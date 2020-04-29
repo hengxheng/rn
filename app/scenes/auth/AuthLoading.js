@@ -9,7 +9,11 @@ export default function AuthLoading(props) {
     const { getAuthState } = useAuth();
 
     useEffect(() => {
-        initialize()
+        let mounted = true;
+        if(mounted){
+            initialize();
+        }
+        return () => mounted = false;
     }, []);
 
     async function initialize() {
@@ -18,7 +22,7 @@ export default function AuthLoading(props) {
 
             if (user) {
                 //check if username exist
-                let username = !!(user.username);
+                let username = !!(user.nickname);
 
                 if (username) navigate('App');
                 else navigate('Auth', {}, StackActions.replace({ routeName: "Username" }))

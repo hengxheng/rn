@@ -16,7 +16,7 @@ export default function Username (props) {
     const { state, updateUser, handleLogout } = useAuth();
 
     const fields = [
-        {name: 'username', label: 'Username', required: true}
+        {name: 'nickname', label: 'Username', required: true}
     ];
 
     async function onSubmit(data) {

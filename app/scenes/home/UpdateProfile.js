@@ -18,7 +18,7 @@ export default function UpdateProfile (props) {
     const fields = [
         {name: 'firstName', label: 'First Name', required: true, value:state.user.firstName},
         {name: 'lastName', label: 'Last Name', required: true, value:state.user.lastName},
-        {name: 'username', label: 'Username', required: true, value:state.user.username}
+        {name: 'nickname', label: 'Username', required: true, value:state.user.nickname}
     ];
 
     async function onSubmit(data) {
