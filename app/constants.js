@@ -1,5 +1,3 @@
-import React from 'react';
-
 //API URL
 export const API_URL = 'http://localhost:3003';
 
