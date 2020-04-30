@@ -25,8 +25,6 @@ function ListRecipe({ navigation }) {
       }
     }
     getRecipes();
-    console.log("dsfd");
-    console.log(recipes);
   }, []);
 
   const addRecipe = (recipe) => {

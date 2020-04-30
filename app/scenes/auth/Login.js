@@ -28,13 +28,8 @@ export default function Login(props) {
     try {
       let response = await api.login(state);
       await handleLogin(response);
-
       setLoading(false);
-
-      //check if username is null
-      let username = response.user.nickname !== null;
-      if (username) navigate("App");
-      else navigation.replace("Username");
+      navigate("App");
     } catch (error) {
       setError(error.message);
       setLoading(false);

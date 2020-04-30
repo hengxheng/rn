@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 import { useAuth } from "../../providers/auth";
 import { Header, ErrorText } from "../../components/Shared";
 
@@ -25,14 +25,34 @@ export default function Logout(props) {
   }
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16, backgroundColor: "#fff" }}>
+    <View style={styles.container}>
       <Header title={"Log out"} />
-      <View style={{ flex: 1 }}>
+      <View>
         <ErrorText error={error} />
+        <Text>Do you want to logout?</Text>
+        <Button title={"Log Out"} onPress={() => onLogout()} />
+        <Button title={"Cancel"} onPress={() => onCancel()} />
       </View>
-      <Text>Do you want to logout?</Text>
-      <Button title={"Log Out"} onPress={() => onLogout()} />
-      <Button title={"Cancel"} onPress={() => onCancel()} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    alignItems: 'center', 
+    justifyContent: 'center',
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  text: {
+    height: 300,
+    fontSize: 16,
+  },
+});
