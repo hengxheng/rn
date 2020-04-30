@@ -21,7 +21,7 @@ export default function Logout(props) {
   }
 
   async function onCancel() {
-    props.navigation.navigate("Home");
+    props.navigation.goBack();
   }
 
   return (

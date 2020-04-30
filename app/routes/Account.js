@@ -2,19 +2,21 @@ import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 
 //IMPORT SCENES
-import LogoutScreen from "../scenes/auth/Logout";
+import LogoutScreen from "../scenes/account/Logout";
+import UpdateProfileScreen from "../scenes/account/UpdateProfile";
 
 import {headerStyle, headerTitleStyle} from '../theme'
 
 //Create Routes
-const LogoutStack = createStackNavigator(
+const AccountStack = createStackNavigator(
     {
+        UpdateProfile: UpdateProfileScreen,
         Logout: LogoutScreen,
     },
     {
-        initialRouteName: 'Logout',
+        initialRouteName: 'UpdateProfile',
         defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
     }
 );
 
-export default LogoutStack;
+export default AccountStack;
