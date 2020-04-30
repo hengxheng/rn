@@ -42,7 +42,7 @@ function AuthProvider(props) {
             await AsyncStorage.multiSet(data_);
 
             //AXIOS AUTHORIZATION HEADER
-            axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+            axios.defaults.headers.common["Authorization"] = `JWT ${data.token}`;
 
             //DISPATCH TO REDUCER
             dispatch({type: LOGGED_IN, user:data.user});

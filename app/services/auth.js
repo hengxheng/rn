@@ -37,15 +37,10 @@ export async function updateProfile(userId, data){
         const options = {
             headers: {
                 Accept: "application/json",
-                "Content-Type": "multipart/form-data"
             }
         };
 
-        const form_data = new FormData();
-        for ( let key in data )
-            form_data.append(key, data[key]);
-
-        let res = await axios.put(`${c.UPDATE_PROFILE}/${userId}`, form_data, options);
+        let res = await axios.put(`${c.UPDATE_PROFILE}/${userId}`, data, options);
         return res.data;
     }catch (e) {
         throw handler(e);

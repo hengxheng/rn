@@ -1,42 +1,47 @@
-import React, {useEffect} from 'react';
-import {ActivityIndicator, View, Text} from 'react-native';
-import { StackActions } from 'react-navigation';
+import React, { useEffect } from "react";
+import { ActivityIndicator, View, Text } from "react-native";
+import { StackActions } from "react-navigation";
 
 import { useAuth } from "../../providers/auth";
 
 export default function AuthLoading(props) {
-    const {navigate} = props.navigation;
-    const { getAuthState } = useAuth();
+  const { navigate } = props.navigation;
+  const { getAuthState } = useAuth();
 
-    useEffect(() => {
-        let mounted = true;
-        if(mounted){
-            initialize();
-        }
-        return () => mounted = false;
-    }, []);
-
-    async function initialize() {
-        try {
-            const {user} = await getAuthState();
-
-            if (user) {
-                //check if username exist
-                let username = !!(user.nickname);
-
-                if (username) navigate('App');
-                else navigate('Auth', {}, StackActions.replace({ routeName: "Username" }))
-
-            } else navigate('Auth');
-        } catch (e) {
-            navigate('Auth');
-        }
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      initialize();
     }
+    return () => (mounted = false);
+  }, []);
 
-    return (
-        <View style={{backgroundColor: "#fff", alignItems: 'center', justifyContent: 'center', flex: 1}}>
-            <ActivityIndicator/>
-            <Text>{"Loading User Data"}</Text>
-        </View>
-    );
-};
+  async function initialize() {
+    try {
+      const { user } = await getAuthState();
+
+      if (user) {
+        navigate("App");
+      } 
+      else {
+        navigate("Auth");
+      }
+    } catch (e) {
+      navigate("Auth");
+    }
+  }
+
+  return (
+    <View
+      style={{
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1,
+      }}
+    >
+      <ActivityIndicator />
+      <Text>{"Loading User Data"}</Text>
+    </View>
+  );
+}
