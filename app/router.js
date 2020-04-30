@@ -7,17 +7,18 @@ import { createBottomTabNavigator } from "react-navigation-tabs";
 import AuthStack from "./routes/Auth";
 import HomeStack from "./routes/Home";
 import RecipeStack from "./routes/Recipe";
+import LogoutStack from "./routes/Logout";
 // import BottomTabNavigator from "./routes/BottomTabNavigator";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
-import LogoutScreen from "./scenes/auth/Logout";
+
 //APP ROUTES STACK
 
 const MainTabNavigator = createBottomTabNavigator({
     Home: HomeStack,
     Recipe: RecipeStack,
-    Logout: LogoutScreen,
+    Logout: LogoutStack,
   },
   {
       initialRouteName: 'Home',

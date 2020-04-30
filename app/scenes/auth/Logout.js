@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
 import { useAuth } from "../../providers/auth";
-import { Header, ErrorText } from "../../components/Shared";
+import Header from "../../components/Header";
 
 export default function Logout(props) {
   const [error, setError] = useState(null);
@@ -25,15 +25,14 @@ export default function Logout(props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Header title={"Log out"} />
-      <View>
-        <ErrorText error={error} />
+    <>
+      <Header titleText={"Log out"} />
+      <View style={styles.container}>
         <Text>Do you want to logout?</Text>
         <Button title={"Log Out"} onPress={() => onLogout()} />
         <Button title={"Cancel"} onPress={() => onCancel()} />
       </View>
-    </View>
+    </>
   );
 }
 
