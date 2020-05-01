@@ -29,6 +29,14 @@ ErrorText.defaultProps = {
     error: ""
 };
 
+export const MessageText = ({message}) => {
+    return <Text style={styles.MessageText}>{message}</Text>
+};
+
+MessageText.defaultProps = {
+    message: ""
+};
+
 const styles = StyleSheet.create({
     header: {
         height: 50,
@@ -44,6 +52,16 @@ const styles = StyleSheet.create({
 
     errorText:{
         marginBottom: 8,
-        color:"red"
-    }
+        backgroundColor:"red",
+        color: "#fff",
+        fontSize: 16,
+        padding: 10
+    },
+    MessageText:{
+        marginBottom: 8,
+        backgroundColor:"green",
+        color: "#fff",
+        fontSize: 16,
+        padding: 10
+    },
 });

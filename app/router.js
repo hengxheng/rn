@@ -17,7 +17,7 @@ import AuthProvider from "./providers/auth";
 
 const MainTabNavigator = createBottomTabNavigator({
     Home: HomeStack,
-    Recipe: RecipeStack,
+    Activity: RecipeStack,
     Account: AccountStack,
   },
   {
