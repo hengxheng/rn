@@ -8,7 +8,6 @@ import AuthStack from "./routes/Auth";
 import HomeStack from "./routes/Home";
 import RecipeStack from "./routes/Recipe";
 import AccountStack from "./routes/Account";
-// import BottomTabNavigator from "./routes/BottomTabNavigator";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";

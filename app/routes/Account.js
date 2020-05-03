@@ -3,18 +3,25 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 //IMPORT SCENES
 import LogoutScreen from "../scenes/account/Logout";
-import UpdateProfileScreen from "../scenes/account/UpdateProfile";
-
+import ProfileScreen from "../scenes/account/Profile";
+import UpdateEmailScreen from "../scenes/account/UpdateEmail";
+import UpdateNameScreen from "../scenes/account/UpdateName";
+import UpdateUsernameScreen from "../scenes/account/UpdateUsername";
+import UpdatePasswordScreen from "../scenes/account/UpdatePassword";
 import {headerStyle, headerTitleStyle} from '../theme'
 
 //Create Routes
 const AccountStack = createStackNavigator(
     {
-        UpdateProfile: UpdateProfileScreen,
+        Profile: ProfileScreen,
+        updateName: UpdateNameScreen,
+        updateUsername: UpdateUsernameScreen,
+        updatePassword: UpdatePasswordScreen,
+        updateEmail: UpdateEmailScreen,
         Logout: LogoutScreen,
     },
     {
-        initialRouteName: 'UpdateProfile',
+        initialRouteName: 'Profile',
         defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
     }
 );
