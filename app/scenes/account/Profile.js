@@ -16,10 +16,6 @@ import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
 import { Input, Button } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
-import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
-import * as Permissions from "expo-permissions";
 
 export default function Profile(props) {
   const { navigation } = props;
@@ -28,7 +24,6 @@ export default function Profile(props) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [cameraPermission, setCameraPermission] = useState(false);
   const { state, updateUser } = useAuth();
   const [formData, setFormData] = useState({});
 
@@ -40,7 +35,7 @@ export default function Profile(props) {
     { label: "Password", field: "password", nav: "updatePassword" },
   ];
 
-  useEffect( () => {
+  useEffect(() => {
     let mounted = true;
     if (mounted) {
       setFormData({
@@ -53,58 +48,31 @@ export default function Profile(props) {
       });
     }
     return () => (mounted = false);
-  },[state.user]);
-
-  async function _pickImage() {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status === "granted") {
-        setCameraPermission(true);
-      }
-    }
-
-    if (!cameraPermission) {
-      alert("Sorry, we need camera roll permissions to make this work!");
-      return false;
-    }
-
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      console.log(result);
-      if (!result.cancelled) {
-        setFormData({
-          ...formData,
-          image: {
-            uri: result.uri,
-            name: "userProfile.jpg",
-            type: result.type,
-          },
-        });
-      }
-    } catch (E) {
-      console.log(E);
-    }
-  }
+  }, [state.user]);
 
   return (
     <>
       <Header titleText="My account" />
       <ScrollView style={styles.container}>
         <View>
+          <ListItem
+            key={"image"}
+            leftAvatar={{ icon: { name: "user", type: "font-awesome" } }}
+            title={`${formData.firstName} ${formData.lastName}`}
+            subtitle={`${formData.firstName} ${formData.lastName}`}
+            bottomDivider
+            chevron
+            button
+            onPress={() => {navigation.navigate("updateProfileImage")}}
+          />
           {formFields.map((item, i) => (
             <ListItem
               key={i}
-              title={item.label+": "+formData[item.field]}
-              // leftIcon={{ name: "arrow-right" }}
+              title={item.label + ": " + formData[item.field]}
               bottomDivider
               chevron
               button
-              onPress={ () => navigation.navigate(item.nav)}
+              onPress={() => navigation.navigate(item.nav)}
             />
           ))}
         </View>
@@ -113,31 +81,6 @@ export default function Profile(props) {
           {error !== "" && <ErrorText error={error} />}
           {message !== "" && <MessageText message={message} />}
           <View style={styles.formContainer}>
-            <View style={styles.photoContainer}>
-              {formData.image ? (
-                <Image
-                  source={{ uri: formData.image.uri }}
-                  style={{ height: 200, width: null, left: 0, right: 0 }}
-                />
-              ) : (
-                <View />
-              )}
-            </View>
-            <View style={styles.input}>
-              <Button
-                icon={{
-                  type: "font-awesome",
-                  name: "camera",
-                  size: 20,
-                  color: "white",
-                }}
-                iconRight
-                title="Take a photo"
-                onPress={() => {
-                  _pickImage();
-                }}
-              />
-            </View>
             <Button
               icon={{
                 type: "font-awesome",
@@ -178,22 +121,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 10,
-  },
-  photoContainer: {
-    flex: 1,
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height / 2,
-    backgroundColor: "#eee",
-    marginBottom: 10,
-    borderColor: "#fff",
-  },
-  iconButton: {
-    backgroundColor: "transparent",
-    color: "#fff",
-    position: "absolute",
-    right: 0,
-    top: 5,
-    margin: 10,
   },
   input: {
     marginBottom: 10,

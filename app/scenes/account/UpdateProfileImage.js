@@ -1,36 +1,77 @@
 import React, { useState } from "react";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { Platform, ActivityIndicator, View, StyleSheet } from "react-native";
 import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
 import { Input, Button } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import { Avatar } from "react-native-elements";
 
-export default function UpdateName(props) {
+export default function UpdateProfileImage(props) {
   const { navigation } = props;
 
-  //1 - DECLARE VARIABLES
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { state, updateUser } = useAuth();
-  const [formData, setFormData] = useState({
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-    nickname: state.user.nickname,
-    email: state.user.email,
-    image: state.user.image,
-    password: "",
-  });
+
+  const [cameraPermission, setCameraPermission] = useState(false);
+  const [avatar, setAvatar] = useState(null);
+
+  async function _pickImage() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status === "granted") {
+        setCameraPermission(true);
+      } else {
+        alert("Sorry, we need camera roll permissions to make this work!");
+        return false;
+      }
+    }
+
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        let localUri = result.uri;
+        let filename = localUri.split("/").pop();
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        setAvatar({ uri: localUri, name: filename, type: type });
+      }
+    } catch (E) {
+      console.log(E);
+    }
+  }
 
   async function onSubmit() {
     setLoading(true);
     setMessage("");
     setError("");
-    let data = formData;
+
     try {
-      let response = await api.updateProfile(state.user.id, data);
-      updateUser(response.user);
+      const data = new FormData();
+      data.append("avatar", {
+        name: avatar.name,
+        type: avatar.type,
+        uri:
+          Platform.OS === "android"
+            ? avatar.uri
+            : avatar.uri.replace("file://", ""),
+      });
+
+      let response = await api.updateProfileImage(state.user.id, data);
+      updateUser({ ...state.user, image: response.filePath });
       setMessage(response.message);
       setLoading(false);
       navigation.goBack();
@@ -47,35 +88,49 @@ export default function UpdateName(props) {
         {error !== "" && <ErrorText error={error} />}
         {message !== "" && <MessageText message={message} />}
         <View style={styles.formContainer}>
-          <Input
-            label="First name"
-            inputContainerStyle={styles.input}
-            value={formData.firstName}
-            onChangeText={(value) =>
-              setFormData({ ...formData, firstName: value })
-            }
-          />
-          <Input
-            label="Last name"
-            inputContainerStyle={styles.input}
-            value={formData.lastName}
-            onChangeText={(value) =>
-              setFormData({ ...formData, lastName: value })
-            }
-          />
-          <Button
-            icon={{
-              type: "font-awesome",
-              name: "pencil-square-o",
-              size: 20,
-              color: "white",
-            }}
-            iconRight
-            title="Update"
-            onPress={() => {
-              onSubmit();
-            }}
-          />
+          <View style={styles.photoContainer}>
+            {avatar ? (
+              <Avatar
+                rounded
+                source={{
+                  uri: avatar.uri,
+                }}
+                style={styles.avatar}
+              />
+            ) : (
+              <View />
+            )}
+          </View>
+          <View style={styles.input}>
+            <Button
+              icon={{
+                type: "font-awesome",
+                name: "camera",
+                size: 20,
+                color: "white",
+              }}
+              iconRight
+              title="Take a photo"
+              onPress={() => {
+                _pickImage();
+              }}
+            />
+          </View>
+          <View style={styles.input}>
+            <Button
+              icon={{
+                type: "font-awesome",
+                name: "pencil-square-o",
+                size: 20,
+                color: "white",
+              }}
+              iconRight
+              title="Update"
+              onPress={() => {
+                onSubmit();
+              }}
+            />
+          </View>
         </View>
 
         {loading && (
@@ -106,12 +161,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
   },
+  photoContainer: {
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    marginBottom: 30,
+  },
+  avatar: {
+    width: 200,
+    height: 200,
+    marginBottom: 30,
+  },
   input: {
     marginBottom: 10,
   },
 });
 
-UpdateName.navigationOptions = ({}) => {
+UpdateProfileImage.navigationOptions = ({}) => {
   return {
     title: `Update Name`,
   };

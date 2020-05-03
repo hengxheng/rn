@@ -51,6 +51,25 @@ export async function updateProfile(userId, data) {
   }
 }
 
+export async function updateProfileImage(userId, data) {
+  try {
+    const options = {
+      headers: {
+        Accept: "application/json",
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    let res = await axios.post(
+      `${c.UPLOAD_AVATAR}/${userId}`,
+      data,
+      options
+    );
+    return res.data;
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export function handler(err) {
   let error = err;
 
