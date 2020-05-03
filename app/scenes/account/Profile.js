@@ -10,23 +10,21 @@ import {
   Text,
   Dimensions,
 } from "react-native";
-import { ListItem } from "react-native-elements";
+import { ListItem, Input, Button } from "react-native-elements";
 import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
-import { Input, Button } from "react-native-elements";
-
+import { USER_PROFILE_IMAGE_URL } from "../../constants";
 export default function Profile(props) {
   const { navigation } = props;
-
   //1 - DECLARE VARIABLES
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { state, updateUser } = useAuth();
   const [formData, setFormData] = useState({});
-
+  const [avatar, setAvatar] = useState(null);
   const formFields = [
     { label: "First Name", field: "firstName", nav: "updateName" },
     { label: "Last Name", field: "lastName", nav: "updateName" },
@@ -46,6 +44,10 @@ export default function Profile(props) {
         image: state.user.image,
         password: "***",
       });
+
+      setAvatar({
+        url: state.user.image
+      })
     }
     return () => (mounted = false);
   }, [state.user]);
@@ -57,7 +59,7 @@ export default function Profile(props) {
         <View>
           <ListItem
             key={"image"}
-            leftAvatar={{ icon: { name: "user", type: "font-awesome" } }}
+            leftAvatar={ (avatar === null)? ({ icon: { name: "user", type: "font-awesome", }}) : ({source: { uri: USER_PROFILE_IMAGE_URL+"/"+avatar.url }}) }
             title={`${formData.firstName} ${formData.lastName}`}
             subtitle={`${formData.firstName} ${formData.lastName}`}
             bottomDivider

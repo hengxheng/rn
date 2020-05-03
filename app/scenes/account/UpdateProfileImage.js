@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Platform, ActivityIndicator, View, StyleSheet } from "react-native";
 import Header from "../../components/Header";
 import * as api from "../../services/auth";
@@ -10,6 +10,7 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Avatar } from "react-native-elements";
+import { USER_PROFILE_IMAGE_URL } from "../../constants";
 
 export default function UpdateProfileImage(props) {
   const { navigation } = props;
@@ -18,16 +19,16 @@ export default function UpdateProfileImage(props) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { state, updateUser } = useAuth();
-
-  const [cameraPermission, setCameraPermission] = useState(false);
   const [avatar, setAvatar] = useState(null);
+
+  useEffect( () => {
+    setAvatar({ uri: USER_PROFILE_IMAGE_URL+"/"+state.user.image });
+  }, [state.user]);
 
   async function _pickImage() {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status === "granted") {
-        setCameraPermission(true);
-      } else {
+      if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
         return false;
       }

@@ -1,6 +1,6 @@
 //API URL
 export const API_URL = 'http://localhost:3003';
-
+export const USER_PROFILE_IMAGE_URL= 'http://localhost:3003';
 //API End Points
 export const REGISTER = `${API_URL}/register`;
 export const LOGIN = `${API_URL}/login`;
