@@ -9,7 +9,8 @@ import UpdateNameScreen from "../scenes/account/UpdateName";
 import UpdateUsernameScreen from "../scenes/account/UpdateUsername";
 import UpdatePasswordScreen from "../scenes/account/UpdatePassword";
 import UpdateProfileImageScreen from "../scenes/account/UpdateProfileImage";
-import {headerStyle, headerTitleStyle} from '../theme'
+import ShowCameraScreen from "../scenes/ShowCamera";
+import {headerStyle, headerTitleStyle} from '../theme';
 
 //Create Routes
 const AccountStack = createStackNavigator(
@@ -20,6 +21,7 @@ const AccountStack = createStackNavigator(
         updatePassword: UpdatePasswordScreen,
         updateEmail: UpdateEmailScreen,
         updateProfileImage: UpdateProfileImageScreen,
+        showCamera: ShowCameraScreen,
         Logout: LogoutScreen,
     },
     {

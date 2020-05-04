@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
 //IMPORT ROUTES
@@ -12,32 +12,40 @@ import AccountStack from "./routes/Account";
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
 
+import Camera from "./scenes/ShowCamera";
 //APP ROUTES STACK
 
-const MainTabNavigator = createBottomTabNavigator({
+const MainTabNavigator = createBottomTabNavigator(
+  {
     Home: HomeStack,
     Activity: RecipeStack,
-    Account: AccountStack,
+    Account: {
+      screen: AccountStack,
+      // navigationOptions:{
+      //     tabBarVisible: false
+      // }
+    },
   },
   {
-      initialRouteName: 'Home',
-  });
-  
+    initialRouteName: "Home",
+  }
+);
+
 const AppStack = createSwitchNavigator(
-    {
-        Loading: AuthLoading,
-        Auth: AuthStack,
-        App: MainTabNavigator,
-    },
-    {initialRouteName: 'Loading'}
+  {
+    Loading: AuthLoading,
+    Auth: AuthStack,
+    App: MainTabNavigator,
+  },
+  { initialRouteName: "Loading" }
 );
 
 const Navigator = createAppContainer(AppStack);
 
 export default function Router(props) {
-    return (
-        <AuthProvider>
-            <Navigator/>
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <Navigator />
+    </AuthProvider>
+  );
 }

@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Platform, ActivityIndicator, View, StyleSheet } from "react-native";
+import {
+  Platform,
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  Modal,
+  TouchableHighlight,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
-import { Input, Button } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { Input, Button, Icon } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Avatar } from "react-native-elements";
@@ -20,10 +29,27 @@ export default function UpdateProfileImage(props) {
   const [loading, setLoading] = useState(false);
   const { state, updateUser } = useAuth();
   const [avatar, setAvatar] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [cameraModalVisible, setCameraModalVisible] = useState(false);
+  const [type, setType] = useState(Camera.Constants.Type.back);
 
-  useEffect( () => {
-    setAvatar({ uri: USER_PROFILE_IMAGE_URL+"/"+state.user.image });
-  }, [state.user]);
+  function conventAvatar(avatar) {
+    let localUri = avatar.uri;
+    let filename = localUri.split("/").pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    return { uri: localUri, name: filename, type: type };
+  }
+  useEffect(() => {
+    const photo = navigation.getParam("photo", null); // from camera
+
+    if (photo) {
+      setAvatar(conventAvatar(photo));
+    } else {
+      setAvatar({ uri: USER_PROFILE_IMAGE_URL + "/" + state.user.image });
+    }
+  }, [state.user, navigation.state.params]);
 
   async function _pickImage() {
     if (Constants.platform.ios) {
@@ -43,16 +69,17 @@ export default function UpdateProfileImage(props) {
       });
 
       if (!result.cancelled) {
-        let localUri = result.uri;
-        let filename = localUri.split("/").pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-
-        setAvatar({ uri: localUri, name: filename, type: type });
+        setAvatar(conventAvatar(result));
+        setModalVisible(false);
       }
     } catch (E) {
       console.log(E);
     }
+  }
+
+  async function _openCamera() {
+    setModalVisible(false);
+    navigation.navigate("showCamera", { onSelect: null });
   }
 
   async function onSubmit() {
@@ -92,6 +119,7 @@ export default function UpdateProfileImage(props) {
           <View style={styles.photoContainer}>
             {avatar ? (
               <Avatar
+                size="medium"
                 rounded
                 source={{
                   uri: avatar.uri,
@@ -103,34 +131,36 @@ export default function UpdateProfileImage(props) {
             )}
           </View>
           <View style={styles.input}>
-            <Button
-              icon={{
-                type: "font-awesome",
-                name: "camera",
-                size: 20,
-                color: "white",
-              }}
-              iconRight
-              title="Take a photo"
+            <TouchableOpacity
+              style={styles.touchableButton}
               onPress={() => {
-                _pickImage();
+                setModalVisible(true);
               }}
-            />
+            >
+              <Text style={styles.textStyle}>Choose a new image</Text>
+              <Icon
+                name="camera"
+                type="font-awesome"
+                style={styles.touchableIcon}
+                color="#fff"
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.input}>
-            <Button
-              icon={{
-                type: "font-awesome",
-                name: "pencil-square-o",
-                size: 20,
-                color: "white",
-              }}
-              iconRight
-              title="Update"
+            <TouchableOpacity
+              style={styles.touchableButton}
               onPress={() => {
                 onSubmit();
               }}
-            />
+            >
+              <Text style={styles.textStyle}>Update</Text>
+              <Icon
+                name="pencil-square-o"
+                type="font-awesome"
+                style={styles.touchableIcon}
+                color="#fff"
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -139,6 +169,89 @@ export default function UpdateProfileImage(props) {
             <ActivityIndicator size="small" color="#00ff00" />
           </View>
         )}
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onBackdropPress={() => setModalVisible(false)}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableHighlight
+                style={{ ...styles.modalButton, backgroundColor: "#2196F3" }}
+                onPress={() => {
+                  _openCamera();
+                }}
+              >
+                <Text style={styles.textStyle}>Take a photo</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{
+                  ...styles.modalButton,
+                  backgroundColor: "#2196F3",
+                  marginBottom: 25,
+                }}
+                onPress={() => {
+                  _pickImage();
+                }}
+              >
+                <Text style={styles.textStyle}>From Camera roll</Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight
+                style={{ ...styles.modalButton }}
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={cameraModalVisible}
+          onBackdropPress={() => setCameraModalVisible(false)}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Camera style={{ flex: 1 }} type={type}>
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: "transparent",
+                    flexDirection: "row",
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      flex: 0.1,
+                      alignSelf: "flex-end",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      setType(
+                        type === Camera.Constants.Type.back
+                          ? Camera.Constants.Type.front
+                          : Camera.Constants.Type.back
+                      );
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 18, marginBottom: 10, color: "white" }}
+                    >
+                      Flip
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Camera>
+            </View>
+          </View>
+        </Modal>
       </View>
     </>
   );
@@ -176,6 +289,50 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+  },
+  centeredView: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: "rgba(52, 52, 52, 0.8)",
+    padding: 15,
+    alignItems: "center",
+    elevation: 5,
+    alignSelf: "stretch",
+  },
+  modalButton: {
+    backgroundColor: "grey",
+    alignSelf: "stretch",
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+    marginBottom: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  touchableButton: {
+    backgroundColor: "#2196F3",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 3,
+    padding: 10,
+  },
+  touchableIcon: {
+    height: 25,
+    width: 25,
+    marginLeft: 10,
   },
 });
 
