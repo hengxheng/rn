@@ -11,7 +11,7 @@ export default function Register(props) {
     const {navigation} = props;
 
     //1 - DECLARE VARIABLES
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const fields = [
@@ -44,7 +44,7 @@ export default function Register(props) {
         <View style={{flex: 1, paddingHorizontal: 16, backgroundColor:"#fff"}}>
             <Header title={"Register"}/>
             <View style={{flex:1}}>
-                <ErrorText error={error}/>
+                {error !== "" && <ErrorText error={error} />}
                 <Form {...formProps}>
                     <CTA
                         title={"Already have an account?"}

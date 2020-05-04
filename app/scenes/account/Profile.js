@@ -36,18 +36,20 @@ export default function Profile(props) {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      setFormData({
-        firstName: state.user.firstName,
-        lastName: state.user.lastName,
-        nickname: state.user.nickname,
-        email: state.user.email,
-        image: state.user.image,
-        password: "***",
-      });
-
-      setAvatar({
-        url: state.user.image
-      })
+      if(state.user !== null){
+        setFormData({
+          firstName: state.user.firstName,
+          lastName: state.user.lastName,
+          nickname: state.user.nickname,
+          email: state.user.email,
+          image: state.user.image,
+          password: "***",
+        });
+  
+        setAvatar({
+          url: state.user.image
+        });
+      }
     }
     return () => (mounted = false);
   }, [state.user]);

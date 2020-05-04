@@ -12,7 +12,6 @@ export default function Logout(props) {
     setLoading(true);
     try {
       await handleLogout();
-      setLoading(false);
       props.navigation.navigate("Auth");
     } catch (error) {
       setError(error.message);

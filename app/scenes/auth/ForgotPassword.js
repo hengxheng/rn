@@ -10,7 +10,7 @@ export default function ForgotPassword(props) {
     const {navigation} = props;
 
     //1 - DECLARE VARIABLES
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const fields = [{name: 'email', label: 'Email Address', required: true}];
@@ -39,7 +39,7 @@ export default function ForgotPassword(props) {
         <View style={{flex: 1, paddingHorizontal: 16, backgroundColor:"#fff"}}>
             <Header title={"Recover Password"}/>
             <View style={{flex:1}}>
-                <ErrorText error={error}/>
+                {error !== "" && <ErrorText error={error} />}
                 <Form {...formProps}/>
             </View>
         </View>

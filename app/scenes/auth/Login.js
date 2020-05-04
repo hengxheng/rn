@@ -13,7 +13,7 @@ export default function Login(props) {
   const { navigate } = navigation;
 
   //1 - DECLARE VARIABLES
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { handleLogin } = useAuth();
 
@@ -41,7 +41,7 @@ export default function Login(props) {
     <View style={{ flex: 1, paddingHorizontal: 16, backgroundColor: "#fff" }}>
       <Header title={"Login"} />
       <View style={{ flex: 1 }}>
-        <ErrorText error={error} />
+        {error !== "" && <ErrorText error={error} />}
         <Form {...formProps}>
           <CTA
             ctaText={"Forgot Password?"}
