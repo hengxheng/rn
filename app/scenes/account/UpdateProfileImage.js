@@ -30,8 +30,7 @@ export default function UpdateProfileImage(props) {
   const { state, updateUser } = useAuth();
   const [avatar, setAvatar] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [cameraModalVisible, setCameraModalVisible] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [avatarUpdated, setAvatarUpdated] = useState(false);
 
   function conventAvatar(avatar) {
     let localUri = avatar.uri;
@@ -41,11 +40,13 @@ export default function UpdateProfileImage(props) {
 
     return { uri: localUri, name: filename, type: type };
   }
+
   useEffect(() => {
     const photo = navigation.getParam("photo", null); // from camera
 
     if (photo) {
       setAvatar(conventAvatar(photo));
+      setAvatarUpdated(true);
     } else {
       setAvatar({ uri: USER_PROFILE_IMAGE_URL + "/" + state.user.image });
     }
@@ -71,6 +72,7 @@ export default function UpdateProfileImage(props) {
       if (!result.cancelled) {
         setAvatar(conventAvatar(result));
         setModalVisible(false);
+        setAvatarUpdated(true);
       }
     } catch (E) {
       console.log(E);
@@ -146,22 +148,25 @@ export default function UpdateProfileImage(props) {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.input}>
-            <TouchableOpacity
-              style={styles.touchableButton}
-              onPress={() => {
-                onSubmit();
-              }}
-            >
-              <Text style={styles.textStyle}>Update</Text>
-              <Icon
-                name="pencil-square-o"
-                type="font-awesome"
-                style={styles.touchableIcon}
-                color="#fff"
-              />
-            </TouchableOpacity>
-          </View>
+
+          {avatarUpdated && (
+            <View style={styles.input}>
+              <TouchableOpacity
+                style={styles.touchableButton}
+                onPress={() => {
+                  onSubmit();
+                }}
+              >
+                <Text style={styles.textStyle}>Update</Text>
+                <Icon
+                  name="pencil-square-o"
+                  type="font-awesome"
+                  style={styles.touchableIcon}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {loading && (
@@ -207,48 +212,6 @@ export default function UpdateProfileImage(props) {
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={cameraModalVisible}
-          onBackdropPress={() => setCameraModalVisible(false)}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Camera style={{ flex: 1 }} type={type}>
-                <View
-                  style={{
-                    flex: 1,
-                    backgroundColor: "transparent",
-                    flexDirection: "row",
-                  }}
-                >
-                  <TouchableOpacity
-                    style={{
-                      flex: 0.1,
-                      alignSelf: "flex-end",
-                      alignItems: "center",
-                    }}
-                    onPress={() => {
-                      setType(
-                        type === Camera.Constants.Type.back
-                          ? Camera.Constants.Type.front
-                          : Camera.Constants.Type.back
-                      );
-                    }}
-                  >
-                    <Text
-                      style={{ fontSize: 18, marginBottom: 10, color: "white" }}
-                    >
-                      Flip
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </Camera>
             </View>
           </View>
         </Modal>

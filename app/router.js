@@ -12,9 +12,6 @@ import AccountStack from "./routes/Account";
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
 
-import Camera from "./scenes/ShowCamera";
-//APP ROUTES STACK
-
 const MainTabNavigator = createBottomTabNavigator(
   {
     Home: HomeStack,
