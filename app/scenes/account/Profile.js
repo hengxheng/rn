@@ -14,7 +14,6 @@ import { ListItem, Input, Button } from "react-native-elements";
 import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
-import { MessageText, ErrorText } from "../../components/Shared";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
 export default function Profile(props) {
   const { navigation } = props;
@@ -82,8 +81,6 @@ export default function Profile(props) {
         </View>
 
         <View style={{ flex: 1 }}>
-          {error !== "" && <ErrorText error={error} />}
-          {message !== "" && <MessageText message={message} />}
           <View style={styles.formContainer}>
             <Button
               icon={{
@@ -136,12 +133,6 @@ const styles = StyleSheet.create({
   text: {
     height: 300,
     fontSize: 16,
-  },
-  fab: {
-    position: "absolute",
-    margin: 20,
-    right: 0,
-    bottom: 0,
   },
 });
 
