@@ -4,8 +4,6 @@ import {
   ActivityIndicator,
   View,
   StyleSheet,
-  Modal,
-  TouchableHighlight,
   TouchableOpacity,
   Text,
 } from "react-native";
@@ -13,9 +11,9 @@ import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
-import { Input, Button, Icon } from "react-native-elements";
+import ImageModal from "../../components/ImageModal";
+import { Icon } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Avatar } from "react-native-elements";
@@ -51,6 +49,20 @@ export default function UpdateProfileImage(props) {
       setAvatar({ uri: USER_PROFILE_IMAGE_URL + "/" + state.user.image });
     }
   }, [state.user, navigation.state.params]);
+
+  function changeImageSource(source) {
+    if (source !== null) {
+      if (source === "camera") {
+        _openCamera();
+      } else if (source === "cameraRoll") {
+        _pickImage();
+      }
+    }
+  }
+
+  function closeImageModal() {
+    setModalVisible(false);
+  }
 
   async function _pickImage() {
     if (Constants.platform.ios) {
@@ -175,46 +187,11 @@ export default function UpdateProfileImage(props) {
           </View>
         )}
 
-        <Modal
-          animationType="fade"
-          transparent={true}
+        <ImageModal
           visible={modalVisible}
-          onBackdropPress={() => setModalVisible(false)}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableHighlight
-                style={{ ...styles.modalButton, backgroundColor: "#2196F3" }}
-                onPress={() => {
-                  _openCamera();
-                }}
-              >
-                <Text style={styles.textStyle}>Take a photo</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{
-                  ...styles.modalButton,
-                  backgroundColor: "#2196F3",
-                  marginBottom: 25,
-                }}
-                onPress={() => {
-                  _pickImage();
-                }}
-              >
-                <Text style={styles.textStyle}>From Camera roll</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={{ ...styles.modalButton }}
-                onPress={() => {
-                  setModalVisible(false);
-                }}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
+          changeImageSource={changeImageSource}
+          onClose={closeImageModal}
+        />
       </View>
     </>
   );
@@ -260,28 +237,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22,
   },
-  modalView: {
-    backgroundColor: "rgba(52, 52, 52, 0.8)",
-    padding: 15,
-    alignItems: "center",
-    elevation: 5,
-    alignSelf: "stretch",
-  },
-  modalButton: {
-    backgroundColor: "grey",
-    alignSelf: "stretch",
-    borderRadius: 5,
-    padding: 10,
-    elevation: 2,
-    marginBottom: 10,
-  },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center",
   },
   touchableButton: {
