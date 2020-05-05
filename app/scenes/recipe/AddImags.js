@@ -20,7 +20,7 @@ export default function AddImages(props) {
   const [images, setImages] = useState([]);
   const imagePlaceholder = require("../../../assets/image-placeholder.png");
 
-  useEffect( () => {
+  useEffect(() => {
     const _selectedImages = navigation.getParam("images", []);
     if (_selectedImages) {
       setSelectedImages([...selectedImages, ..._selectedImages]);
@@ -52,6 +52,18 @@ export default function AddImages(props) {
   function addImages(img) {
     const _selectedImage = img;
     setSelectedImages([...selectedImages, _selectedImage]);
+  }
+
+  function removeImage(img) {
+    const _selectedImages = [...selectedImages];
+    let k = null;
+    _selectedImages.map((s, index) => {
+      if (s.uri === img.uri) {
+        k = index;
+      }
+    });
+    _selectedImages.splice(k, 1);
+    setSelectedImages(_selectedImages);
   }
 
   async function _pickImage() {
@@ -95,7 +107,7 @@ export default function AddImages(props) {
               <TouchableHighlight
                 key={index}
                 onPress={() => setImageModalVisible(true)}
-                onLongPress={() => alert("Delete")}
+                onLongPress={() => removeImage(img)}
               >
                 <Image
                   style={styles.image}
@@ -113,7 +125,9 @@ export default function AddImages(props) {
             style={styles.submitButton}
             mode="contained"
             icon="check"
-            onPress={() => navigation.navigate("AddRecipe", { images: selectedImages })}
+            onPress={() =>
+              navigation.navigate("AddRecipe", { images: selectedImages })
+            }
           >
             Submit
           </Button>
