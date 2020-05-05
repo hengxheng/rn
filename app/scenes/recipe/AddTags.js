@@ -25,7 +25,6 @@ export default function AddTags(props) {
   function removeTag(index) {
       let _tags = [ ...tags ]; // make a separate copy of the array
       _tags.splice(index, 1);
-      console.log(_tags);
       setTags(_tags);
   }
 

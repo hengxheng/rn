@@ -56,9 +56,8 @@ export default function ShowCamera(props) {
           <TouchableOpacity
             onPress={async () => {
               if (cameraRef) {
-                let photo = await cameraRef.takePictureAsync();
-                // console.log(photo);
-                navigation.navigate("updateProfileImage", { photo: photo });
+                let image = await cameraRef.takePictureAsync();
+                navigation.navigate("AddRecipeImages", { images: [image] });
               }
             }}
           >

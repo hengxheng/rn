@@ -15,6 +15,7 @@ import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
 import { MessageText, ErrorText } from "../../components/Shared";
+import { SliderBox } from "react-native-image-slider-box";
 
 function AddRecipe({ navigation }) {
   const [title, setTitle] = useState("");
@@ -34,7 +35,13 @@ function AddRecipe({ navigation }) {
     if (_tags) {
       setTags(_tags);
     }
+
+    const _images = navigation.getParam("images", []);
+    if (_images) {
+      setImages(_images);
+    }
   }, [navigation.state.params]);
+
   async function onSaveRecipe() {
     try {
       //GET TOKEN
@@ -117,13 +124,19 @@ function AddRecipe({ navigation }) {
           </Card.Actions>
         </Card>
 
+        {images && (
+          <View style={{ marginBotton: 10 }}>
+            <SliderBox images={images} />
+          </View>
+        )}
+
         <Card style={styles.card}>
           <Card.Actions style={styles.centerContainer}>
             <Button
               icon="camera"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeImages", { description: content })
+                navigation.navigate("AddRecipeImages", { images: images })
               }
             >
               Add images
@@ -178,13 +191,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
     paddingTop: 30,
     paddingBottom: 120,
   },
   card: {
     flex: 1,
     marginBottom: 15,
+    marginHorizontal: 10,
   },
   centerContainer: {
     justifyContent: "center",

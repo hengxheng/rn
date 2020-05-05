@@ -6,7 +6,7 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { Button } from "react-native-paper";
 import Header from "../../components/Header";
 import ImageModal from "../../components/ImageModal";
 import Constants from "expo-constants";
@@ -16,21 +16,24 @@ import * as ImagePicker from "expo-image-picker";
 export default function AddImages(props) {
   const navigation = props.navigation;
   const [imageModalVisible, setImageModalVisible] = useState(false);
-  const [images, setImages] = useState([
-    { uri: "" },
-    { uri: "" },
-    { uri: "" },
-    { uri: "" },
-    { uri: "" },
-    { uri: "" },
-  ]);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [images, setImages] = useState([]);
+  const imagePlaceholder = require("../../../assets/image-placeholder.png");
 
-  useEffect(() => {
-    const _images = navigation.getParam("images", null);
-    if (_images) {
-      setImages(_images);
+  useEffect( () => {
+    const _selectedImages = navigation.getParam("images", []);
+    if (_selectedImages) {
+      setSelectedImages([...selectedImages, ..._selectedImages]);
     }
   }, [navigation.state.params]);
+
+  useEffect(() => {
+    const _images = [...selectedImages];
+    for (let i = 0; i < 6 - selectedImages.length; i++) {
+      _images.push(imagePlaceholder);
+    }
+    setImages([..._images]);
+  }, [selectedImages]);
 
   function changeImageSource(source) {
     if (source !== null) {
@@ -44,6 +47,11 @@ export default function AddImages(props) {
 
   function closeImageModal() {
     setImageModalVisible(false);
+  }
+
+  function addImages(img) {
+    const _selectedImage = img;
+    setSelectedImages([...selectedImages, _selectedImage]);
   }
 
   async function _pickImage() {
@@ -64,9 +72,8 @@ export default function AddImages(props) {
       });
 
       if (!result.cancelled) {
-        // setAvatar(conventAvatar(result));
-        // setModalVisible(false);
-        // setAvatarUpdated(true);
+        setImageModalVisible(false);
+        addImages(result);
       }
     } catch (E) {
       console.log(E);
@@ -75,7 +82,7 @@ export default function AddImages(props) {
 
   async function _openCamera() {
     setImageModalVisible(false);
-    navigation.navigate("fromCamera", { onSelect: null });
+    navigation.navigate("fromCamera");
   }
 
   return (
@@ -92,11 +99,7 @@ export default function AddImages(props) {
               >
                 <Image
                   style={styles.image}
-                  source={
-                    img.uri !== ""
-                      ? img.uri
-                      : require("../../../assets/image-placeholder.png")
-                  }
+                  source={img}
                   resizeMethod="resize"
                   resizeMode="cover"
                 />
@@ -110,7 +113,7 @@ export default function AddImages(props) {
             style={styles.submitButton}
             mode="contained"
             icon="check"
-            onPress={() => navigation.navigate("AddRecipe", { images: images })}
+            onPress={() => navigation.navigate("AddRecipe", { images: selectedImages })}
           >
             Submit
           </Button>
