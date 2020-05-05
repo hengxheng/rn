@@ -1,38 +1,75 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { TextInput, Button, Chip } from "react-native-paper";
 import Header from "../../components/Header";
 
 export default function AddTags(props) {
   const navigation = props.navigation;
-  const [content, setContent] = useState(props.description);
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    const description = navigation.getParam("description", null);
-    if (description) {
-      setContent(description);
+    const _tags = navigation.getParam("tags", null);
+    if (_tags) {
+      setTags(_tags);
     }
   }, [navigation.state.params]);
-  
+
+  function addTag() {
+    if (tag !== "") {
+      setTags([...tags, tag]);
+      setTag("");
+    }
+  }
+
+  function removeTag(index) {
+      let _tags = [ ...tags ]; // make a separate copy of the array
+      _tags.splice(index, 1);
+      console.log(_tags);
+      setTags(_tags);
+  }
+
   return (
     <>
-      <Header titleText="Add recipe" />
+      <Header titleText="Recipe tags" />
       <ScrollView style={styles.container}>
-        <TextInput
-          label="Desciption"
-          value={content}
-          onChangeText={setContent}
-          mode="outlined"
-          multiline
-          style={styles.text}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            label="Tags"
+            value={tag}
+            onChangeText={setTag}
+            mode="outlined"
+            style={styles.text}
+          />
+          <Button
+            style={styles.submitButton}
+            mode="contained"
+            icon="check-circle"
+            onPress={() => addTag()}
+          >
+            Add
+          </Button>
+        </View>
+        <View style={styles.chipContainer}>
+          {tags.map((tag, index) => {
+            return (
+              <Chip
+                key={index}
+                style={styles.chip}
+                onClose={() => removeTag(index) }
+              >
+                {tag}
+              </Chip>
+            );
+          })}
+        </View>
         <View>
           <Button
             style={styles.submitButton}
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate("AddRecipe", { description: content })
+              navigation.navigate("AddRecipe", { tags: tags })
             }
           >
             Submit
@@ -51,6 +88,13 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 120,
   },
+  chipContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
   text: {
     fontSize: 16,
     marginBottom: 20,
@@ -59,4 +103,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 25,
   },
+  chip: {
+    width: "auto",
+    margin: 5,
+  },
 });
+
+AddTags.navigationOptions = ({}) => {
+  return {
+    title: `Recipe tags`,
+  };
+};

@@ -8,6 +8,7 @@ import {
   Card,
   Button,
   Paragraph,
+  Chip,
 } from "react-native-paper";
 import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
@@ -18,13 +19,20 @@ import { MessageText, ErrorText } from "../../components/Shared";
 function AddRecipe({ navigation }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [tags, setTags] = useState([]);
+
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect( () => {
-    const description = navigation.getParam("description", null); 
+  useEffect(() => {
+    const description = navigation.getParam("description", null);
     setContent(description);
+
+    const _tags = navigation.getParam("tags", []);
+    if (_tags) {
+      setTags(_tags);
+    }
   }, [navigation.state.params]);
   async function onSaveRecipe() {
     try {
@@ -70,14 +78,14 @@ function AddRecipe({ navigation }) {
         {error !== "" && <ErrorText error={error} />}
         {message !== "" && <MessageText message={message} />}
         <Card style={styles.card}>
-        <Card.Content>
-          <TextInput
-            label="Title"
-            value={title}
-            mode="outlined"
-            onChangeText={setTitle}
-            style={styles.text}
-          />
+          <Card.Content>
+            <TextInput
+              label="Title"
+              value={title}
+              mode="outlined"
+              onChangeText={setTitle}
+              style={styles.text}
+            />
           </Card.Content>
         </Card>
         <Card style={styles.card}>
@@ -97,9 +105,13 @@ function AddRecipe({ navigation }) {
             <Button
               icon="pencil"
               mode="contained"
-              onPress={() => navigation.navigate("AddRecipeDescription", { description: content })}
+              onPress={() =>
+                navigation.navigate("AddRecipeDescription", {
+                  description: content,
+                })
+              }
             >
-              {(content !== "")?"Edit":"Add"} description
+              {content !== "" ? "Edit" : "Add"} description
             </Button>
           </Card.Actions>
         </Card>
@@ -109,20 +121,38 @@ function AddRecipe({ navigation }) {
             <Button
               icon="camera"
               mode="contained"
-              onPress={() => navigation.navigate("AddRecipeImages", { description: content })}
+              onPress={() =>
+                navigation.navigate("AddRecipeImages", { description: content })
+              }
             >
               Add images
             </Button>
           </Card.Actions>
         </Card>
         <Card style={styles.card}>
+          {tags && (
+            <Card.Content>
+              <View style={styles.chipContainer}>
+                {tags.map((tag, index) => {
+                  return (
+                    <Chip key={index} style={styles.chip}>
+                      {tag}
+                    </Chip>
+                  );
+                })}
+              </View>
+            </Card.Content>
+          )}
+
           <Card.Actions style={styles.centerContainer}>
             <Button
-              icon="camera"
+              icon="tag"
               mode="contained"
-              onPress={() => navigation.navigate("AddRecipeTags", { description: content })}
+              onPress={() =>
+                navigation.navigate("AddRecipeTags", { tags: tags })
+              }
             >
-              Add tags
+              {tags ? "Edit" : "Add"} tags
             </Button>
           </Card.Actions>
         </Card>
@@ -172,6 +202,17 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 10,
     marginBottom: 25,
+  },
+  chipContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  chip: {
+    width: "auto",
+    margin: 5,
   },
 });
 

@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 
 export default function AddDescription(props) {
   const navigation = props.navigation;
-  const [content, setContent] = useState(props.description);
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     const description = navigation.getParam("description", null);
@@ -60,3 +60,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
 });
+
+AddDescription.navigationOptions = ({}) => {
+  return {
+    title: `Recipe description`,
+  };
+};
