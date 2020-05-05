@@ -17,7 +17,7 @@ const addRecipeStack = createStackNavigator(
         AddRecipeDescription: AddRecipeDescriptionScreen,
         AddRecipeImages: AddRecipeImagesScreen,
         AddRecipeTags: AddRecipeTagsScreen,
-        ShowCamera: ShowCameraScreen,
+        fromCamera: ShowCameraScreen,
     },
     {
         initialRouteName: 'AddRecipe',
