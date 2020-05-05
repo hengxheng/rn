@@ -139,7 +139,7 @@ function AddRecipe({ navigation }) {
                 navigation.navigate("AddRecipeImages", { images: images })
               }
             >
-              Add images
+              {images ? "Edit" : "Add"} images
             </Button>
           </Card.Actions>
         </Card>
