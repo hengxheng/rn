@@ -20,6 +20,7 @@ function AddRecipe({ navigation }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
+  const [images, setImages] = useState([]);
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
