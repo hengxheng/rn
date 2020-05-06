@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import {
-  Text,
-  IconButton,
-  TextInput,
-  FAB,
-  Card,
-  Button,
-  Paragraph,
-  Chip,
-} from "react-native-paper";
+import { TextInput, Card, Button, Chip } from "react-native-paper";
 import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
@@ -28,7 +19,7 @@ function AddRecipe({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const description = navigation.getParam("description", null);
+    const description = navigation.getParam("description", "");
     setContent(description);
 
     const _tags = navigation.getParam("tags", []);
@@ -42,25 +33,43 @@ function AddRecipe({ navigation }) {
     }
   }, [navigation.state.params]);
 
-  async function onSaveRecipe() {
+  function conventImageObject(img) {
+    let localUri =
+      Platform.OS === "android" ? img.uri : img.uri.replace("file://", "");
+    let filename = localUri.split("/").pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    return { uri: localUri, name: filename, type: type };
+  }
+
+  async function onSave() {
     try {
       //GET TOKEN
       let token = await AsyncStorage.getItem("token");
 
+      const imgs = images.map((i) => {
+        return conventImageObject(i);
+      });
+
+      const data = new FormData();
+      imgs.map( (img) => {
+        data.append("images", img);
+      });
+      
+      data.append("title", title);
+      data.append("description", content);
+      data.append("tags", JSON.stringify(tags));
+
       if (token !== null) {
         await axios
-          .post(
-            c.ADD_RECIPES,
-            {
-              title,
-              content,
+          .post(c.ADD_RECIPES, data, {
+            headers: {
+              Authorization: `JWT ${token}`,
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
             },
-            {
-              headers: {
-                Authorization: `JWT ${token}`,
-              },
-            }
-          )
+          })
           .then((response) => {
             if (response.status === 200) {
               navigation.goBack();
@@ -177,7 +186,7 @@ function AddRecipe({ navigation }) {
             mode="contained"
             icon="check"
             disabled={title == "" ? true : false}
-            onPress={() => onSaveRecipe()}
+            onPress={() => onSave()}
           >
             Submit
           </Button>
