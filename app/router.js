@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Icon } from 'react-native-elements' 
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
@@ -14,17 +14,44 @@ import AuthProvider from "./providers/auth";
 
 const MainTabNavigator = createBottomTabNavigator(
   {
-    Home: HomeStack,
-    Activity: RecipeStack,
+    Home: {
+      screen: HomeStack,
+      navigationOptions: {
+        tabBarLabel:"Home",
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="home" size={30} color={tintColor} />
+        )
+      },
+    },
+    Activity: {
+      screen: RecipeStack,
+      navigationOptions: {
+        tabBarLabel:"Activity",
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="local-activity" size={30} color={tintColor} />
+        )
+      }
+    },
     Account: {
       screen: AccountStack,
-      // navigationOptions:{
-      //     tabBarVisible: false
-      // }
+      navigationOptions: {
+        tabBarLabel:"Account",
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="account-circle" size={30} color={tintColor} />
+        )
+      }
     },
   },
   {
     initialRouteName: "Home",
+    order: ['Home', 'Activity', 'Account'],
+    tabBarOptions: {
+      activeTintColor: '#cc3300',
+      inactiveTintColor: '#006600',
+      style: {
+        backgroundColor: '#ddd',
+      }
+    },
   }
 );
 

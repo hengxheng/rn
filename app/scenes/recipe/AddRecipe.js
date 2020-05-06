@@ -53,10 +53,10 @@ function AddRecipe({ navigation }) {
       });
 
       const data = new FormData();
-      imgs.map( (img) => {
+      imgs.map((img) => {
         data.append("images", img);
       });
-      
+
       data.append("title", title);
       data.append("description", content);
       data.append("tags", JSON.stringify(tags));

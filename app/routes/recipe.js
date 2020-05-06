@@ -4,10 +4,10 @@ import {createStackNavigator} from 'react-navigation-stack';
 import ListRecipeScreen from "../scenes/recipe/ListRecipe";
 import AddRecipeScreen from "../scenes/recipe/AddRecipe";
 import AddRecipeDescriptionScreen from "../scenes/recipe/AddDescription";
-import AddRecipeImagesScreen from "../scenes/recipe/AddImags";
+import AddRecipeImagesScreen from "../scenes/recipe/AddImages";
 import AddRecipeTagsScreen from "../scenes/recipe/AddTags";
 import ShowCameraScreen from "../scenes/recipe/ShowCamera";
-import {headerStyle, headerTitleStyle} from '../theme'
+import {headerStyle, headerTitleStyle} from '../theme';
 
 
 const addRecipeStack = createStackNavigator(

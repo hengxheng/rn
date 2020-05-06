@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
+import RecipeCard from "./components/RecipeCard";
 
 function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -18,6 +19,7 @@ function ListRecipe({ navigation }) {
             headers: { Authorization: `JWT ${token}` },
           })
           .then((response) => {
+            // console.log(response);
             setRecipes(response.data.data);
           });
       } catch (error) {
@@ -27,10 +29,10 @@ function ListRecipe({ navigation }) {
     getRecipes();
   }, []);
 
-  const addRecipe = (recipe) => {
-    recipe.id = recipes.length + 1;
-    setRecipes([...recipes, recipe]);
-  };
+  // const addRecipe = (recipe) => {
+  //   recipe.id = recipes.length + 1;
+  //   setRecipes([...recipes, recipe]);
+  // };
 
   return (
     <>
@@ -44,12 +46,7 @@ function ListRecipe({ navigation }) {
           <FlatList
             data={recipes}
             renderItem={({ item }) => (
-              <List.Item
-                title={item.title}
-                description={item.content}
-                descriptionNumberOfLines={1}
-                titleStyle={styles.listTitle}
-              />
+              <RecipeCard item={item} />
             )}
             keyExtractor={(item) => item.id.toString()}
           />
@@ -59,7 +56,7 @@ function ListRecipe({ navigation }) {
           small
           icon="plus"
           label="Add new recipe"
-          onPress={() => navigation.navigate("AddRecipe", { addRecipe })}
+          onPress={() => navigation.navigate("AddRecipe")}
         />
       </View>
     </>
