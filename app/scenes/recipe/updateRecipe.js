@@ -7,20 +7,15 @@ import axios from "axios";
 import * as c from "../../constants";
 import { MessageText, ErrorText } from "../../components/Shared";
 import { SliderBox } from "react-native-image-slider-box";
-import SnackBar from "../../components/SnackBar";
 
-function AddRecipe({ navigation }) {
+function updateRecipe({ navigation }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
 
-  const [snackbar, setSnackbar] = useState({
-    visible: false,
-    type: null,
-    message: "",
-  });
-
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -49,68 +44,47 @@ function AddRecipe({ navigation }) {
   }
 
   async function onSave() {
-    //GET TOKEN
-    let token = await AsyncStorage.getItem("token");
+    try {
+      //GET TOKEN
+      let token = await AsyncStorage.getItem("token");
 
-    const imgs = images.map((i) => {
-      return conventImageObject(i);
-    });
-
-    const data = new FormData();
-    imgs.map((img) => {
-      data.append("images", img);
-    });
-
-    data.append("title", title);
-    data.append("content", content);
-    data.append("tags", JSON.stringify(tags));
-
-    if (token !== null) {
-      await axios
-        .post(c.ADD_RECIPES, data, {
-          headers: {
-            Authorization: `JWT ${token}`,
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setSnackbar({
-              visible: true,
-              type: "info",
-              message: "Recipe is added",
-            });
-            navigation.navigate("ListRecipe");
-          } else if (response.status === 401 || response.status === 403) {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Token expired, please try login again",
-            });
-          } else {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Server error",
-            });
-          }
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          setSnackbar({
-            visible: true,
-            type: "error",
-            message: "Cannot connect to server",
-          });
-        });
-    } else {
-      setSnackbar({
-        visible: true,
-        type: "error",
-        message: "Cannot connect to server",
+      const imgs = images.map((i) => {
+        return conventImageObject(i);
       });
+
+      const data = new FormData();
+      imgs.map((img) => {
+        data.append("images", img);
+      });
+
+      data.append("title", title);
+      data.append("content", content);
+      data.append("tags", JSON.stringify(tags));
+
+      if (token !== null) {
+        await axios
+          .post(c.ADD_RECIPES, data, {
+            headers: {
+              Authorization: `JWT ${token}`,
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              navigation.goBack();
+            } else {
+              setMessage("Error");
+            }
+          })
+          .catch((error) => {
+            setMessage("Error");
+          });
+      } else {
+        setMessage("Unauthorised");
+      }
+    } catch (error) {
+      setMessage(error);
     }
   }
 
@@ -118,6 +92,8 @@ function AddRecipe({ navigation }) {
     <>
       <Header titleText="Add recipe" />
       <ScrollView style={styles.container}>
+        {error !== "" && <ErrorText error={error} />}
+        {message !== "" && <MessageText message={message} />}
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
@@ -214,13 +190,8 @@ function AddRecipe({ navigation }) {
           >
             Submit
           </Button>
-        </View>  
+        </View>
       </ScrollView>
-      <SnackBar
-          visible={snackbar.visible}
-          type={snackbar.type}
-          message={snackbar.message}
-        />
     </>
   );
 }

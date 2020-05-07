@@ -12,6 +12,7 @@ import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
 import RecipeCard from "../../components/RecipeCard";
+import SnackBar from "../../components/SnackBar";
 
 export default function Home({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -20,6 +21,11 @@ export default function Home({ navigation }) {
   // const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
 
   useEffect(() => {
     setRecipes([]);
@@ -28,13 +34,13 @@ export default function Home({ navigation }) {
   }, []);
 
   async function getRecipes(fetchPage) {
-    try {
-      let token = await AsyncStorage.getItem("token");
-      await axios
-        .get(`${c.GET_RECIPES}/${fetchPage}`, {
-          headers: { Authorization: `JWT ${token}` },
-        })
-        .then((response) => {
+    let token = await AsyncStorage.getItem("token");
+    await axios
+      .get(`${c.GET_RECIPES}/${fetchPage}`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then((response) => {
+        if (response.status === 200) {
           // console.log(response.data.data);
           const recipeData = response.data.data;
           if (recipeData.length > 0) {
@@ -49,11 +55,29 @@ export default function Home({ navigation }) {
           } else {
             setLoadingMore(false);
           }
-          
+        } else if (response.status === 401 || response.status === 403) {
+          setSnackbar({
+            visible: true,
+            type: "error",
+            message: "Token expired, please try login again",
+          });
+        } else {
+          setSnackbar({
+            visible: true,
+            type: "error",
+            message: "Server error",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: "Cannot connect to server",
         });
-    } catch (error) {
-      setMessage("Error");
-    }
+      });
+
     setRefreshing(false);
   }
 
@@ -102,6 +126,11 @@ export default function Home({ navigation }) {
           />
         )}
       </SafeAreaView>
+      <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+        />
     </>
   );
 }

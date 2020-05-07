@@ -13,15 +13,19 @@ import axios from "axios";
 import * as c from "../../constants";
 import { useAuth } from "../../providers/auth";
 import MyRecipeCard from "../../components/MyRecipeCard";
+import SnackBar from "../../components/SnackBar";
 
 function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
-  const [message, setMessage] = useState("");
   const [page, setPage] = useState(0);
   // const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
   const { state } = useAuth();
 
   useEffect(() => {
@@ -31,14 +35,14 @@ function ListRecipe({ navigation }) {
   }, []);
 
   async function getRecipes(fetchPage) {
-    try {
-      let token = await AsyncStorage.getItem("token");
-      await axios
-        .get(`${c.GET_USER_RECIPES}/${state.user.id}/${fetchPage}`, {
-          headers: { Authorization: `JWT ${token}` },
-        })
-        .then((response) => {
-          // console.log(response.data.data);
+    let token = await AsyncStorage.getItem("token");
+    await axios
+      .get(`${c.GET_USER_RECIPES}/${state.user.id}/${fetchPage}`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then((response) => {
+        // console.log(response);
+        if (response.status === 200) {
           const recipeData = response.data.data;
           if (recipeData.length > 0) {
             if (fetchPage === 0) {
@@ -52,11 +56,29 @@ function ListRecipe({ navigation }) {
           } else {
             setLoadingMore(false);
           }
-          
+        } else if (response.status === 401 || response.status === 403) {
+          setSnackbar({
+            visible: true,
+            type: "error",
+            message: "Token expired, please try login again",
+          });
+        } else {
+          setSnackbar({
+            visible: true,
+            type: "error",
+            message: "Server error",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: "Cannot connect to server",
         });
-    } catch (error) {
-      setMessage("Error");
-    }
+      });
+
     setRefreshing(false);
   }
 
@@ -105,6 +127,11 @@ function ListRecipe({ navigation }) {
           />
         )}
       </SafeAreaView>
+      <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+        />
       <FAB
         style={styles.fab}
         small

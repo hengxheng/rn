@@ -21,7 +21,7 @@ export default function RecipeCard(props) {
     item.RecipeImages.length > 0
       ? { uri: RECIPE_IMAGE_URL + "/" + item.RecipeImages[0].path }
       : require("../../assets/image-placeholder.png");
-    console.log(item.Tags);
+
   return (
     <Card>
       <Card.Cover source={cover} />
