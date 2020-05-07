@@ -27,8 +27,6 @@ function ListRecipe({ navigation }) {
     getRecipes(page);
   }, []);
 
-  // useEffect(() => {}, [loadingMore]);
-
   async function getRecipes(fetchPage) {
     try {
       let token = await AsyncStorage.getItem("token");
