@@ -58,7 +58,7 @@ function AddRecipe({ navigation }) {
       });
 
       data.append("title", title);
-      data.append("description", content);
+      data.append("content", content);
       data.append("tags", JSON.stringify(tags));
 
       if (token !== null) {

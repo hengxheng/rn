@@ -23,7 +23,7 @@ export default function RecipeCard(props) {
   return (
     <Card>
       <Card.Title
-        title={item.User.firstName}
+        title={item.User.firstName+" "+item.id} 
         subtitle={item.title}
         left={LeftContent}
       />
