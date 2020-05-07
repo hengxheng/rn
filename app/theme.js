@@ -8,3 +8,7 @@ export let headerStyle = {backgroundColor: '#fff', borderBottomWidth:0, shadowCo
 export let headerTitleStyle = {fontWeight: 'bold', fontSize: 17, fontFamily: font, color: titleColor};
 
 export const imageOptions = {allowsEditing: true, aspect: [4, 3]};
+
+export const Colors = {
+    primaryIconButton: "#03DAC6",
+}

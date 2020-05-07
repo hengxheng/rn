@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import { Avatar, Button, Card, Title, Paragraph, IconButton} from "react-native-paper";
 import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
+import { Colors } from "../theme";
 
 export default function RecipeCard(props) {
   const item = props.item;
@@ -22,18 +23,23 @@ export default function RecipeCard(props) {
   //   console.log(item);
   return (
     <Card>
+      <Card.Cover source={cover} />
       <Card.Title
-        title={item.User.firstName+" "+item.id} 
-        subtitle={item.title}
+        title={item.title}
+        subtitle={item.User.firstName+" "+item.id} 
         left={LeftContent}
       />
-      <Card.Cover source={cover} />
-      <Card.Content>
-        <Title>{item.title}</Title>
-        {/* <Paragraph>{item.content}</Paragraph> */}
-      </Card.Content>
+      {/* <Card.Content>
+        <Title></Title>
+        <Paragraph>{item.content}</Paragraph>
+      </Card.Content> */}
       <Card.Actions>
-        <Button>View </Button>
+      <IconButton
+            icon="eye-circle"
+            color={Colors.primaryIconButton}
+            size={30}
+            onPress={() => console.log("Pressed")}
+          />
       </Card.Actions>
     </Card>
   );

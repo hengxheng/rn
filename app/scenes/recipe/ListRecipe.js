@@ -6,12 +6,12 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from "react-native";
-import { Text, FAB, List } from "react-native-paper";
+import { Text, FAB } from "react-native-paper";
 import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
-import RecipeCard from "../../components/RecipeCard";
+import MyRecipeCard from "../../components/MyRecipeCard";
 
 function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -91,7 +91,7 @@ function ListRecipe({ navigation }) {
         ) : (
           <FlatList
             data={recipes}
-            renderItem={({ item }) => <RecipeCard item={item} />}
+            renderItem={({ item }) => <MyRecipeCard item={item} />}
             initialNumToRender={8}
             onEndReached={() => handleLoadMore()}
             onEndReachedThreshold={0.5}

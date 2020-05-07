@@ -102,13 +102,6 @@ export default function Home({ navigation }) {
           />
         )}
       </SafeAreaView>
-      <FAB
-        style={styles.fab}
-        small
-        icon="plus"
-        label="ADD"
-        onPress={() => navigation.navigate("AddRecipe")}
-      />
     </>
   );
 }
