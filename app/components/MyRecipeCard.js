@@ -6,10 +6,11 @@ import {
   Title,
   Paragraph,
   IconButton,
+  Chip,
 } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { RECIPE_IMAGE_URL } from "../constants";
-import { Colors } from "../theme";
+import { Colors, chipContainer, tagStyle } from "../theme";
 
 export default function MyRecipeCard(props) {
   const item = props.item;
@@ -25,6 +26,19 @@ export default function MyRecipeCard(props) {
       <Card.Content>
         <Title>{item.title}</Title>
         <Paragraph>{item.createdAt}</Paragraph>
+        <View style={ chipContainer }>
+          {item.Tags.map((tag, index) => {
+            return (
+              <Chip
+                key={index}
+                style={tagStyle}
+                icon="tag"
+              >
+                {tag.name}
+              </Chip>
+            );
+          })}
+        </View>
       </Card.Content>
       <Card.Actions>
         <View style={styles.listButtonContainer}>

@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Avatar, Button, Card, Title, Paragraph, IconButton} from "react-native-paper";
+import { View } from "react-native";
+import { Avatar, Button, Card, Title, Paragraph, IconButton, Chip} from "react-native-paper";
 import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
-import { Colors } from "../theme";
+import { Colors, chipContainer, tagStyle } from "../theme";
 
 export default function RecipeCard(props) {
   const item = props.item;
@@ -20,7 +21,7 @@ export default function RecipeCard(props) {
     item.RecipeImages.length > 0
       ? { uri: RECIPE_IMAGE_URL + "/" + item.RecipeImages[0].path }
       : require("../../assets/image-placeholder.png");
-  //   console.log(item);
+    console.log(item.Tags);
   return (
     <Card>
       <Card.Cover source={cover} />
@@ -29,10 +30,23 @@ export default function RecipeCard(props) {
         subtitle={item.User.firstName+" "+item.id} 
         left={LeftContent}
       />
-      {/* <Card.Content>
-        <Title></Title>
-        <Paragraph>{item.content}</Paragraph>
-      </Card.Content> */}
+      <Card.Content>
+      <View style={ chipContainer }>
+          {item.Tags.map((tag, index) => {
+            return (
+              <Chip
+                key={index}
+                style={tagStyle}
+                icon="tag"
+              >
+                {tag.name}
+              </Chip>
+            );
+          })}
+        </View>
+        {/* <Title></Title>
+        <Paragraph>{item.content}</Paragraph> */}
+      </Card.Content>
       <Card.Actions>
       <IconButton
             icon="eye-circle"

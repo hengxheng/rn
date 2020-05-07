@@ -11,6 +11,7 @@ import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
+import { useAuth } from "../../providers/auth";
 import MyRecipeCard from "../../components/MyRecipeCard";
 
 function ListRecipe({ navigation }) {
@@ -20,6 +21,8 @@ function ListRecipe({ navigation }) {
   // const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  const { state } = useAuth();
 
   useEffect(() => {
     setRecipes([]);
@@ -31,7 +34,7 @@ function ListRecipe({ navigation }) {
     try {
       let token = await AsyncStorage.getItem("token");
       await axios
-        .get(`${c.GET_RECIPES}/${fetchPage}`, {
+        .get(`${c.GET_USER_RECIPES}/${state.user.id}/${fetchPage}`, {
           headers: { Authorization: `JWT ${token}` },
         })
         .then((response) => {

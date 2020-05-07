@@ -10,7 +10,7 @@ export const UPLOAD_AVATAR = `${API_URL}/user/upload_avatar`;
 export const FORGOT_PASSWORD = `${API_URL}/auth/recover`;
 
 export const GET_USERS = `${API_URL}/users`;
-
+export const GET_USER_RECIPES = `${API_URL}/user/recipe`;
 
 export const GET_RECIPES = `${API_URL}/recipes`;
 export const ADD_RECIPES = `${API_URL}/recipe/add`;
