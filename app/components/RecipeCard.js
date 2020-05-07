@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
-import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../../../constants";
+import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
 
 export default function RecipeCard(props) {
   const item = props.item;
@@ -18,7 +18,7 @@ export default function RecipeCard(props) {
   const cover =
     item.RecipeImages.length > 0
       ? { uri: RECIPE_IMAGE_URL + "/" + item.RecipeImages[0].path }
-      : require("../../../../assets/image-placeholder.png");
+      : require("../../assets/image-placeholder.png");
   //   console.log(item);
   return (
     <Card>
@@ -27,13 +27,13 @@ export default function RecipeCard(props) {
         subtitle={item.title}
         left={LeftContent}
       />
+      <Card.Cover source={cover} />
       <Card.Content>
         <Title>{item.title}</Title>
-        <Paragraph>{item.content}</Paragraph>
+        {/* <Paragraph>{item.content}</Paragraph> */}
       </Card.Content>
-      <Card.Cover source={cover} />
       <Card.Actions>
-        <Button>View</Button>
+        <Button>View </Button>
       </Card.Actions>
     </Card>
   );

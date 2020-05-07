@@ -11,7 +11,7 @@ import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
-import RecipeCard from "./components/RecipeCard";
+import RecipeCard from "../../components/RecipeCard";
 
 function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -129,11 +129,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   listFooter: {
-    position: "relative",
     width: "100%",
     height: 200,
     paddingVertical: 20,
-    borderTopWidth: 1,
     marginTop: 10,
     marginBottom: 10,
     borderColor: "grey",

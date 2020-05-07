@@ -26,7 +26,7 @@
       "bundleIdentifier": "expo-hengzou"
     },
     "android": {
-      "package": "expo-hengzou"
+      "package": "expo.hengzou"
     },
     "entryPoint": "node_modules/expo/AppEntry.js"
   }
