@@ -157,7 +157,7 @@ export default function UpdateRecipe({ navigation }) {
               icon="pencil"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeDescription", {
+                navigation.navigate("UpdateRecipeDescription", {
                   update: true,
                   content: content,
                 })
@@ -180,7 +180,7 @@ export default function UpdateRecipe({ navigation }) {
               icon="camera"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeImages", {
+                navigation.navigate("UpdateRecipeImages", {
                   update: true,
                   images: images,
                 })
@@ -210,7 +210,7 @@ export default function UpdateRecipe({ navigation }) {
               icon="tag"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeTags", {
+                navigation.navigate("UpdateRecipeTags", {
                   update: true,
                   tags: tags,
                 })

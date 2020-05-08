@@ -16,14 +16,26 @@ const addRecipeStack = createStackNavigator(
     {
 
         AddRecipe: AddRecipeScreen,
-        UpdateRecipe: UpdateRecipeScreen,
         AddRecipeDescription: AddRecipeDescriptionScreen,
         AddRecipeImages: AddRecipeImagesScreen,
         AddRecipeTags: AddRecipeTagsScreen,
-        fromCamera: ShowCameraScreen,
+        
     },
     {
         initialRouteName: 'AddRecipe',
+        defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
+    }
+);
+
+const updateRecipeStack = createStackNavigator(
+    {
+        UpdateRecipe: UpdateRecipeScreen,
+        UpdateRecipeDescription: AddRecipeDescriptionScreen,
+        UpdateRecipeImages: AddRecipeImagesScreen,
+        UpdateRecipeTags: AddRecipeTagsScreen,
+    },
+    {
+        initialRouteName: 'UpdateRecipe',
         defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
     }
 );
@@ -32,8 +44,16 @@ const RecipeStack = createStackNavigator(
     {
         ListRecipe: ListRecipeScreen,
         ViewRecipe: ViewRecipeScreen,
+        fromCamera: ShowCameraScreen,
         AddRecipe: {
             screen: addRecipeStack,
+            navigationOptions:{
+                headerShown: false,
+                  tabBarVisible: false,
+                 }
+        },
+        UpdateRecipe: {
+            screen: updateRecipeStack,
             navigationOptions:{
                 headerShown: false,
                   tabBarVisible: false,
