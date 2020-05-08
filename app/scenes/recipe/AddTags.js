@@ -3,22 +3,21 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, Chip } from "react-native-paper";
 import Header from "../../components/Header";
 
-export default function AddTags(props) {
-  const navigation = props.navigation;
+export default function AddTags({ navigation, route }) {
+
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
-    const _tags = navigation.getParam("tags", null);
-    if (_tags) {
-      setTags(_tags);
+    if (route.params?.tags) {
+      setTags(route.params.tags);
     }
 
-    if (navigation.getParam("update", false) === true){
+    if (route.params?.update === true){
       setReturnURL("UpdateRecipe");
     }
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   function addTag() {
     if (tag !== "") {

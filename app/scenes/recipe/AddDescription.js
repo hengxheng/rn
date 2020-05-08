@@ -3,21 +3,19 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import Header from "../../components/Header";
 
-export default function AddDescription(props) {
-  const navigation = props.navigation;
+export default function AddDescription({ navigation, route }) {
   const [content, setContent] = useState("");
   const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
-    const content = navigation.getParam("content", null);
-    if (content) {
-      setContent(content);
+    if (route.params?.content) {
+      setContent(route.params.content);
     }
 
-    if (navigation.getParam("update", false) === true){
+    if (route.params?.update === true){
       setReturnURL("UpdateRecipe");
     }
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   return (
     <>

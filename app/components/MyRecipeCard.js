@@ -82,11 +82,14 @@ export default function MyRecipeCard(props) {
             size={30}
             onPress={() =>
               navigation.navigate("UpdateRecipe", {
-                recipeId: item.id,
-                title: item.title,
-                content: item.content,
-                images: pluckImages(item.RecipeImages),
-                tags: pluckTagName(item.Tags),
+                screen: "UpdateRecipe",
+                params: {
+                  id: item.id,
+                  title: item.title,
+                  content: item.content,
+                  images: pluckImages(item.RecipeImages),
+                  tags: pluckTagName(item.Tags),
+                },
               })
             }
           />

@@ -13,8 +13,7 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 
-export default function AddImages(props) {
-  const navigation = props.navigation;
+export default function AddImages({ navigation, route }) {
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([]);
@@ -22,15 +21,15 @@ export default function AddImages(props) {
   const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
-    const _selectedImages = navigation.getParam("images", []);
-    if (_selectedImages) {
+    if (route.params?.images) {
+      const _selectedImages = route.params.images;
       setSelectedImages([...selectedImages, ..._selectedImages]);
     }
 
-    if (navigation.getParam("update", false) === true){
+    if (route.params?.update === true) {
       setReturnURL("UpdateRecipe");
     }
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   useEffect(() => {
     const _images = [...selectedImages];

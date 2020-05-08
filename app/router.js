@@ -1,7 +1,8 @@
 import React from "react";
-import { Icon } from 'react-native-elements' 
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import { Provider as PaperProvider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
 //IMPORT ROUTES
 import AuthStack from "./routes/Auth";
@@ -12,64 +13,61 @@ import AccountStack from "./routes/Account";
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
 
-const MainTabNavigator = createBottomTabNavigator(
-  {
-    Home: {
-      screen: HomeStack,
-      navigationOptions: {
-        tabBarLabel:"Home",
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="home" size={30} color={tintColor} />
-        )
-      },
-    },
-    Activity: {
-      screen: RecipeStack,
-      navigationOptions: {
-        tabBarLabel:"Activity",
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="local-activity" size={30} color={tintColor} />
-        )
-      }
-    },
-    Account: {
-      screen: AccountStack,
-      navigationOptions: {
-        tabBarLabel:"Account",
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="account-circle" size={30} color={tintColor} />
-        )
-      }
-    },
-  },
-  {
-    initialRouteName: "Home",
-    order: ['Home', 'Activity', 'Account'],
-    tabBarOptions: {
-      activeTintColor: '#cc3300',
-      inactiveTintColor: '#006600',
-      style: {
-        backgroundColor: '#ddd',
-      }
-    },
-  }
-);
+const MainTab = createMaterialBottomTabNavigator();
 
-const AppStack = createSwitchNavigator(
-  {
-    Loading: AuthLoading,
-    Auth: AuthStack,
-    App: MainTabNavigator,
-  },
-  { initialRouteName: "Loading" }
-);
+function MainTabNavigator() {
+  return (
+    <MainTab.Navigator
+    initialRouteName="Home"
+  activeColor="#f0edf6"
+  inactiveColor="#3e2465"
+  barStyle={{ backgroundColor: '#694fad' }}>
+      <MainTab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          tabBarIcon: "home-account",
+        }}
+      />
+      <MainTab.Screen
+        name="Activity"
+        component={RecipeStack}
+        options={{
+          tabBarIcon: "safe",
+        }}
+      />
+      <MainTab.Screen
+        name="Account"
+        component={AccountStack}
+        options={{
+          tabBarIcon: "account-circle",
+        }}
+      />
+    </MainTab.Navigator>
+  );
+}
 
-const Navigator = createAppContainer(AppStack);
+const AppStack = createStackNavigator();
+
+function Navigator() {
+  return (
+    <AppStack.Navigator
+    headerMode="none">
+      <AppStack.Screen name="Auth" component={AuthStack} />
+      <AppStack.Screen name="App" component={MainTabNavigator} />
+      <AppStack.Screen name="Loading" component={AuthLoading} />
+    </AppStack.Navigator>
+  );
+}
 
 export default function Router(props) {
   return (
     <AuthProvider>
-      <Navigator />
+      <PaperProvider>
+        <NavigationContainer>
+          <Navigator />
+        </NavigationContainer>
+      </PaperProvider>
     </AuthProvider>
   );
 }

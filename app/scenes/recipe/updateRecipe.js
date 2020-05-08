@@ -8,8 +8,8 @@ import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 
-export default function UpdateRecipe({ navigation }) {
-  const [recipeId, setRecipeId] = useState(null);
+export default function UpdateRecipe({ navigation, route }) {
+  const recipeId = route.params.id;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
@@ -22,24 +22,40 @@ export default function UpdateRecipe({ navigation }) {
   });
 
   useEffect(() => {
-    setRecipeId(navigation.getParam("recipeId", null));
-    setTitle(navigation.getParam("title", ""));
-    setContent(navigation.getParam("content", ""));
-    setTags(navigation.getParam("tags", []));
-    setImages(navigation.getParam("images", []));
+    if (route.params?.title) {
+      setTitle(route.params.title);
+    }
+
+    if (route.params?.content) {
+      setContent(route.params.content);
+    }
+
+    if (route.params?.tags) {
+      setTags(route.params.tags);
+    }
+
+    if (route.params?.images) {
+      setImages(route.params.images);
+    }
   }, []);
 
   useEffect(() => {
-    setContent(navigation.getParam("content", ""));
-  }, [navigation.state.params.content]);
+    if (route.params?.content) {
+      setContent(route.params.content);
+    }
+  }, [route.params?.content]);
 
   useEffect(() => {
-    setTags(navigation.getParam("tags", []));
-  }, [navigation.state.params.tags]);
+    if (route.params?.tags) {
+      setTags(route.params.tags);
+    }
+  }, [route.params?.tags]);
 
   useEffect(() => {
-    setImages(navigation.getParam("images", []));
-  }, [navigation.state.params.images]);
+    if (route.params?.images) {
+      setImages(route.params.images);
+    }
+  }, [route.params?.images]);
 
   function hideSnackbar() {
     setSnackbar({ ...snackbar, visible: false });

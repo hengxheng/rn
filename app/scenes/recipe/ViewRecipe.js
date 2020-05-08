@@ -16,8 +16,9 @@ import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 import { RECIPE_IMAGE_URL } from "../../constants";
 
-export default function ViewRecipe({ navigation }) {
-  const [recipeId, setRecipeId] = useState(navigation.getParam("id", null));
+export default function ViewRecipe({ navigation, route }) {
+  const recipeId = route.params.id;
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
@@ -30,8 +31,6 @@ export default function ViewRecipe({ navigation }) {
   });
 
   useEffect(() => {
-    console.log(recipeId);
-    console.log(navigation.getParam("id"));
     onLoad();
   }, []);
 

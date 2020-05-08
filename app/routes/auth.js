@@ -1,24 +1,19 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 //IMPORT SCENES
 import RegisterScreen from "../scenes/auth/Register";
 import LoginScreen from "../scenes/auth/Login";
 import ForgotPasswordScreen from "../scenes/auth/ForgotPassword";
 
-import {headerStyle, headerTitleStyle} from '../theme'
+const AuthNav = createStackNavigator();
 
-//Create Routes
-const AuthStack = createStackNavigator(
-    {
-        Register: RegisterScreen,
-        Login: LoginScreen,
-        ForgotPassword: ForgotPasswordScreen
-    },
-    {
-        initialRouteName: 'Login',
-        defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
-    }
-);
-
-export default AuthStack;
+export default function AuthStack() {
+    return (
+        <AuthNav.Navigator>
+            <AuthNav.Screen name="Login" component={LoginScreen} />
+            <AuthNav.Screen name="Register" component={RegisterScreen} />
+            <AuthNav.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        </AuthNav.Navigator>
+    )
+}

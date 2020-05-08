@@ -8,7 +8,7 @@ import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 
-export default function AddRecipe({ navigation }) {
+export default function AddRecipe({ navigation, route }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
@@ -21,10 +21,18 @@ export default function AddRecipe({ navigation }) {
   });
 
   useEffect(() => {
-    setContent(navigation.getParam("content", ""));
-    setTags(navigation.getParam("tags", []));
-    setImages(navigation.getParam("images", []));
-  }, [navigation.state.params]);
+    if (route.params?.content) {
+      setContent(route.params.content);
+    }
+
+    if (route.params?.tags) {
+      setTags(route.params.tags);
+    }
+    
+    if (route.params?.images) {
+      setImages(route.params.images);
+    }
+  }, [route.params]);
 
   function hideSnackbar() {
     setSnackbar({ ...snackbar, visible: false });

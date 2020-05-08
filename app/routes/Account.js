@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 //IMPORT SCENES
 import LogoutScreen from "../scenes/account/Logout";
@@ -12,22 +12,19 @@ import UpdateProfileImageScreen from "../scenes/account/UpdateProfileImage";
 import ShowCameraScreen from "../scenes/account/ShowCamera";
 import {headerStyle, headerTitleStyle} from '../theme';
 
-//Create Routes
-const AccountStack = createStackNavigator(
-    {
-        Profile: ProfileScreen,
-        updateName: UpdateNameScreen,
-        updateUsername: UpdateUsernameScreen,
-        updatePassword: UpdatePasswordScreen,
-        updateEmail: UpdateEmailScreen,
-        updateProfileImage: UpdateProfileImageScreen,
-        showCamera: ShowCameraScreen,
-        Logout: LogoutScreen,
-    },
-    {
-        initialRouteName: 'Profile',
-        defaultNavigationOptions: () => ({headerStyle, headerTitleStyle})
-    }
-);
+const AccountNav = createStackNavigator();
 
-export default AccountStack;
+export default function AccountStack() {
+    return (
+        <AccountNav.Navigator>
+            <AccountNav.Screen name="Profile" component={ProfileScreen} />
+            <AccountNav.Screen name="updateName" component={UpdateNameScreen} />
+            <AccountNav.Screen name="updateUsername" component={UpdateUsernameScreen} />
+            <AccountNav.Screen name="updatePassword" component={UpdatePasswordScreen} />
+            <AccountNav.Screen name="updateEmail" component={UpdateEmailScreen} />
+            <AccountNav.Screen name="updateProfileImage" component={UpdateProfileImageScreen} />
+            <AccountNav.Screen name="showCamera" component={ShowCameraScreen} />
+            <AccountNav.Screen name="Logout" component={LogoutScreen} />
+        </AccountNav.Navigator>
+    )
+}
