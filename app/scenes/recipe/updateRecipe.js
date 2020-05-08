@@ -5,33 +5,45 @@ import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
-import { MessageText, ErrorText } from "../../components/Shared";
 import { SliderBox } from "react-native-image-slider-box";
+import SnackBar from "../../components/SnackBar";
 
-function updateRecipe({ navigation }) {
+export default function UpdateRecipe({ navigation }) {
+  const [recipeId, setRecipeId] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
 
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
 
   useEffect(() => {
-    const description = navigation.getParam("description", "");
-    setContent(description);
+    setRecipeId(navigation.getParam("recipeId", null));
+    setTitle(navigation.getParam("title", ""));
+    setContent(navigation.getParam("content", ""));
+    setTags(navigation.getParam("tags", []));
+    setImages(navigation.getParam("images", []));
+  }, []);
 
-    const _tags = navigation.getParam("tags", []);
-    if (_tags) {
-      setTags(_tags);
-    }
+  useEffect(() => {
+    setContent(navigation.getParam("content", ""));
+  }, [navigation.state.params.content]);
 
-    const _images = navigation.getParam("images", []);
-    if (_images) {
-      setImages(_images);
-    }
-  }, [navigation.state.params]);
+  useEffect(() => {
+    setTags(navigation.getParam("tags", []));
+  }, [navigation.state.params.tags]);
+
+  useEffect(() => {
+    setImages(navigation.getParam("images", []));
+  }, [navigation.state.params.images]);
+
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
   function conventImageObject(img) {
     let localUri =
@@ -44,56 +56,78 @@ function updateRecipe({ navigation }) {
   }
 
   async function onSave() {
-    try {
-      //GET TOKEN
-      let token = await AsyncStorage.getItem("token");
+    //GET TOKEN
+    let token = await AsyncStorage.getItem("token");
 
+    const data = new FormData();
+    data.append("id", recipeId);
+
+    if (!recipeId) {
       const imgs = images.map((i) => {
         return conventImageObject(i);
       });
-
-      const data = new FormData();
       imgs.map((img) => {
         data.append("images", img);
       });
+    }
 
-      data.append("title", title);
-      data.append("content", content);
-      data.append("tags", JSON.stringify(tags));
+    data.append("title", title);
+    data.append("content", content);
+    data.append("tags", JSON.stringify(tags));
 
-      if (token !== null) {
-        await axios
-          .post(c.ADD_RECIPES, data, {
-            headers: {
-              Authorization: `JWT ${token}`,
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              navigation.goBack();
-            } else {
-              setMessage("Error");
-            }
-          })
-          .catch((error) => {
-            setMessage("Error");
+    if (token !== null) {
+      await axios
+        .post(c.ADD_RECIPES, data, {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setSnackbar({
+              visible: true,
+              type: "info",
+              message: "Recipe is added",
+            });
+            navigation.navigate("ListRecipe");
+          } else if (response.status === 401 || response.status === 403) {
+            setSnackbar({
+              visible: true,
+              type: "error",
+              message: "Token expired, please try login again",
+            });
+          } else {
+            setSnackbar({
+              visible: true,
+              type: "error",
+              message: "Server error",
+            });
+          }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          setSnackbar({
+            visible: true,
+            type: "error",
+            message: "Cannot connect to server",
           });
-      } else {
-        setMessage("Unauthorised");
-      }
-    } catch (error) {
-      setMessage(error);
+        });
+    } else {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: "Cannot connect to server",
+      });
     }
   }
 
   return (
     <>
-      <Header titleText="Add recipe" />
+      <Header titleText="Edit recipe" />
       <ScrollView style={styles.container}>
-        {error !== "" && <ErrorText error={error} />}
-        {message !== "" && <MessageText message={message} />}
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
@@ -124,7 +158,8 @@ function updateRecipe({ navigation }) {
               mode="contained"
               onPress={() =>
                 navigation.navigate("AddRecipeDescription", {
-                  description: content,
+                  update: true,
+                  content: content,
                 })
               }
             >
@@ -145,7 +180,10 @@ function updateRecipe({ navigation }) {
               icon="camera"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeImages", { images: images })
+                navigation.navigate("AddRecipeImages", {
+                  update: true,
+                  images: images,
+                })
               }
             >
               {images ? "Edit" : "Add"} images
@@ -172,7 +210,10 @@ function updateRecipe({ navigation }) {
               icon="tag"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeTags", { tags: tags })
+                navigation.navigate("AddRecipeTags", {
+                  update: true,
+                  tags: tags,
+                })
               }
             >
               {tags ? "Edit" : "Add"} tags
@@ -192,6 +233,12 @@ function updateRecipe({ navigation }) {
           </Button>
         </View>
       </ScrollView>
+      <SnackBar
+        visible={snackbar.visible}
+        type={snackbar.type}
+        message={snackbar.message}
+        onClose={hideSnackbar}
+      />
     </>
   );
 }
@@ -238,5 +285,3 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
-
-export default AddRecipe;

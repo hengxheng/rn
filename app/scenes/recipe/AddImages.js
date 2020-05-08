@@ -19,11 +19,16 @@ export default function AddImages(props) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([]);
   const imagePlaceholder = require("../../../assets/image-placeholder.png");
+  const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
     const _selectedImages = navigation.getParam("images", []);
     if (_selectedImages) {
       setSelectedImages([...selectedImages, ..._selectedImages]);
+    }
+
+    if (navigation.getParam("update", false) === true){
+      setReturnURL("UpdateRecipe");
     }
   }, [navigation.state.params]);
 
@@ -126,7 +131,7 @@ export default function AddImages(props) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate("AddRecipe", { images: selectedImages })
+              navigation.navigate(returnURL, { images: selectedImages })
             }
           >
             Submit

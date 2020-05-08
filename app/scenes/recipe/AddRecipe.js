@@ -5,11 +5,11 @@ import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
-import { MessageText, ErrorText } from "../../components/Shared";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 
 function AddRecipe({ navigation }) {
+  const [recipeId, setRecipeId] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
@@ -21,22 +21,15 @@ function AddRecipe({ navigation }) {
     message: "",
   });
 
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    const description = navigation.getParam("description", "");
-    setContent(description);
-
-    const _tags = navigation.getParam("tags", []);
-    if (_tags) {
-      setTags(_tags);
-    }
-
-    const _images = navigation.getParam("images", []);
-    if (_images) {
-      setImages(_images);
-    }
+    setContent(navigation.getParam("content", ""));
+    setTags(navigation.getParam("tags", []));
+    setImages(navigation.getParam("images", []));
   }, [navigation.state.params]);
+
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
   function conventImageObject(img) {
     let localUri =
@@ -52,11 +45,11 @@ function AddRecipe({ navigation }) {
     //GET TOKEN
     let token = await AsyncStorage.getItem("token");
 
+    const data = new FormData();
+
     const imgs = images.map((i) => {
       return conventImageObject(i);
     });
-
-    const data = new FormData();
     imgs.map((img) => {
       data.append("images", img);
     });
@@ -148,7 +141,7 @@ function AddRecipe({ navigation }) {
               mode="contained"
               onPress={() =>
                 navigation.navigate("AddRecipeDescription", {
-                  description: content,
+                  content: content,
                 })
               }
             >
@@ -169,7 +162,9 @@ function AddRecipe({ navigation }) {
               icon="camera"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeImages", { images: images })
+                navigation.navigate("AddRecipeImages", {
+                  images: images,
+                })
               }
             >
               {images ? "Edit" : "Add"} images
@@ -196,7 +191,9 @@ function AddRecipe({ navigation }) {
               icon="tag"
               mode="contained"
               onPress={() =>
-                navigation.navigate("AddRecipeTags", { tags: tags })
+                navigation.navigate("AddRecipeTags", {
+                  tags: tags,
+                })
               }
             >
               {tags ? "Edit" : "Add"} tags
@@ -214,13 +211,14 @@ function AddRecipe({ navigation }) {
           >
             Submit
           </Button>
-        </View>  
+        </View>
       </ScrollView>
       <SnackBar
-          visible={snackbar.visible}
-          type={snackbar.type}
-          message={snackbar.message}
-        />
+        visible={snackbar.visible}
+        type={snackbar.type}
+        message={snackbar.message}
+        onClose={hideSnackbar}
+      />
     </>
   );
 }

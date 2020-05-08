@@ -13,12 +13,40 @@ import { RECIPE_IMAGE_URL } from "../constants";
 import { Colors, chipContainer, tagStyle } from "../theme";
 
 export default function MyRecipeCard(props) {
+  const navigation = props.navigation;
   const item = props.item;
-
   const cover =
     item.RecipeImages.length > 0
       ? { uri: RECIPE_IMAGE_URL + "/" + item.RecipeImages[0].path }
       : require("../../assets/image-placeholder.png");
+
+  // console.log(item.content);
+  function pluckTagName(tagObjs) {
+    if (!tagObjs) {
+      return null;
+    }
+
+    let tagNames = [];
+    tagNames = tagObjs.map((tag) => {
+      return tag.name;
+    });
+
+    return tagNames;
+  }
+
+  function pluckImages(imageObjs) {
+    if (!imageObjs) {
+      return null;
+    }
+
+    let images = [];
+    images = imageObjs.map((img) => {
+      const path = img.path;
+      return { uri: `${RECIPE_IMAGE_URL}/${path}`, uploaded: true };
+    });
+
+    return images;
+  }
 
   return (
     <Card>
@@ -26,14 +54,10 @@ export default function MyRecipeCard(props) {
       <Card.Content>
         <Title>{item.title}</Title>
         <Paragraph>{item.createdAt}</Paragraph>
-        <View style={ chipContainer }>
+        <View style={chipContainer}>
           {item.Tags.map((tag, index) => {
             return (
-              <Chip
-                key={index}
-                style={tagStyle}
-                icon="tag"
-              >
+              <Chip key={index} style={tagStyle} icon="tag">
                 {tag.name}
               </Chip>
             );
@@ -52,7 +76,15 @@ export default function MyRecipeCard(props) {
             icon="content-save-edit-outline"
             color={Colors.primaryIconButton}
             size={30}
-            onPress={() => console.log("Pressed1")}
+            onPress={() =>
+              navigation.navigate("UpdateRecipe", {
+                recipeId: item.id,
+                title: item.title,
+                content: item.content,
+                images: pluckImages(item.RecipeImages),
+                tags: pluckTagName(item.Tags),
+              })
+            }
           />
         </View>
       </Card.Actions>

@@ -7,11 +7,16 @@ export default function AddTags(props) {
   const navigation = props.navigation;
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
+  const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
     const _tags = navigation.getParam("tags", null);
     if (_tags) {
       setTags(_tags);
+    }
+
+    if (navigation.getParam("update", false) === true){
+      setReturnURL("UpdateRecipe");
     }
   }, [navigation.state.params]);
 
@@ -68,7 +73,7 @@ export default function AddTags(props) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate("AddRecipe", { tags: tags })
+              navigation.navigate(returnURL, { tags: tags })
             }
           >
             Submit

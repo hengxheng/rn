@@ -6,11 +6,16 @@ import Header from "../../components/Header";
 export default function AddDescription(props) {
   const navigation = props.navigation;
   const [content, setContent] = useState("");
+  const [returnURL, setReturnURL] = useState("AddRecipe");
 
   useEffect(() => {
-    const description = navigation.getParam("description", null);
-    if (description) {
-      setContent(description);
+    const content = navigation.getParam("content", null);
+    if (content) {
+      setContent(content);
+    }
+
+    if (navigation.getParam("update", false) === true){
+      setReturnURL("UpdateRecipe");
     }
   }, [navigation.state.params]);
 
@@ -32,7 +37,7 @@ export default function AddDescription(props) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate("AddRecipe", { description: content })
+              navigation.navigate(returnURL, { content: content })
             }
           >
             Submit

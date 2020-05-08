@@ -13,6 +13,7 @@ export default function SnackBar(props) {
 
   function _onDismissSnackBar(){
     setVisible(false);
+    props.onClose();
   }
 
   useEffect(() => {

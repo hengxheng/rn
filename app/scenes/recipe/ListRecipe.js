@@ -5,6 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   SafeAreaView,
+  AppState,
 } from "react-native";
 import { Text, FAB } from "react-native-paper";
 import Header from "../../components/Header";
@@ -28,11 +29,31 @@ function ListRecipe({ navigation }) {
   });
   const { state } = useAuth();
 
+  const [appState, setAppState] = useState(AppState.currentState);
+
   useEffect(() => {
     setRecipes([]);
     setPage(0);
     getRecipes(page);
+
+    AppState.addEventListener("change", _handleAppStateChange);
+    // console.log(state.user);
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange);
+    };
+
   }, []);
+
+  const _handleAppStateChange = nextAppState => {
+    if (appState.match(/inactive|background/) && nextAppState === "active") {
+      console.log("App has come to the foreground!");
+    }
+    setAppState(nextAppState);
+  };
+
+  function hideSnackbar(){
+    setSnackbar({ ...snackbar, visible: false} );
+  }
 
   async function getRecipes(fetchPage) {
     let token = await AsyncStorage.getItem("token");
@@ -116,7 +137,7 @@ function ListRecipe({ navigation }) {
         ) : (
           <FlatList
             data={recipes}
-            renderItem={({ item }) => <MyRecipeCard item={item} />}
+            renderItem={({ item }) => <MyRecipeCard item={item} navigation={navigation}/>}
             initialNumToRender={8}
             onEndReached={() => handleLoadMore()}
             onEndReachedThreshold={0.5}
@@ -131,6 +152,7 @@ function ListRecipe({ navigation }) {
           visible={snackbar.visible}
           type={snackbar.type}
           message={snackbar.message}
+          onClose={hideSnackbar}
         />
       <FAB
         style={styles.fab}

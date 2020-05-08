@@ -3,6 +3,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 //IMPORT SCENES
 import ListRecipeScreen from "../scenes/recipe/ListRecipe";
 import AddRecipeScreen from "../scenes/recipe/AddRecipe";
+import UpdateRecipeScreen from "../scenes/recipe/UpdateRecipe";
 import AddRecipeDescriptionScreen from "../scenes/recipe/AddDescription";
 import AddRecipeImagesScreen from "../scenes/recipe/AddImages";
 import AddRecipeTagsScreen from "../scenes/recipe/AddTags";
@@ -14,6 +15,7 @@ const addRecipeStack = createStackNavigator(
     {
 
         AddRecipe: AddRecipeScreen,
+        UpdateRecipe: UpdateRecipeScreen,
         AddRecipeDescription: AddRecipeDescriptionScreen,
         AddRecipeImages: AddRecipeImagesScreen,
         AddRecipeTags: AddRecipeTagsScreen,
