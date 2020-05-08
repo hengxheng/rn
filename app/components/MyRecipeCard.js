@@ -49,7 +49,7 @@ export default function MyRecipeCard(props) {
   }
 
   return (
-    <Card>
+    <Card style={styles.cardContainer}>
       <Card.Cover source={cover} />
       <Card.Content>
         <Title>{item.title}</Title>
@@ -107,6 +107,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "flex-end",
+  },
+  cardContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+    shadowColor: "#ddd",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    marginBottom: 20,
   },
   title: {
     fontSize: 20,

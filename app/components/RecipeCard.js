@@ -1,6 +1,14 @@
 import * as React from "react";
-import { View } from "react-native";
-import { Avatar, Button, Card, Title, Paragraph, IconButton, Chip} from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import {
+  Avatar,
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  IconButton,
+  Chip,
+} from "react-native-paper";
 import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
 import { Colors, chipContainer, tagStyle } from "../theme";
 
@@ -24,42 +32,83 @@ export default function RecipeCard(props) {
       : require("../../assets/image-placeholder.png");
 
   return (
-    <Card>
+    <Card style={styles.cardContainer}>
       <Card.Cover source={cover} />
       <Card.Title
         title={item.title}
-        subtitle={item.User.firstName+" "+item.id} 
+        subtitle={item.User.firstName + " " + item.id}
         left={LeftContent}
       />
-      <Card.Content>
-      <View style={ chipContainer }>
+      <Card.Content style={styles.cartContentContainer}>
+        <View style={styles.chipContainer}>
           {item.Tags.map((tag, index) => {
             return (
-              <Chip
-                key={index}
-                style={tagStyle}
-                icon="tag"
-              >
+              <Chip key={index} style={tagStyle} icon="tag">
                 {tag.name}
               </Chip>
             );
           })}
         </View>
-        {/* <Title></Title>
-        <Paragraph>{item.content}</Paragraph> */}
       </Card.Content>
       <Card.Actions>
-      <IconButton
-            icon="eye-circle"
-            color={Colors.primaryIconButton}
-            size={30}
-            onPress={() =>
-              navigation.navigate("ViewHomeRecipe", {
-                id: item.id,
-              })
-            }
-          />
+        <IconButton
+          icon="eye-circle"
+          color={Colors.primaryIconButton}
+          size={30}
+          onPress={() =>
+            navigation.navigate("ViewHomeRecipe", {
+              id: item.id,
+            })
+          }
+        />
       </Card.Actions>
     </Card>
   );
 }
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+    shadowColor: "#ddd",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    marginBottom: 20,
+  },
+  cartContentContainer: {
+    flex: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+  },
+  chipContainer: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  title: {
+    fontSize: 20,
+  },
+  listFooter: {
+    width: "100%",
+    height: 200,
+    paddingVertical: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    borderColor: "grey",
+  },
+  fab: {
+    position: "absolute",
+    margin: 20,
+    right: 0,
+    top: 5,
+  },
+});
