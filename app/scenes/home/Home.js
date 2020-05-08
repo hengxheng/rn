@@ -119,7 +119,7 @@ export default function Home({ navigation }) {
         ) : (
           <FlatList
             data={recipes}
-            renderItem={({ item }) => <RecipeCard item={item} />}
+            renderItem={({ item }) => <RecipeCard item={item} navigation={navigation}/>}
             initialNumToRender={8}
             onEndReached={() => handleLoadMore()}
             onEndReachedThreshold={0.5}

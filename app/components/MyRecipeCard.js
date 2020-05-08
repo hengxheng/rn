@@ -70,7 +70,11 @@ export default function MyRecipeCard(props) {
             icon="eye-circle"
             color={Colors.primaryIconButton}
             size={30}
-            onPress={() => console.log("Pressed")}
+            onPress={() =>
+              navigation.navigate("ViewRecipe", {
+                id: item.id,
+              })
+            }
           />
           <IconButton
             icon="content-save-edit-outline"

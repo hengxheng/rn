@@ -8,8 +8,7 @@ import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 
-function AddRecipe({ navigation }) {
-  const [recipeId, setRecipeId] = useState(null);
+export default function AddRecipe({ navigation }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
@@ -265,5 +264,3 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
-
-export default AddRecipe;

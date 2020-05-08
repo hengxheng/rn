@@ -14,3 +14,4 @@ export const GET_USER_RECIPES = `${API_URL}/user/recipe`;
 
 export const GET_RECIPES = `${API_URL}/recipes`;
 export const ADD_RECIPES = `${API_URL}/recipe/add`;
+export const VIEW_RECIPE = `${API_URL}/recipe`;

@@ -7,6 +7,7 @@ import UpdateRecipeScreen from "../scenes/recipe/UpdateRecipe";
 import AddRecipeDescriptionScreen from "../scenes/recipe/AddDescription";
 import AddRecipeImagesScreen from "../scenes/recipe/AddImages";
 import AddRecipeTagsScreen from "../scenes/recipe/AddTags";
+import ViewRecipeScreen from "../scenes/recipe/ViewRecipe";
 import ShowCameraScreen from "../scenes/recipe/ShowCamera";
 import {headerStyle, headerTitleStyle} from '../theme';
 
@@ -30,6 +31,7 @@ const addRecipeStack = createStackNavigator(
 const RecipeStack = createStackNavigator(
     {
         ListRecipe: ListRecipeScreen,
+        ViewRecipe: ViewRecipeScreen,
         AddRecipe: {
             screen: addRecipeStack,
             navigationOptions:{

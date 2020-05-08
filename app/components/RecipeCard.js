@@ -5,6 +5,7 @@ import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
 import { Colors, chipContainer, tagStyle } from "../theme";
 
 export default function RecipeCard(props) {
+  const navigation = props.navigation;
   const item = props.item;
 
   let LeftContent = () => <Avatar.Icon size={36} icon="face" />;
@@ -52,7 +53,11 @@ export default function RecipeCard(props) {
             icon="eye-circle"
             color={Colors.primaryIconButton}
             size={30}
-            onPress={() => console.log("Pressed")}
+            onPress={() =>
+              navigation.navigate("ViewHomeRecipe", {
+                id: item.id,
+              })
+            }
           />
       </Card.Actions>
     </Card>
