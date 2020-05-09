@@ -15,7 +15,6 @@ import SnackBar from "../../components/SnackBar";
 
 export default function Home({ navigation }) {
   const [recipes, setRecipes] = useState([]);
-  const [message, setMessage] = useState("");
   const [page, setPage] = useState(0);
   // const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);

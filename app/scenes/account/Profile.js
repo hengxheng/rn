@@ -5,23 +5,16 @@ import {
   View,
   Image,
   StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Text,
   Dimensions,
 } from "react-native";
 import { ListItem, Input, Button } from "react-native-elements";
-import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
 export default function Profile(props) {
   const { navigation } = props;
-  //1 - DECLARE VARIABLES
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const { state, updateUser } = useAuth();
+  const { state } = useAuth();
   const [formData, setFormData] = useState({});
   const [avatar, setAvatar] = useState(null);
   const formFields = [

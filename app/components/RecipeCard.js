@@ -2,7 +2,6 @@ import * as React from "react";
 import { View, StyleSheet, TouchableHighlight } from "react-native";
 import {
   Avatar,
-  Button,
   Card,
   Title,
   Paragraph,
