@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import Header from "../../components/Header";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
@@ -47,7 +46,6 @@ export default function UpdateUsername(props) {
 
   return (
     <>
-      <Header titleText="My account" />
       <View style={styles.container}>
         {error !== "" && <ErrorText error={error} />}
         {message !== "" && <MessageText message={message} />}

@@ -128,7 +128,6 @@ function ListRecipe({ navigation }) {
 
   return (
     <>
-      <Header titleText="Recipe" />
       <SafeAreaView style={styles.container}>
         {recipes.length === 0 ? (
           <View style={styles.titleContainer}>

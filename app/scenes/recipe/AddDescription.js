@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import Header from "../../components/Header";
 
 export default function AddDescription({ navigation, route }) {
   const [content, setContent] = useState("");
@@ -19,7 +18,6 @@ export default function AddDescription({ navigation, route }) {
 
   return (
     <>
-      <Header titleText="Add recipe" />
       <ScrollView style={styles.container}>
         <TextInput
           label="Desciption"

@@ -7,7 +7,6 @@ import {
   TouchableHighlight,
 } from "react-native";
 import { Button } from "react-native-paper";
-import Header from "../../components/Header";
 import ImageModal from "../../components/ImageModal";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
@@ -103,7 +102,6 @@ export default function AddImages({ navigation, route }) {
 
   return (
     <>
-      <Header titleText="Add recipe" />
       <ScrollView style={styles.container}>
         <View style={styles.imgContainer}>
           {images.map((img, index) => {

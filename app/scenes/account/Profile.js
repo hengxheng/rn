@@ -55,7 +55,6 @@ export default function Profile(props) {
 
   return (
     <>
-      <Header titleText="My account" />
       <ScrollView style={styles.container}>
         <View>
           <ListItem

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Card, Button, Chip } from "react-native-paper";
-import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -116,7 +115,6 @@ export default function AddRecipe({ navigation, route }) {
 
   return (
     <>
-      <Header titleText="Add recipe" />
       <ScrollView style={styles.container}>
         <Card style={styles.card}>
           <Card.Content>

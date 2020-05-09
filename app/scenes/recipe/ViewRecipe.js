@@ -8,7 +8,6 @@ import {
   Paragraph,
   Title,
 } from "react-native-paper";
-import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -118,7 +117,6 @@ export default function ViewRecipe({ navigation, route }) {
 
   return (
     <>
-      <Header titleText={title} />
       <ScrollView style={styles.container}>
         {images && (
           <View style={{ marginBotton: 10 }}>

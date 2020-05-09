@@ -7,7 +7,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Text, FAB, List } from "react-native-paper";
-import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -110,7 +109,6 @@ export default function Home({ navigation }) {
 
   return (
     <>
-      <Header titleText="Recipe" />
       <SafeAreaView style={styles.container}>
         {recipes.length === 0 ? (
           <View style={styles.titleContainer}>

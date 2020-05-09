@@ -25,7 +25,6 @@ export default function Logout(props) {
 
   return (
     <>
-      <Header titleText={"Log out"} />
       <View style={styles.container}>
         <Text>Do you want to logout?</Text>
         <Button title={"Log Out"} onPress={() => onLogout()} />

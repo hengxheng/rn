@@ -56,7 +56,7 @@ export default function RecipeCard(props) {
           color={Colors.primaryIconButton}
           size={30}
           onPress={() =>
-            navigation.navigate("ViewHomeRecipe", {
+            navigation.push("ViewHomeRecipe", {
               id: item.id,
             })
           }

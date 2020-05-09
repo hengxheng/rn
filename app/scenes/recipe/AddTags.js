@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, Chip } from "react-native-paper";
-import Header from "../../components/Header";
 
 export default function AddTags({ navigation, route }) {
 
@@ -34,7 +33,6 @@ export default function AddTags({ navigation, route }) {
 
   return (
     <>
-      <Header titleText="Recipe tags" />
       <ScrollView style={styles.container}>
         <View style={styles.inputContainer}>
           <TextInput

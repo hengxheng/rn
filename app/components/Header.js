@@ -1,28 +1,39 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Appbar, Title } from "react-native-paper";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Appbar, useTheme } from "react-native-paper";
 
-function Header({ titleText }) {
+const Header = ({ scene, previous, navigation }) => {
+  const theme = useTheme();
+  const { options } = scene.descriptor;
+  const title =
+    options.headerTitle !== undefined
+      ? options.headerTitle
+      : options.title !== undefined
+      ? options.title
+      : scene.route.name;
+
   return (
-    <Appbar.Header style={styles.headerContainer}>
-      <View style={styles.container}>
-        <Title style={styles.title}>{titleText}</Title>
-      </View>
+    <Appbar.Header theme={{ colors: { primary: "#03b1fc" } }}>
+      {previous && (
+        <Appbar.BackAction
+          onPress={ () => navigation.pop() }
+          color={theme.colors.primary}
+        />
+      )}
+      <Appbar.Content
+        style={ styles.title }
+        title={
+          previous ? title : "Logo"
+        }
+      />
     </Appbar.Header>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: "#60DBC5",
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
-    color: "#2E7166",
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
