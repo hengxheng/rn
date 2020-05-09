@@ -18,6 +18,7 @@ export default function AddImages({ navigation, route }) {
   const [images, setImages] = useState([]);
   const imagePlaceholder = require("../../../assets/image-placeholder.png");
   const [returnURL, setReturnURL] = useState("AddRecipe");
+  const [cameraReturnScreen, setCameraReturnScreen] = useState("AddRecipeImages");
 
   useEffect(() => {
     if (route.params?.images) {
@@ -27,6 +28,7 @@ export default function AddImages({ navigation, route }) {
 
     if (route.params?.update === true) {
       setReturnURL("UpdateRecipe");
+      setCameraReturnScreen("UpdateRecipeImages");
     }
   }, [route.params]);
 
@@ -97,7 +99,7 @@ export default function AddImages({ navigation, route }) {
 
   async function _openCamera() {
     setImageModalVisible(false);
-    navigation.navigate("fromCamera");
+    navigation.navigate("fromCamera", { returnScreen: cameraReturnScreen});
   }
 
   return (
@@ -128,7 +130,7 @@ export default function AddImages({ navigation, route }) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate(returnURL, { images: selectedImages })
+              navigation.navigate(returnURL, { images: selectedImages, imageChanged: true })
             }
           >
             Submit

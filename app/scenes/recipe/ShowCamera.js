@@ -3,8 +3,8 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { Input, Button, Icon } from "react-native-elements";
 
-export default function ShowCamera(props) {
-  const { navigation } = props;
+export default function ShowCamera({ navigation, route }) {
+  const returnScreen = route.params.returnScreen;
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -57,7 +57,7 @@ export default function ShowCamera(props) {
             onPress={async () => {
               if (cameraRef) {
                 let image = await cameraRef.takePictureAsync();
-                navigation.navigate("AddRecipeImages", { images: [image] });
+                navigation.navigate(returnScreen, { images: [image] });
               }
             }}
           >

@@ -62,7 +62,7 @@ export default function RecipeCard(props) {
         </View>
       </Card.Content>
       <Card.Actions>
-        <IconButton
+        {/* <IconButton
           icon="eye-circle"
           color={Colors.primaryIconButton}
           size={30}
@@ -71,7 +71,7 @@ export default function RecipeCard(props) {
               id: item.id,
             })
           }
-        />
+        /> */}
       </Card.Actions>
     </Card>
   );

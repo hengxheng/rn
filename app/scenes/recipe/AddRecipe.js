@@ -144,6 +144,8 @@ export default function AddRecipe({ navigation, route }) {
             <Button
               icon="pencil"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("AddRecipeDescription", {
                   content: content,
@@ -166,6 +168,8 @@ export default function AddRecipe({ navigation, route }) {
             <Button
               icon="camera"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("AddRecipeImages", {
                   images: images,
@@ -195,6 +199,8 @@ export default function AddRecipe({ navigation, route }) {
             <Button
               icon="tag"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("AddRecipeTags", {
                   tags: tags,
@@ -243,12 +249,8 @@ const styles = StyleSheet.create({
   centerContainer: {
     justifyContent: "center",
   },
-  iconButton: {
-    backgroundColor: "rgba(46, 113, 102, 0.8)",
-    position: "absolute",
-    right: 0,
-    top: 5,
-    margin: 10,
+  wideButton: {
+    width: "100%",
   },
   text: {
     fontSize: 16,

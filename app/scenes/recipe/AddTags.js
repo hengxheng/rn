@@ -70,7 +70,7 @@ export default function AddTags({ navigation, route }) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate(returnURL, { tags: tags })
+              navigation.navigate(returnURL, { tags: tags, tagChanged: true })
             }
           >
             Submit

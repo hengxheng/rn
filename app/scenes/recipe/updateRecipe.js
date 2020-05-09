@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, cloneElement } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Card, Button, Chip } from "react-native-paper";
 import { AsyncStorage } from "react-native";
@@ -13,7 +13,8 @@ export default function UpdateRecipe({ navigation, route }) {
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
-
+  const [imageChanged, setImageChanged] = useState(false);
+  const [tagChanged, setTagChanged] = useState(false);
   const [snackbar, setSnackbar] = useState({
     visible: false,
     type: null,
@@ -45,16 +46,18 @@ export default function UpdateRecipe({ navigation, route }) {
   }, [route.params?.content]);
 
   useEffect(() => {
-    if (route.params?.tags) {
+    if (route.params?.tags && route.params.tagChanged) {
+      setTagChanged(true);
       setTags(route.params.tags);
     }
-  }, [route.params?.tags]);
+  }, [route.params?.tagChanged]);
 
   useEffect(() => {
-    if (route.params?.images) {
+    if (route.params?.images && route.params.imageChanged) {
+      setImageChanged(true);
       setImages(route.params.images);
     }
-  }, [route.params?.images]);
+  }, [route.params?.imageChanged]);
 
   function hideSnackbar() {
     setSnackbar({ ...snackbar, visible: false });
@@ -70,14 +73,16 @@ export default function UpdateRecipe({ navigation, route }) {
     return { uri: localUri, name: filename, type: type };
   }
 
-  async function onSave() {
+  async function onUpdate() {
     //GET TOKEN
     let token = await AsyncStorage.getItem("token");
 
     const data = new FormData();
     data.append("id", recipeId);
+    data.append("title", title);
+    data.append("content", content);
 
-    if (!recipeId) {
+    if (imageChanged) {
       const imgs = images.map((i) => {
         return conventImageObject(i);
       });
@@ -86,9 +91,9 @@ export default function UpdateRecipe({ navigation, route }) {
       });
     }
 
-    data.append("title", title);
-    data.append("content", content);
-    data.append("tags", JSON.stringify(tags));
+    if (tagChanged) {
+      data.append("tags", JSON.stringify(tags));
+    }
 
     if (token !== null) {
       await axios
@@ -170,6 +175,8 @@ export default function UpdateRecipe({ navigation, route }) {
             <Button
               icon="pencil"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("UpdateRecipeDescription", {
                   update: true,
@@ -193,6 +200,8 @@ export default function UpdateRecipe({ navigation, route }) {
             <Button
               icon="camera"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("UpdateRecipeImages", {
                   update: true,
@@ -223,6 +232,8 @@ export default function UpdateRecipe({ navigation, route }) {
             <Button
               icon="tag"
               mode="contained"
+              compact={ false }
+              style={ styles.wideButton }
               onPress={() =>
                 navigation.navigate("UpdateRecipeTags", {
                   update: true,
@@ -241,7 +252,7 @@ export default function UpdateRecipe({ navigation, route }) {
             mode="contained"
             icon="check"
             disabled={title == "" ? true : false}
-            onPress={() => onSave()}
+            onPress={() => onUpdate()}
           >
             Submit
           </Button>
@@ -272,12 +283,8 @@ const styles = StyleSheet.create({
   centerContainer: {
     justifyContent: "center",
   },
-  iconButton: {
-    backgroundColor: "rgba(46, 113, 102, 0.8)",
-    position: "absolute",
-    right: 0,
-    top: 5,
-    margin: 10,
+  wideButton: {
+    width: "100%",
   },
   text: {
     fontSize: 16,

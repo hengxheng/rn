@@ -33,7 +33,7 @@ export default function AddDescription({ navigation, route }) {
             mode="contained"
             icon="check"
             onPress={() =>
-              navigation.navigate(returnURL, { content: content })
+              navigation.navigate(returnURL, { content: content, contentChanged: true})
             }
           >
             Submit
