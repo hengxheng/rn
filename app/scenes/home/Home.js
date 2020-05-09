@@ -27,9 +27,13 @@ export default function Home({ navigation }) {
   });
 
   useEffect(() => {
-    setRecipes([]);
-    setPage(0);
-    getRecipes(page);
+    let mounted = true;
+    if (mounted) {
+      setRecipes([]);
+      setPage(0);
+      getRecipes(page);
+    }
+    return () => (mounted = false);
   }, []);
 
   function hideSnackbar(){

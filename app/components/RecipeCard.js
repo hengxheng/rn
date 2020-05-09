@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableHighlight } from "react-native";
 import {
   Avatar,
   Button,
@@ -33,12 +33,24 @@ export default function RecipeCard(props) {
 
   return (
     <Card style={styles.cardContainer}>
-      <Card.Cover source={cover} />
-      <Card.Title
-        title={item.title}
-        subtitle={item.User.firstName + " " + item.id}
-        left={LeftContent}
-      />
+      <TouchableHighlight
+        activeOpacity={0.6}
+        underlayColor="transparent"
+        onPress={() =>
+          navigation.push("ViewHomeRecipe", {
+            id: item.id,
+          })
+        }
+      >
+        <>
+          <Card.Cover source={cover} />
+          <Card.Title
+            title={item.title}
+            subtitle={item.User.firstName + " " + item.id}
+            left={LeftContent}
+          />
+        </>
+      </TouchableHighlight>
       <Card.Content style={styles.cartContentContainer}>
         <View style={styles.chipContainer}>
           {item.Tags.map((tag, index) => {

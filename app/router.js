@@ -8,6 +8,7 @@ import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
+  useTheme,
 } from "react-native-paper";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -30,12 +31,13 @@ const CombinedDarkTheme = { ...PaperDarkTheme, ...NavigationDarkTheme };
 const MainTab = createMaterialBottomTabNavigator();
 
 function MainTabNavigator() {
+  const theme = useTheme();
   return (
     <MainTab.Navigator
       initialRouteName="Home"
       activeColor="#f0edf6"
       inactiveColor="#3e2465"
-      barStyle={{ backgroundColor: "#694fad" }}
+      theme={theme}
       shifting={true}
       sceneAnimationEnabled={false}
     >
