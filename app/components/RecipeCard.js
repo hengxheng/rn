@@ -9,7 +9,7 @@ import {
   Chip,
 } from "react-native-paper";
 import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
-import { Colors, chipContainer, tagStyle } from "../theme";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../theme";
 
 export default function RecipeCard(props) {
   const navigation = props.navigation;
@@ -51,10 +51,10 @@ export default function RecipeCard(props) {
         </>
       </TouchableHighlight>
       <Card.Content style={styles.cartContentContainer}>
-        <View style={styles.chipContainer}>
+        <View style={MainStyle.tagContainer}>
           {item.Tags.map((tag, index) => {
             return (
-              <Chip key={index} style={tagStyle} icon="tag">
+              <Chip key={index} style={MainStyle.tagBox} icon="tag">
                 {tag.name}
               </Chip>
             );

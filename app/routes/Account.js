@@ -10,7 +10,6 @@ import UpdateUsernameScreen from "../scenes/account/UpdateUsername";
 import UpdatePasswordScreen from "../scenes/account/UpdatePassword";
 import UpdateProfileImageScreen from "../scenes/account/UpdateProfileImage";
 import ShowCameraScreen from "../scenes/account/ShowCamera";
-import { headerStyle, headerTitleStyle } from "../theme";
 import Header from "../components/Header";
 
 const AccountNav = createStackNavigator();

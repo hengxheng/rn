@@ -12,6 +12,7 @@ import axios from "axios";
 import * as c from "../../constants";
 import RecipeCard from "../../components/RecipeCard";
 import SnackBar from "../../components/SnackBar";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function Home({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -112,7 +113,7 @@ export default function Home({ navigation }) {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={MainStyle.sceneContainer}>
         {recipes.length === 0 ? (
           <View style={styles.titleContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>

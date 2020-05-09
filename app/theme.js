@@ -1,36 +1,44 @@
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
+import {
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme,
+} from "@react-navigation/native";
+import {
+  DarkTheme as PaperDarkTheme,
+  DefaultTheme as PaperDefaultTheme,
+} from "react-native-paper";
 
-export let font = Platform.OS === "ios" ? "HelveticaNeue" : "Roboto";
-export let titleColor = "#363434";
-
-//Nav Shared Styles
-export let headerStyle = {
-  backgroundColor: "#fff",
-  borderBottomWidth: 0,
-  shadowColor: "transparent",
-};
-export let headerTitleStyle = {
-  fontWeight: "bold",
-  fontSize: 17,
-  fontFamily: font,
-  color: titleColor,
+export const CombinedDefaultTheme = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
 };
 
-export const imageOptions = { allowsEditing: true, aspect: [4, 3] };
+export const CombinedDarkTheme = { 
+  ...PaperDarkTheme, 
+  ...NavigationDarkTheme 
+};
 
 export const Colors = {
   primaryIconButton: "#03DAC6",
 };
 
-export const chipContainer = {
-  flex: 1,
-  flexDirection: "row",
-  alignItems: "flex-start",
-  flexWrap: "wrap",
-  justifyContent: "flex-start",
-};
-
-export const tagStyle = {
+export const MainStyle = StyleSheet.create({
+  sceneContainer: { 
+    fontFamily: (Platform.OS === "ios" ? "HelveticaNeue" : "Roboto"),
+    backgroundColor: "#f1f1f1",
+    fontSize: 14,
+  },
+  tagContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  tagBox: {
     width: "auto",
     margin: 5,
-}
+  }
+});
+
+

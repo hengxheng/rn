@@ -189,9 +189,10 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
+    backgroundColor: "green",
     margin: 20,
     right: 0,
-    bottom: 5,
+    top: 0,
   },
 });
 

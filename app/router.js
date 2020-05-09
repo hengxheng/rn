@@ -12,6 +12,7 @@ import {
 } from "react-native-paper";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { CombinedDefaultTheme, CombinedDarkTheme } from "./theme";
 
 //IMPORT ROUTES
 import AuthStack from "./routes/Auth";
@@ -21,12 +22,6 @@ import AccountStack from "./routes/Account";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
-
-const CombinedDefaultTheme = {
-  ...PaperDefaultTheme,
-  ...NavigationDefaultTheme,
-};
-const CombinedDarkTheme = { ...PaperDarkTheme, ...NavigationDarkTheme };
 
 const MainTab = createMaterialBottomTabNavigator();
 
@@ -90,7 +85,7 @@ export default function Router(props) {
     // We will pass this function to Drawer and invoke it on theme switch press
     setIsDarkTheme((isDark) => !isDark);
   }
-  
+
   return (
     <AuthProvider>
       <PaperProvider theme={theme}>

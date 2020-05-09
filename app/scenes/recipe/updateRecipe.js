@@ -1,4 +1,4 @@
-import React, { useState, useEffect, cloneElement } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Card, Button, Chip } from "react-native-paper";
 import { AsyncStorage } from "react-native";
@@ -6,6 +6,7 @@ import axios from "axios";
 import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function UpdateRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -216,10 +217,10 @@ export default function UpdateRecipe({ navigation, route }) {
         <Card style={styles.card}>
           {tags && (
             <Card.Content>
-              <View style={styles.chipContainer}>
+              <View style={MainStyle.tagContainer}>
                 {tags.map((tag, index) => {
                   return (
-                    <Chip key={index} style={styles.chip}>
+                    <Chip key={index} style={MainStyle.tagBox} icon="tag">
                       {tag}
                     </Chip>
                   );
@@ -293,16 +294,5 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 10,
     marginBottom: 25,
-  },
-  chipContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-  },
-  chip: {
-    width: "auto",
-    margin: 5,
   },
 });

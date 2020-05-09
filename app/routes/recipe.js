@@ -11,7 +11,6 @@ import AddRecipeTagsScreen from "../scenes/recipe/AddTags";
 import ViewRecipeScreen from "../scenes/recipe/ViewRecipe";
 import ShowCameraScreen from "../scenes/recipe/ShowCamera";
 import Header from "../components/Header";
-import { headerStyle, headerTitleStyle } from "../theme";
 
 const AddRecipeNav = createStackNavigator();
 function addRecipeStack() {
