@@ -12,8 +12,8 @@ export default function HomeStack() {
       initialRouteName="Home"
       headerMode="screen"
       screenOptions={{
-        header: ({ scene, previous, navigation }) => (
-          <Header scene={scene} previous={previous} navigation={navigation} />
+        header: ({ scene, previous, navigation, route }) => (
+          <Header scene={scene} previous={previous} navigation={navigation} route={route}/>
         ),
       }}
     >

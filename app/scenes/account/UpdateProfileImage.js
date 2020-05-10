@@ -17,11 +17,10 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Avatar } from "react-native-elements";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
+import Loading from "../../components/Loading";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
-export default function UpdateProfileImage(props) {
-  const { navigation } = props;
-
+export default function UpdateProfileImage({ navigation, route }) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,7 +39,10 @@ export default function UpdateProfileImage(props) {
   }
 
   useEffect(() => {
-    const photo = navigation.getParam("photo", null); // from camera
+    let photo = null;
+    if (route.params?.photo) {
+      photo = route.params.photo;
+    }
 
     if (photo) {
       setAvatar(conventAvatar(photo));
@@ -48,7 +50,7 @@ export default function UpdateProfileImage(props) {
     } else {
       setAvatar({ uri: USER_PROFILE_IMAGE_URL + "/" + state.user.image });
     }
-  }, [state.user, navigation.state.params]);
+  }, [state.user, route.params]);
 
   function changeImageSource(source) {
     if (source !== null) {
@@ -126,9 +128,7 @@ export default function UpdateProfileImage(props) {
   return (
     <>
       <View style={MainStyle.sceneContainer}>
-        {error !== "" && <ErrorText error={error} />}
-        {message !== "" && <MessageText message={message} />}
-        <View style={styles.formContainer}>
+        <View style={MainStyle.formContainer}>
           <View style={styles.photoContainer}>
             {avatar ? (
               <Avatar
@@ -180,11 +180,7 @@ export default function UpdateProfileImage(props) {
           )}
         </View>
 
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#00ff00" />
-          </View>
-        )}
+        {loading && <Loading />}
 
         <ImageModal
           visible={modalVisible}
@@ -197,16 +193,6 @@ export default function UpdateProfileImage(props) {
 }
 
 const styles = StyleSheet.create({
-  formContainer: {
-    flex: 1,
-    paddingTop: 30,
-    paddingBottom: 60,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 10,
-  },
   photoContainer: {
     flex: 3,
     justifyContent: "center",
@@ -248,9 +234,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
-UpdateProfileImage.navigationOptions = ({}) => {
-  return {
-    title: `Update Name`,
-  };
-};

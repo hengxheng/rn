@@ -19,17 +19,48 @@ export const CombinedDarkTheme = {
 };
 
 export const Colors = {
-  primaryIconButton: "#03DAC6",
+  primaryBtnColor: "#fff",
+  secondaryBtnColor: "#fff",
 };
 
 export const MainStyle = StyleSheet.create({
+  primaryBtn: {
+    backgroundColor: "#f77862",
+  },
+  secondaryBtn: {
+    backgroundColor: "#fcb661",
+  },
   sceneContainer: { 
     flex:1,
     fontFamily: (Platform.OS === "ios" ? "HelveticaNeue" : "Roboto"),
-    backgroundColor: "#ebebeb",
+    backgroundColor: "#5f7393",
+    color: "#fff",
     fontSize: 14,
     paddingHorizontal: 5,
     paddingVertical: 20,
+    color: "#fff",
+  },
+  headerBar: {
+    paddingTop:15,
+    backgroundColor: "#5f7393",
+    borderWidth:0,
+    elevation: 0, // remove shadow on Android
+    shadowOpacity: 0, // remove shadow on iOS
+  },
+  headerBarTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  headerBarSubtitle:{
+    fontSize: 12,
+    marginVertical: 5,
+    color: "#fff",
+  },  
+  centerContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   bottomTabBar: {
     backgroundColor: "#fff",
@@ -64,6 +95,24 @@ export const MainStyle = StyleSheet.create({
   tagBox: {
     width: "auto",
     margin: 5,
+  },
+  formContainer: {
+    flex: 1,
+    paddingVertical: 20,
+    alignItems:"center",
+  },
+  innerButton: {
+    backgroundColor: "#41b2e2",
+    width: "80%",
+    color: "#fff",
+  },
+  textInput: {
+    color: "#000",
+    fontSize: 14,
+    backgroundColor: "#fef4e2",
+    borderRadius:3,
+    marginBottom: 15,
+    width: "90%",
   }
 });
 

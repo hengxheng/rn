@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import { useAuth } from "../../providers/auth";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import { Text, FAB, IconButton } from "react-native-paper";
 
 export default function Logout(props) {
   const [error, setError] = useState(null);
@@ -26,9 +27,26 @@ export default function Logout(props) {
   return (
     <>
       <View style={MainStyle.sceneContainer}>
-        <Text>Do you want to logout?</Text>
-        <Button title={"Log Out"} onPress={() => onLogout()} />
-        <Button title={"Cancel"} onPress={() => onCancel()} />
+        <View style={MainStyle.centerContainer}>
+          <Text>Do you want to logout?</Text>
+          <View style={{ justifyContent: "center", flexDirection: "row", marginVertical:20, }}>
+            <IconButton
+              icon="check"
+              color={Colors.primaryBtnColor}
+              style={MainStyle.primaryBtn}
+              size={20}
+              onPress={() => onLogout()}
+            />
+
+            <IconButton
+              icon="cancel"
+              color={Colors.secondaryBtnColor}
+              style={MainStyle.secondaryBtn}
+              size={20}
+              onPress={() => onCancel()}
+            />
+          </View>
+        </View>
       </View>
     </>
   );

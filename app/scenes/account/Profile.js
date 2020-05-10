@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  View,
-  Image,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
-import { ListItem, Input, Button } from "react-native-elements";
-import * as api from "../../services/auth";
+import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
+import { ListItem, Button } from "react-native-elements";
 import { useAuth } from "../../providers/auth";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function Profile(props) {
   const { navigation } = props;
-  const [loading, setLoading] = useState(false);
   const { state } = useAuth();
   const [formData, setFormData] = useState({});
   const [avatar, setAvatar] = useState(null);
@@ -30,7 +21,7 @@ export default function Profile(props) {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      if(state.user !== null){
+      if (state.user !== null) {
         setFormData({
           firstName: state.user.firstName,
           lastName: state.user.lastName,
@@ -39,9 +30,9 @@ export default function Profile(props) {
           image: state.user.image,
           password: "***",
         });
-  
+
         setAvatar({
-          url: state.user.image
+          url: state.user.image,
         });
       }
     }
@@ -54,13 +45,19 @@ export default function Profile(props) {
         <View>
           <ListItem
             key={"image"}
-            leftAvatar={ (avatar === null)? ({ icon: { name: "user", type: "font-awesome", }}) : ({source: { uri: USER_PROFILE_IMAGE_URL+"/"+avatar.url }}) }
+            leftAvatar={
+              avatar === null
+                ? { icon: { name: "user", type: "font-awesome" } }
+                : { source: { uri: USER_PROFILE_IMAGE_URL + "/" + avatar.url } }
+            }
             title={`${formData.firstName} ${formData.lastName}`}
             subtitle={`${formData.firstName} ${formData.lastName}`}
             bottomDivider
             chevron
             button
-            onPress={() => {navigation.navigate("updateProfileImage")}}
+            onPress={() => {
+              navigation.navigate("updateProfileImage");
+            }}
           />
           {formFields.map((item, i) => (
             <ListItem
@@ -87,11 +84,6 @@ export default function Profile(props) {
               title="Logout"
               onPress={() => navigation.navigate("Logout")}
             />
-            {loading && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="small" color="#00ff00" />
-              </View>
-            )}
           </View>
         </View>
       </ScrollView>

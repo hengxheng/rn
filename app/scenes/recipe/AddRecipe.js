@@ -116,15 +116,17 @@ export default function AddRecipe({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
               label="Title"
               value={title}
-              mode="outlined"
+              mode="flat"
               onChangeText={setTitle}
-              style={styles.text}
+              selectionColor="#3cc68a"
+              underlineColor="#3cc68a"
+              style={ MainStyle.textInput }
             />
           </Card.Content>
         </Card>
@@ -136,7 +138,8 @@ export default function AddRecipe({ navigation, route }) {
                 value={content}
                 mode="outlined"
                 multiline
-                style={styles.text}
+                selectionColor="red"
+                style={ MainStyle.innerButton }
                 disabled
               />
             </Card.Content>
@@ -146,7 +149,7 @@ export default function AddRecipe({ navigation, route }) {
               icon="pencil"
               mode="contained"
               compact={ false }
-              style={ styles.wideButton }
+              style={ MainStyle.innerButton }
               onPress={() =>
                 navigation.navigate("AddRecipeDescription", {
                   content: content,
@@ -170,7 +173,7 @@ export default function AddRecipe({ navigation, route }) {
               icon="camera"
               mode="contained"
               compact={ false }
-              style={ styles.wideButton }
+              style={ MainStyle.innerButton }
               onPress={() =>
                 navigation.navigate("AddRecipeImages", {
                   images: images,
@@ -201,7 +204,8 @@ export default function AddRecipe({ navigation, route }) {
               icon="tag"
               mode="contained"
               compact={ false }
-              style={ styles.wideButton }
+              style={ MainStyle.innerButton }
+
               onPress={() =>
                 navigation.navigate("AddRecipeTags", {
                   tags: tags,
@@ -243,9 +247,6 @@ const styles = StyleSheet.create({
   },
   centerContainer: {
     justifyContent: "center",
-  },
-  wideButton: {
-    width: "100%",
   },
   text: {
     fontSize: 16,

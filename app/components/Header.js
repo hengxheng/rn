@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../theme";
 
-const Header = ({ scene, previous, navigation }) => {
+const Header = ({ scene, previous, navigation, route }) => {
   const theme = useTheme();
   const { options } = scene.descriptor;
   const title =
@@ -13,28 +14,32 @@ const Header = ({ scene, previous, navigation }) => {
       : scene.route.name;
 
   return (
-    <Appbar.Header theme={{ colors: { primary: "transparent" } }}>
+    <Appbar.Header style={MainStyle.headerBar}>
       {previous && (
         <Appbar.BackAction
-          onPress={ () => navigation.pop() }
-          color={theme.colors.primary}
+          onPress={() => navigation.pop()}
+          size={20}
+          style={MainStyle.secondaryBtn}
+          color={Colors.secondaryBtnColor}
         />
       )}
       <Appbar.Content
-        style={ styles.title }
-        title={
-          previous ? title : "Logo"
-        }
+        title="Recipe"
+        titleStyle={MainStyle.headerBarTitle}
+        subtitle={previous ? title : scene.route.name}
+        subtitleStyle={MainStyle.headerBarSubtitle}
       />
+      {options.headerRight && (
+        <Appbar.Action
+          icon={options.headerRightIcon ? options.headerRightIcon : "search"}
+          style={MainStyle.primaryBtn}
+          size={20}
+          color={Colors.primaryBtnColor}
+          onPress={() => options.headerRight()}
+        />
+      )}
     </Appbar.Header>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-});
 
 export default Header;

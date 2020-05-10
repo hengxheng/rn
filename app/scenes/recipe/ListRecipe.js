@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   AppState,
 } from "react-native";
-import { Text, FAB } from "react-native-paper";
+import { Text, FAB, IconButton } from "react-native-paper";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -17,7 +17,7 @@ import RecipeOptionsModal from "../../components/RecipeOptionsModal";
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
-function ListRecipe({ navigation }) {
+export default function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(0);
   const [optionModalVisible, setOptionModalVisible] = useState(false);
@@ -44,21 +44,20 @@ function ListRecipe({ navigation }) {
     AppState.addEventListener("change", _handleAppStateChange);
     // console.log(state.user);
     return () => {
-      mounted = false
+      mounted = false;
       AppState.removeEventListener("change", _handleAppStateChange);
     };
-
   }, []);
 
-  const _handleAppStateChange = nextAppState => {
+  const _handleAppStateChange = (nextAppState) => {
     if (appState.match(/inactive|background/) && nextAppState === "active") {
       console.log("App has come to the foreground!");
     }
     setAppState(nextAppState);
   };
 
-  function hideSnackbar(){
-    setSnackbar({ ...snackbar, visible: false} );
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
   }
 
   async function getRecipes(fetchPage) {
@@ -137,22 +136,39 @@ function ListRecipe({ navigation }) {
     setSelectedItem(null);
   }
 
-  function openOptionModal(item){
+  function openOptionModal(item) {
     setOptionModalVisible(true);
     setSelectedItem(item);
   }
+
+  function add() {
+    navigation.navigate("AddRecipe");
+  }
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRightIcon: "plus",
+      headerRight: add,
+    });
+  }, [navigation, add]);
 
   return (
     <>
       <SafeAreaView style={MainStyle.sceneContainer}>
         {recipes.length === 0 ? (
-          <View style={styles.titleContainer}>
+          <View style={MainStyle.centerContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
           </View>
         ) : (
           <FlatList
             data={recipes}
-            renderItem={({ item }) => <MyRecipeCard item={item} navigation={navigation} onClick={openOptionModal}/>}
+            renderItem={({ item }) => (
+              <MyRecipeCard
+                item={item}
+                navigation={navigation}
+                onClick={openOptionModal}
+              />
+            )}
             initialNumToRender={8}
             onEndReached={() => handleLoadMore()}
             onEndReachedThreshold={0.5}
@@ -171,28 +187,23 @@ function ListRecipe({ navigation }) {
         />
       </SafeAreaView>
       <SnackBar
-          visible={snackbar.visible}
-          type={snackbar.type}
-          message={snackbar.message}
-          onClose={hideSnackbar}
-        />
-      <FAB
+        visible={snackbar.visible}
+        type={snackbar.type}
+        message={snackbar.message}
+        onClose={hideSnackbar}
+      />
+      {/* <FAB
         style={styles.fab}
         small
         icon="plus"
-        // label="ADD"
+        label="ADD"
         onPress={() => navigation.navigate("AddRecipe")}
-      />
+      /> */}
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
   title: {
     fontSize: 20,
   },
@@ -212,5 +223,3 @@ const styles = StyleSheet.create({
     top: 0,
   },
 });
-
-export default ListRecipe;

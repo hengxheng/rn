@@ -114,7 +114,7 @@ export default function Home({ navigation }) {
     <>
       <SafeAreaView style={MainStyle.sceneContainer}>
         {recipes.length === 0 ? (
-          <View style={styles.titleContainer}>
+          <View style={MainStyle.centerContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
           </View>
         ) : (
@@ -144,11 +144,6 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
   title: {
     fontSize: 20,
   },

@@ -1,13 +1,9 @@
-import React, { useState} from "react";
-import {
-  ActivityIndicator,
-  View,
-  StyleSheet,
-} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
-import { MessageText, ErrorText } from "../../components/Shared";
-import { Input, Button } from "react-native-elements";
+import Loading from "../../components/Loading";
+import { TextInput } from "react-native-paper";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function UpdateEmail(props) {
@@ -44,60 +40,30 @@ export default function UpdateEmail(props) {
     }
   }
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRightIcon: "check",
+      headerRight: onSubmit,
+    });
+  }, [navigation, onSubmit]);
+
   return (
     <>
       <View style={MainStyle.sceneContainer}>
-        {error !== "" && <ErrorText error={error} />}
-        {message !== "" && <MessageText message={message} />}
-        <View style={styles.formContainer}>
-          <Input
+        <View style={MainStyle.formContainer}>
+          <TextInput
             label="Email"
-            inputContainerStyle={styles.input}
             value={formData.email}
+            mode="flat"
             onChangeText={(value) => setFormData({ ...formData, email: value })}
-          />
-          <Button
-            icon={{
-              type: "font-awesome",
-              name: "pencil-square-o",
-              size: 20,
-              color: "white",
-            }}
-            iconRight
-            title="Update"
-            onPress={() => {
-              onSubmit();
-            }}
+            selectionColor="#3cc68a"
+            underlineColor="#3cc68a"
+            style={MainStyle.textInput}
           />
         </View>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#00ff00" />
-          </View>
-        )}
+
+        {loading && <Loading />}
       </View>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  formContainer: {
-    flex: 1,
-    paddingTop: 30,
-    paddingBottom: 60,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 10,
-  },
-  input: {
-    marginBottom: 10,
-  },
-});
-
-UpdateEmail.navigationOptions = ({}) => {
-  return {
-    title: `Update Email`,
-  };
-};
