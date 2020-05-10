@@ -21,6 +21,8 @@ export const CombinedDarkTheme = {
 export const Colors = {
   primaryBtnColor: "#fff",
   secondaryBtnColor: "#fff",
+  mainText: "#fff",
+  link: "#fcb661",
 };
 
 export const MainStyle = StyleSheet.create({
@@ -37,7 +39,7 @@ export const MainStyle = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     paddingHorizontal: 5,
-    paddingVertical: 20,
+    paddingTop: 20,
     color: "#fff",
   },
   headerBar: {

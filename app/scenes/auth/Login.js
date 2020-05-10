@@ -3,19 +3,15 @@ import { View } from "react-native";
 
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
-
-import Form from "react-native-basic-form";
 import CTA from "../../components/CTA";
 import Loading from "../../components/Loading";
 import { TextInput, Button } from "react-native-paper";
-
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function Login({ navigation }) {
-  
   const [loading, setLoading] = useState(false);
-  const {handleLogin } = useAuth();
+  const { handleLogin } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,6 +72,9 @@ export default function Login({ navigation }) {
         <Button icon="login" mode="contained" onPress={() => onSubmit()}>
           Login
         </Button>
+
+        {loading && <Loading />}
+
         <CTA
           ctaText={"Forgot Password?"}
           onPress={() => navigation.navigate("ForgotPassword")}
@@ -88,7 +87,7 @@ export default function Login({ navigation }) {
           onPress={() => navigation.replace("Register")}
           style={{ marginTop: 50 }}
         />
-        {loading && <Loading />}
+
         <SnackBar
           visible={snackbar.visible}
           type={snackbar.type}

@@ -1,53 +1,78 @@
-import React, { useState } from 'react';
-import {Alert, View} from 'react-native';
-
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
 import * as api from "../../services/auth";
-
-import Form from 'react-native-basic-form';
-import {Header, ErrorText} from "../../components/Shared";
+import CTA from "../../components/CTA";
+import Loading from "../../components/Loading";
+import { TextInput, Button } from "react-native-paper";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
-export default function ForgotPassword(props) {
-    const {navigation} = props;
+import SnackBar from "../../components/SnackBar";
 
-    //1 - DECLARE VARIABLES
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+export default function ForgotPassword({ navigation }) {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
 
-    const fields = [{name: 'email', label: 'Email Address', required: true}];
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
-    async function onSubmit(state) {
-        setLoading(true);
+  async function onSubmit() {
+    setLoading(true);
+    const data = {
+      email,
+    };
+    try {
+      let response = await api.forgotPassword(data);
+      setLoading(false);
 
-        try {
-            let response = await api.forgotPassword(state);
-            setLoading(false);
-
-            Alert.alert(
-                'Recover Password',
-                response.message,
-                [{text: 'OK', onPress: () => navigation.goBack()}],
-                {cancelable: false},
-            );
-        } catch (error) {
-            setError(error.message);
-            setLoading(false)
-        }
+      Alert.alert(
+        "Recover Password",
+        response.message,
+        [{ text: "OK", onPress: () => navigation.goBack() }],
+        { cancelable: false }
+      );
+    } catch (error) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: error.message,
+      });
+      setLoading(false);
     }
+  }
 
-    let formProps = {title: "Submit", fields, onSubmit, loading };
-    return (
-        <View style={MainStyle.sceneContainer}>
-            <Header title={"Recover Password"}/>
-            <View style={{flex:1}}>
-                {error !== "" && <ErrorText error={error} />}
-                <Form {...formProps}/>
-            </View>
-        </View>
-    );
-};
+  return (
+    <View style={MainStyle.sceneContainer}>
+      <View style={MainStyle.centerContainer}>
+        <TextInput
+          label="Email"
+          value={email}
+          mode="flat"
+          onChangeText={(value) => setEmail(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <CTA
+          title={"Send reset password to your email"}
+          style={{ marginVertical: 10 }}
+        />
+        <Button icon="security" mode="contained" onPress={() => onSubmit()}>
+          Send
+        </Button>
 
-ForgotPassword.navigationOptions = ({}) => {
-    return {
-        title: ``
-    }
-};
+        {loading && <Loading />}
+        <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+          onClose={hideSnackbar}
+        />
+      </View>
+    </View>
+  );
+}

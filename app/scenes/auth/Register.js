@@ -1,65 +1,116 @@
-import React, { useState } from 'react';
-import {Alert, View} from 'react-native';
-
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
 import * as api from "../../services/auth";
-
-import Form from 'react-native-basic-form';
 import CTA from "../../components/CTA";
-import {Header, ErrorText} from "../../components/Shared";
+import Loading from "../../components/Loading";
+import { TextInput, Button } from "react-native-paper";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import SnackBar from "../../components/SnackBar";
 
-export default function Register(props) {
-    const {navigation} = props;
+export default function Register({ navigation }) {
+  const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
 
-    //1 - DECLARE VARIABLES
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
-    const fields = [
-        {name: 'firstName', label: 'First Name', required: true},
-        {name: 'lastName', label: 'Last Name', required: true},
-        {name: 'email', label: 'Email Address', required: true},
-        {name: 'password', label: 'Password', required: true, secure:true}
-    ];
-
-    async function onSubmit(state) {
-        setLoading(true);
-
-        try {
-            let response = await api.register(state);
-            setLoading(false);
-            Alert.alert(
-                'Registration Successful',
-                response.message,
-                [{text: 'OK', onPress: () => navigation.replace("Login")}],
-                {cancelable: false},
-            );
-        } catch (error) {
-            setError(error.message);
-            setLoading(false)
-        }
+  async function onSubmit() {
+    setLoading(true);
+    try {
+      const data = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+      let response = await api.register(data);
+      setLoading(false);
+      Alert.alert(
+        "Registration Successful",
+        response.message,
+        [{ text: "OK", onPress: () => navigation.replace("Login") }],
+        { cancelable: false }
+      );
+    } catch (error) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: error.message,
+      });
+      setLoading(false);
     }
+  }
 
-    let formProps = {title: "Register", fields, onSubmit, loading };
-    return (
-        <View style={MainStyle.sceneContainer}>
-            <Header title={"Register"}/>
-            <View style={{flex:1}}>
-                {error !== "" && <ErrorText error={error} />}
-                <Form {...formProps}>
-                    <CTA
-                        title={"Already have an account?"}
-                        ctaText={"Login"}
-                        onPress={() => navigation.replace("Login")}
-                        style={{marginTop: 50}}/>
-                </Form>
-            </View>
-        </View>
-    );
-};
+  return (
+    <View style={MainStyle.sceneContainer}>
+      <View style={MainStyle.centerContainer}>
+        <TextInput
+          label="First Name"
+          value={firstName}
+          mode="flat"
+          onChangeText={(value) => setFirstName(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <TextInput
+          label="Last Name"
+          value={lastName}
+          mode="flat"
+          onChangeText={(value) => setLastName(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <TextInput
+          label="Email"
+          value={email}
+          mode="flat"
+          onChangeText={(value) => setEmail(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <TextInput
+          label="Password"
+          secureTextEntry
+          password
+          mode="flat"
+          value={password}
+          onChangeText={(value) => setPassword(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <Button icon="security" mode="contained" onPress={() => onSubmit()}>
+          Register
+        </Button>
 
-Register.navigationOptions = ({}) => {
-    return {
-        title: ``
-    }
-};
+        {loading && <Loading />}
+
+        <CTA
+          title={"Already have an account?"}
+          ctaText={"Login"}
+          onPress={() => navigation.replace("Login")}
+          style={{ marginTop: 50 }}
+        />
+
+        <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+          onClose={hideSnackbar}
+        />
+      </View>
+    </View>
+  );
+}
