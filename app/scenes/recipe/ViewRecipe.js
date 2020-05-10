@@ -14,6 +14,7 @@ import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 import { RECIPE_IMAGE_URL } from "../../constants";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function ViewRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -117,7 +118,7 @@ export default function ViewRecipe({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         {images && (
           <View style={{ marginBotton: 10 }}>
             <SliderBox images={images} />
@@ -129,10 +130,10 @@ export default function ViewRecipe({ navigation, route }) {
             {content !== "" && <Paragraph>{content}</Paragraph>}
           </Card.Content>
           {tags && (
-            <View style={styles.chipContainer}>
+            <View style={MainStyle.tagContainer}>
               {tags.map((tag, index) => {
                 return (
-                  <Chip key={index} style={styles.chip}>
+                  <Chip key={index} style={MainStyle.tagBox} icon="tag">
                     {tag}
                   </Chip>
                 );
@@ -193,16 +194,5 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 10,
     marginBottom: 25,
-  },
-  chipContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-  },
-  chip: {
-    width: "auto",
-    margin: 5,
   },
 });

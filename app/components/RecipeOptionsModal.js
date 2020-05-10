@@ -14,7 +14,6 @@ export default function RecipeOptionsModal(props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    console.log(props.visible);
     setVisible(props.visible);
   }, [props.visible]);
 

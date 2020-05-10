@@ -78,33 +78,6 @@ export default function RecipeCard(props) {
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderBottomLeftRadius: 3,
-    borderBottomRightRadius: 3,
-    shadowColor: "#ddd",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    marginBottom: 20,
-  },
-  cartContentContainer: {
-    flex: 1,
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-  },
-  chipContainer: {
-    flex: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-  },
   title: {
     fontSize: 20,
   },
