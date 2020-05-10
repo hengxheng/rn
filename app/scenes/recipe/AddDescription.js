@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function AddDescription({ navigation, route }) {
   const [content, setContent] = useState("");
@@ -18,7 +19,7 @@ export default function AddDescription({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <TextInput
           label="Desciption"
           value={content}
@@ -45,13 +46,6 @@ export default function AddDescription({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   text: {
     fontSize: 16,
     marginBottom: 20,

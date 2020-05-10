@@ -7,6 +7,7 @@ import { useAuth } from "../../providers/auth";
 import Form from "react-native-basic-form";
 import CTA from "../../components/CTA";
 import { Header, ErrorText } from "../../components/Shared";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function Login(props) {
   const { navigation } = props;
@@ -29,7 +30,7 @@ export default function Login(props) {
       let response = await api.login(state);
       await handleLogin(response);
       setLoading(false);
-      navigate("Home");
+      navigate("App");
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -38,7 +39,7 @@ export default function Login(props) {
 
   let formProps = { title: "Login", fields, onSubmit, loading };
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16, backgroundColor: "#fff" }}>
+    <View style={MainStyle.sceneContainer}>
       <Header title={"Login"} />
       <View style={{ flex: 1 }}>
         {error !== "" && <ErrorText error={error} />}

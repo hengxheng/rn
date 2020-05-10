@@ -11,6 +11,7 @@ import ImageModal from "../../components/ImageModal";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function AddImages({ navigation, route }) {
   const [imageModalVisible, setImageModalVisible] = useState(false);
@@ -103,7 +104,7 @@ export default function AddImages({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <View style={styles.imgContainer}>
           {images.map((img, index) => {
             return (
@@ -147,13 +148,6 @@ export default function AddImages({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   imgContainer: {
     flex: 1,
     flexDirection: "row",

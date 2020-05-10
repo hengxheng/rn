@@ -188,12 +188,6 @@ function ListRecipe({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-  },
   titleContainer: {
     alignItems: "center",
     justifyContent: "center",

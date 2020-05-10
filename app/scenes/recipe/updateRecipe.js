@@ -147,7 +147,7 @@ export default function UpdateRecipe({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
@@ -270,12 +270,6 @@ export default function UpdateRecipe({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   card: {
     flex: 1,
     marginBottom: 15,

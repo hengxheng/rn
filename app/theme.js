@@ -24,6 +24,7 @@ export const Colors = {
 
 export const MainStyle = StyleSheet.create({
   sceneContainer: { 
+    flex:1,
     fontFamily: (Platform.OS === "ios" ? "HelveticaNeue" : "Roboto"),
     backgroundColor: "#ebebeb",
     fontSize: 14,

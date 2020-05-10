@@ -17,6 +17,7 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Avatar } from "react-native-elements";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function UpdateProfileImage(props) {
   const { navigation } = props;
@@ -124,7 +125,7 @@ export default function UpdateProfileImage(props) {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={MainStyle.sceneContainer}>
         {error !== "" && <ErrorText error={error} />}
         {message !== "" && <MessageText message={message} />}
         <View style={styles.formContainer}>
@@ -196,13 +197,6 @@ export default function UpdateProfileImage(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   formContainer: {
     flex: 1,
     paddingTop: 30,

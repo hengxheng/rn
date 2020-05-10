@@ -4,6 +4,7 @@ import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { MessageText, ErrorText } from "../../components/Shared";
 import { Input, Button } from "react-native-elements";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function UpdateName(props) {
   const { navigation } = props;
@@ -41,9 +42,7 @@ export default function UpdateName(props) {
 
   return (
     <>
-      <View style={styles.container}>
-        {error !== "" && <ErrorText error={error} />}
-        {message !== "" && <MessageText message={message} />}
+      <View style={MainStyle.sceneContainer}>
         <View style={styles.formContainer}>
           <Input
             label="First name"
@@ -87,13 +86,6 @@ export default function UpdateName(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   formContainer: {
     flex: 1,
     paddingTop: 30,

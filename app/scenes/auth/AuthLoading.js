@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
 import { StackActions } from "react-navigation";
-
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 import { useAuth } from "../../providers/auth";
 
 export default function AuthLoading(props) {
@@ -22,8 +22,7 @@ export default function AuthLoading(props) {
 
       if (user) {
         navigate("App");
-      } 
-      else {
+      } else {
         navigate("Auth");
       }
     } catch (e) {
@@ -32,14 +31,7 @@ export default function AuthLoading(props) {
   }
 
   return (
-    <View
-      style={{
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-      }}
-    >
+    <View style={MainStyle.sceneContainer}>
       <ActivityIndicator />
       <Text>{"Loading User Data"}</Text>
     </View>

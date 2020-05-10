@@ -11,6 +11,8 @@ import { ListItem, Input, Button } from "react-native-elements";
 import * as api from "../../services/auth";
 import { useAuth } from "../../providers/auth";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+
 export default function Profile(props) {
   const { navigation } = props;
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,7 @@ export default function Profile(props) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <View>
           <ListItem
             key={"image"}
@@ -98,13 +100,6 @@ export default function Profile(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   formContainer: {
     flex: 1,
     paddingTop: 30,

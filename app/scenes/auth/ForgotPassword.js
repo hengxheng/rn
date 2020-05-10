@@ -5,7 +5,7 @@ import * as api from "../../services/auth";
 
 import Form from 'react-native-basic-form';
 import {Header, ErrorText} from "../../components/Shared";
-
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 export default function ForgotPassword(props) {
     const {navigation} = props;
 
@@ -36,7 +36,7 @@ export default function ForgotPassword(props) {
 
     let formProps = {title: "Submit", fields, onSubmit, loading };
     return (
-        <View style={{flex: 1, paddingHorizontal: 16, backgroundColor:"#fff"}}>
+        <View style={MainStyle.sceneContainer}>
             <Header title={"Recover Password"}/>
             <View style={{flex:1}}>
                 {error !== "" && <ErrorText error={error} />}

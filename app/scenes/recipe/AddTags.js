@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, Chip } from "react-native-paper";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 export default function AddTags({ navigation, route }) {
 
@@ -33,7 +34,7 @@ export default function AddTags({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={MainStyle.sceneContainer}>
         <View style={styles.inputContainer}>
           <TextInput
             label="Tags"

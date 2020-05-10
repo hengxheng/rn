@@ -236,12 +236,6 @@ export default function AddRecipe({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 30,
-    paddingBottom: 120,
-  },
   card: {
     flex: 1,
     marginBottom: 15,
