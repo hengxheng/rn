@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../theme";
 
-const Header = ({ scene, previous, navigation, route }) => {
+const Header = ({ scene, previous, navigation }) => {
   const theme = useTheme();
   const { options } = scene.descriptor;
   const title =

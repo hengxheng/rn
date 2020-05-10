@@ -6,64 +6,96 @@ import { useAuth } from "../../providers/auth";
 
 import Form from "react-native-basic-form";
 import CTA from "../../components/CTA";
-import { Header, ErrorText } from "../../components/Shared";
+import Loading from "../../components/Loading";
+import { TextInput, Button } from "react-native-paper";
+
+import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
-export default function Login(props) {
-  const { navigation } = props;
-  const { navigate } = navigation;
-
-  //1 - DECLARE VARIABLES
-  const [error, setError] = useState("");
+export default function Login({ navigation }) {
+  
   const [loading, setLoading] = useState(false);
-  const { handleLogin } = useAuth();
+  const {handleLogin } = useAuth();
 
-  const fields = [
-    { name: "email", label: "Email Address", required: true },
-    { name: "password", label: "Password", required: true, secure: true },
-  ];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
 
-  async function onSubmit(state) {
+  async function onSubmit() {
     setLoading(true);
-
     try {
-      let response = await api.login(state);
+      const data = {
+        email,
+        password,
+      };
+      let response = await api.login(data);
       await handleLogin(response);
       setLoading(false);
-      navigate("App");
+      navigation.navigate("App");
     } catch (error) {
-      setError(error.message);
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: error.message,
+      });
       setLoading(false);
     }
   }
 
-  let formProps = { title: "Login", fields, onSubmit, loading };
-  return (
-    <View style={MainStyle.sceneContainer}>
-      <Header title={"Login"} />
-      <View style={{ flex: 1 }}>
-        {error !== "" && <ErrorText error={error} />}
-        <Form {...formProps}>
-          <CTA
-            ctaText={"Forgot Password?"}
-            onPress={() => navigation.navigate("ForgotPassword")}
-            style={{ marginTop: 20 }}
-          />
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
-          <CTA
-            title={"Don't have an account?"}
-            ctaText={"Register"}
-            onPress={() => navigation.replace("Register")}
-            style={{ marginTop: 50 }}
-          />
-        </Form>
+  return (
+    <View style={{ ...MainStyle.sceneContainer, flex: 1 }}>
+      <View style={MainStyle.centerContainer}>
+        <TextInput
+          label="Email"
+          value={email}
+          mode="flat"
+          onChangeText={(value) => setEmail(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <TextInput
+          label="Password"
+          secureTextEntry
+          password
+          mode="flat"
+          value={password}
+          onChangeText={(value) => setPassword(value)}
+          selectionColor="#3cc68a"
+          underlineColor="#3cc68a"
+          style={MainStyle.textInput}
+        />
+        <Button icon="login" mode="contained" onPress={() => onSubmit()}>
+          Login
+        </Button>
+        <CTA
+          ctaText={"Forgot Password?"}
+          onPress={() => navigation.navigate("ForgotPassword")}
+          style={{ marginTop: 20 }}
+        />
+
+        <CTA
+          title={"Don't have an account?"}
+          ctaText={"Register"}
+          onPress={() => navigation.replace("Register")}
+          style={{ marginTop: 50 }}
+        />
+        {loading && <Loading />}
+        <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+          onClose={hideSnackbar}
+        />
       </View>
     </View>
   );
 }
-
-Login.navigationOptions = ({}) => {
-  return {
-    title: ``,
-  };
-};
