@@ -8,20 +8,23 @@ import {
   AppState,
 } from "react-native";
 import { Text, FAB } from "react-native-paper";
-import Header from "../../components/Header";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
 import { useAuth } from "../../providers/auth";
 import MyRecipeCard from "../../components/MyRecipeCard";
+import RecipeOptionsModal from "../../components/RecipeOptionsModal";
 import SnackBar from "../../components/SnackBar";
+import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 
 function ListRecipe({ navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(0);
+  const [optionModalVisible, setOptionModalVisible] = useState(false);
   // const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [snackbar, setSnackbar] = useState({
     visible: false,
     type: null,
@@ -32,13 +35,16 @@ function ListRecipe({ navigation }) {
   const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
-    setRecipes([]);
-    setPage(0);
-    getRecipes(page);
+    let mounted = true;
+
+    if (mounted) {
+      handleRefresh();
+    }
 
     AppState.addEventListener("change", _handleAppStateChange);
     // console.log(state.user);
     return () => {
+      mounted = false
       AppState.removeEventListener("change", _handleAppStateChange);
     };
 
@@ -109,11 +115,11 @@ function ListRecipe({ navigation }) {
     }
   }
 
-  function handleRefresh() {
+  async function handleRefresh() {
     setPage(0);
     setRefreshing(true);
     setLoadingMore(true);
-    getRecipes(0);
+    await getRecipes(0);
   }
 
   function _renderFooter() {
@@ -126,9 +132,19 @@ function ListRecipe({ navigation }) {
     );
   }
 
+  function closeOptionModal() {
+    setOptionModalVisible(false);
+    setSelectedItem(null);
+  }
+
+  function openOptionModal(item){
+    setOptionModalVisible(true);
+    setSelectedItem(item);
+  }
+
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={MainStyle.sceneContainer}>
         {recipes.length === 0 ? (
           <View style={styles.titleContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
@@ -136,7 +152,7 @@ function ListRecipe({ navigation }) {
         ) : (
           <FlatList
             data={recipes}
-            renderItem={({ item }) => <MyRecipeCard item={item} navigation={navigation}/>}
+            renderItem={({ item }) => <MyRecipeCard item={item} navigation={navigation} onClick={openOptionModal}/>}
             initialNumToRender={8}
             onEndReached={() => handleLoadMore()}
             onEndReachedThreshold={0.5}
@@ -146,6 +162,13 @@ function ListRecipe({ navigation }) {
             ListFooterComponent={_renderFooter}
           />
         )}
+
+        <RecipeOptionsModal
+          visible={optionModalVisible}
+          item={selectedItem}
+          onClose={closeOptionModal}
+          navigation={navigation}
+        />
       </SafeAreaView>
       <SnackBar
           visible={snackbar.visible}
@@ -157,7 +180,7 @@ function ListRecipe({ navigation }) {
         style={styles.fab}
         small
         icon="plus"
-        label="ADD"
+        // label="ADD"
         onPress={() => navigation.navigate("AddRecipe")}
       />
     </>

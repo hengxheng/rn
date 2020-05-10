@@ -29,7 +29,7 @@ export default function Login(props) {
       let response = await api.login(state);
       await handleLogin(response);
       setLoading(false);
-      navigate("App");
+      navigate("Home");
     } catch (error) {
       setError(error.message);
       setLoading(false);

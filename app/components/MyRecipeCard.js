@@ -8,7 +8,7 @@ import {
   IconButton,
   Chip,
 } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableHighlight } from "react-native";
 import { RECIPE_IMAGE_URL } from "../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../theme";
 
@@ -20,81 +20,30 @@ export default function MyRecipeCard(props) {
       ? { uri: RECIPE_IMAGE_URL + "/" + item.RecipeImages[0].path }
       : require("../../assets/image-placeholder.png");
 
-  // console.log(item.content);
-  function pluckTagName(tagObjs) {
-    if (!tagObjs) {
-      return null;
-    }
-
-    let tagNames = [];
-    tagNames = tagObjs.map((tag) => {
-      return tag.name;
-    });
-
-    return tagNames;
-  }
-
-  function pluckImages(imageObjs) {
-    if (!imageObjs) {
-      return null;
-    }
-
-    let images = [];
-    images = imageObjs.map((img) => {
-      const path = img.path;
-      return { uri: `${RECIPE_IMAGE_URL}/${path}`, uploaded: true };
-    });
-
-    return images;
-  }
-
   return (
-    <Card style={styles.cardContainer}>
-      <Card.Cover source={cover} />
-      <Card.Content>
-        <Title>{item.title}</Title>
-        <Paragraph>{item.createdAt}</Paragraph>
-        <View style={MainStyle.tagContainer}>
-          {item.Tags.map((tag, index) => {
-            return (
-              <Chip key={index} style={MainStyle.tagBox} icon="tag">
-                {tag.name}
-              </Chip>
-            );
-          })}
-        </View>
-      </Card.Content>
-      <Card.Actions>
-        <View style={styles.listButtonContainer}>
-          <IconButton
-            icon="eye-circle"
-            color={Colors.primaryIconButton}
-            size={30}
-            onPress={() =>
-              navigation.navigate("ViewRecipe", {
-                id: item.id,
-              })
-            }
-          />
-          <IconButton
-            icon="content-save-edit-outline"
-            color={Colors.primaryIconButton}
-            size={30}
-            onPress={() =>
-              navigation.navigate("UpdateRecipe", {
-                screen: "UpdateRecipe",
-                params: {
-                  id: item.id,
-                  title: item.title,
-                  content: item.content,
-                  images: pluckImages(item.RecipeImages),
-                  tags: pluckTagName(item.Tags),
-                },
-              })
-            }
-          />
-        </View>
-      </Card.Actions>
+    <Card style={MainStyle.cardContainer}>
+      <TouchableHighlight
+        activeOpacity={0.6}
+        underlayColor="transparent"
+        onPress={() => props.onClick(item)}
+      >
+        <>
+          <Card.Cover source={cover} />
+          <Card.Content style={MainStyle.cartContentContainer}>
+            <Title>{item.title}</Title>
+            <Paragraph>{item.createdAt}</Paragraph>
+            <View style={MainStyle.tagContainer}>
+              {item.Tags.map((tag, index) => {
+                return (
+                  <Chip key={index} style={MainStyle.tagBox} icon="tag">
+                    {tag.name}
+                  </Chip>
+                );
+              })}
+            </View>
+          </Card.Content>
+        </>
+      </TouchableHighlight>
     </Card>
   );
 }

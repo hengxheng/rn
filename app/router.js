@@ -22,6 +22,7 @@ import AccountStack from "./routes/Account";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
+import { MainStyle } from "./theme";
 
 const MainTab = createMaterialBottomTabNavigator();
 
@@ -30,9 +31,12 @@ function MainTabNavigator() {
   return (
     <MainTab.Navigator
       initialRouteName="Home"
-      activeColor="#f0edf6"
-      inactiveColor="#3e2465"
+      activeColor="red"
+      inactiveColor="grey"
+      activeBackgroundColor= 'red'
+      labeled={false}
       theme={theme}
+      barStyle={ MainStyle.bottomTabBar }
       shifting={true}
       sceneAnimationEnabled={false}
     >

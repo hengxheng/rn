@@ -48,6 +48,7 @@ export default function AddImages({ navigation, route }) {
         _pickImage();
       }
     }
+    setImageModalVisible(false);
   }
 
   function closeImageModal() {
@@ -89,7 +90,6 @@ export default function AddImages({ navigation, route }) {
       });
 
       if (!result.cancelled) {
-        setImageModalVisible(false);
         addImages(result);
       }
     } catch (E) {
@@ -98,7 +98,6 @@ export default function AddImages({ navigation, route }) {
   }
 
   async function _openCamera() {
-    setImageModalVisible(false);
     navigation.navigate("fromCamera", { returnScreen: cameraReturnScreen});
   }
 

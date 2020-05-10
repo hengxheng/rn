@@ -46,15 +46,15 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   info: {
-    backgroundColor: "green",
+    backgroundColor: "#27a3a7",
     color: "#fff",
   },
   error: {
-    backgroundColor: "red",
+    backgroundColor: "#d64548",
     color: "#fff",
   },
   warning: {
-    backgroundColor: "yellow",
+    backgroundColor: "#fddd62",
     color: "#fff",
   },
 });

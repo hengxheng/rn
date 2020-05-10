@@ -31,7 +31,7 @@ export default function RecipeCard(props) {
       : require("../../assets/image-placeholder.png");
 
   return (
-    <Card style={styles.cardContainer}>
+    <Card style={MainStyle.cardContainer}>
       <TouchableHighlight
         activeOpacity={0.6}
         underlayColor="transparent"
@@ -50,7 +50,7 @@ export default function RecipeCard(props) {
           />
         </>
       </TouchableHighlight>
-      <Card.Content style={styles.cartContentContainer}>
+      <Card.Content style={MainStyle.cartContentContainer}>
         <View style={MainStyle.tagContainer}>
           {item.Tags.map((tag, index) => {
             return (

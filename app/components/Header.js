@@ -13,7 +13,7 @@ const Header = ({ scene, previous, navigation }) => {
       : scene.route.name;
 
   return (
-    <Appbar.Header theme={{ colors: { primary: "#03b1fc" } }}>
+    <Appbar.Header theme={{ colors: { primary: "transparent" } }}>
       {previous && (
         <Appbar.BackAction
           onPress={ () => navigation.pop() }
