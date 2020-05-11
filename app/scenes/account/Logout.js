@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { View } from "react-native";
 import { useAuth } from "../../providers/auth";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
-import { Text, FAB, IconButton } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import CTA from "../../components/CTA";
 
 export default function Logout(props) {
@@ -58,14 +58,3 @@ export default function Logout(props) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  text: {
-    height: 300,
-    fontSize: 16,
-  },
-});
