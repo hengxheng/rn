@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
-import { ListItem, Button } from "react-native-elements";
+import { ListItem } from "react-native-elements";
+import { Button } from "react-native-paper";
 import { useAuth } from "../../providers/auth";
 import { USER_PROFILE_IMAGE_URL } from "../../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
@@ -42,7 +43,7 @@ export default function Profile(props) {
   return (
     <>
       <ScrollView style={MainStyle.sceneContainer}>
-        <View>
+        <View style={ {marginBottom: 20} }>
           <ListItem
             key={"image"}
             leftAvatar={
@@ -71,20 +72,16 @@ export default function Profile(props) {
           ))}
         </View>
 
-        <View style={{ flex: 1 }}>
-          <View style={styles.formContainer}>
-            <Button
-              icon={{
-                type: "font-awesome",
-                name: "sign-out",
-                size: 20,
-                color: "white",
-              }}
-              iconRight
-              title="Logout"
-              onPress={() => navigation.navigate("Logout")}
-            />
-          </View>
+        <View style={MainStyle.inputCard}>
+          <Button
+            style={MainStyle.innerButton2}
+            mode="contained"
+            icon="logout-variant"
+            title="Logout"
+            onPress={() => navigation.navigate("Logout")}
+          >
+            Sign out
+          </Button>
         </View>
       </ScrollView>
     </>

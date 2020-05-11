@@ -5,8 +5,9 @@ import {
   View,
   Image,
   TouchableHighlight,
+  Alert,
 } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, FAB } from "react-native-paper";
 import ImageModal from "../../components/ImageModal";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
@@ -19,7 +20,9 @@ export default function AddImages({ navigation, route }) {
   const [images, setImages] = useState([]);
   const imagePlaceholder = require("../../../assets/image-placeholder.png");
   const [returnURL, setReturnURL] = useState("AddRecipe");
-  const [cameraReturnScreen, setCameraReturnScreen] = useState("AddRecipeImages");
+  const [cameraReturnScreen, setCameraReturnScreen] = useState(
+    "AddRecipeImages"
+  );
 
   useEffect(() => {
     if (route.params?.images) {
@@ -76,8 +79,9 @@ export default function AddImages({ navigation, route }) {
   async function _pickImage() {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
       if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
+        Alert("Sorry, we need camera roll permissions to make this work!");
         return false;
       }
     }
@@ -89,7 +93,7 @@ export default function AddImages({ navigation, route }) {
         aspect: [4, 3],
         quality: 1,
       });
-
+      console.log(result);
       if (!result.cancelled) {
         addImages(result);
       }
@@ -99,7 +103,7 @@ export default function AddImages({ navigation, route }) {
   }
 
   async function _openCamera() {
-    navigation.navigate("fromCamera", { returnScreen: cameraReturnScreen});
+    navigation.navigate("fromCamera", { returnScreen: cameraReturnScreen });
   }
 
   return (
@@ -124,25 +128,24 @@ export default function AddImages({ navigation, route }) {
           })}
         </View>
 
-        <View>
-          <Button
-            style={styles.submitButton}
-            mode="contained"
-            icon="check"
-            onPress={() =>
-              navigation.navigate(returnURL, { images: selectedImages, imageChanged: true })
-            }
-          >
-            Submit
-          </Button>
-        </View>
-
         <ImageModal
           visible={imageModalVisible}
           changeImageSource={changeImageSource}
           onClose={closeImageModal}
         />
       </ScrollView>
+      <FAB
+        style={MainStyle.fab}
+        small
+        icon="check"
+        color="#fff"
+        onPress={() =>
+          navigation.navigate(returnURL, {
+            images: selectedImages,
+            imageChanged: true,
+          })
+        }
+      />
     </>
   );
 }
@@ -154,19 +157,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     padding: 10,
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
   },
   image: {
     width: 150,
     height: 150,
     margin: 5,
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  submitButton: {
-    marginTop: 10,
-    marginBottom: 25,
   },
 });

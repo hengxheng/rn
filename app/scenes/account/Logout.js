@@ -3,6 +3,7 @@ import { StyleSheet, View, Button } from "react-native";
 import { useAuth } from "../../providers/auth";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 import { Text, FAB, IconButton } from "react-native-paper";
+import CTA from "../../components/CTA";
 
 export default function Logout(props) {
   const [error, setError] = useState(null);
@@ -28,8 +29,14 @@ export default function Logout(props) {
     <>
       <View style={MainStyle.sceneContainer}>
         <View style={MainStyle.centerContainer}>
-          <Text>Do you want to logout?</Text>
-          <View style={{ justifyContent: "center", flexDirection: "row", marginVertical:20, }}>
+          <CTA title={"Do you want to sign out?"} style={{ marginTop: 20 }} />
+          <View
+            style={{
+              justifyContent: "center",
+              flexDirection: "row",
+              marginVertical: 20,
+            }}
+          >
             <IconButton
               icon="check"
               color={Colors.primaryBtnColor}

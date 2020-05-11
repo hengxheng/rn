@@ -118,13 +118,13 @@ export default function ViewRecipe({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={MainStyle.sceneContainer}>
+      <ScrollView style={{ ...MainStyle.sceneContainer, paddingHorizontal: 0 }}>
         {images && (
-          <View style={{ marginBotton: 10 }}>
+          <View>
             <SliderBox images={images} />
           </View>
         )}
-        <Card style={styles.card}>
+        <Card style={MainStyle.contentCard}>
           <Card.Content>
             <Title>{title}</Title>
             {content !== "" && <Paragraph>{content}</Paragraph>}
@@ -164,29 +164,3 @@ export default function ViewRecipe({ navigation, route }) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    marginBottom: 15,
-    marginHorizontal: 10,
-  },
-  centerContainer: {
-    justifyContent: "center",
-  },
-  iconButton: {
-    backgroundColor: "rgba(46, 113, 102, 0.8)",
-    position: "absolute",
-    right: 0,
-    top: 5,
-    margin: 10,
-  },
-  text: {
-    fontSize: 16,
-    // marginBottom: 20,
-  },
-  submitButton: {
-    marginTop: 10,
-    marginBottom: 25,
-  },
-});

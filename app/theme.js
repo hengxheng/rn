@@ -21,6 +21,9 @@ export const CombinedDarkTheme = {
 export const Colors = {
   primaryBtnColor: "#fff",
   secondaryBtnColor: "#fff",
+  red: "#f77862",
+  yellow: "#fcb661",
+  green: "#3cc68a",
   mainText: "#fff",
   link: "#fcb661",
 };
@@ -39,11 +42,11 @@ export const MainStyle = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     paddingHorizontal: 5,
-    paddingTop: 20,
+    paddingBottom: 40,
     color: "#fff",
   },
   headerBar: {
-    paddingTop:15,
+    paddingVertical:10,
     backgroundColor: "#5f7393",
     borderWidth:0,
     elevation: 0, // remove shadow on Android
@@ -93,6 +96,7 @@ export const MainStyle = StyleSheet.create({
     alignItems: "flex-start",
     flexWrap: "wrap",
     justifyContent: "flex-start",
+    padding: 10,
   },
   tagBox: {
     width: "auto",
@@ -108,13 +112,36 @@ export const MainStyle = StyleSheet.create({
     width: "80%",
     color: "#fff",
   },
+  innerButton2: {
+    backgroundColor: "#fcb661",
+    width: "90%",
+    color: "#fff",
+  },
   textInput: {
     color: "#000",
     fontSize: 14,
-    backgroundColor: "#fef4e2",
+    backgroundColor: "#fff",
     borderRadius:3,
     marginBottom: 15,
     width: "90%",
+  },
+  inputCard: {
+   color: "#000",
+   alignItems:"center",
+   justifyContent:"center", 
+   marginBottom: 15,
+  },
+  fab: {
+    position: "absolute",
+    backgroundColor: Colors.red,
+    margin: 20,
+    right: 0,
+    bottom: 0,
+  },
+  contentCard: {
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    borderRadius: 0,
   }
 });
 

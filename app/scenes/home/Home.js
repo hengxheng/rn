@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from "react-native";
-import { Text, FAB, List } from "react-native-paper";
+import { Text, FAB, List, IconButton } from "react-native-paper";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -116,6 +116,11 @@ export default function Home({ navigation }) {
         {recipes.length === 0 ? (
           <View style={MainStyle.centerContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
+            <IconButton 
+              icon="refresh"
+              size={20}
+              onPress={ ()=> handleRefresh() }
+            />
           </View>
         ) : (
           <FlatList

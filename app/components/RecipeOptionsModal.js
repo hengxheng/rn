@@ -21,7 +21,7 @@ export default function RecipeOptionsModal(props) {
     setVisible(false);
     props.onClose(false);
     if (option === "Edit") {
-      props.navigation.navigate("UpdateRecipe", {
+      props.navigation.push("UpdateRecipe", {
         screen: "UpdateRecipe",
         params: {
           id: item.id,

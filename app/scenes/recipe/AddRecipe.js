@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { TextInput, Card, Button, Chip } from "react-native-paper";
+import { TextInput, Card, Button, Chip, FAB } from "react-native-paper";
 import { AsyncStorage } from "react-native";
 import axios from "axios";
 import * as c from "../../constants";
@@ -28,7 +28,7 @@ export default function AddRecipe({ navigation, route }) {
     if (route.params?.tags) {
       setTags(route.params.tags);
     }
-    
+
     if (route.params?.images) {
       setImages(route.params.images);
     }
@@ -114,121 +114,114 @@ export default function AddRecipe({ navigation, route }) {
     }
   }
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRightIcon: "check",
+      headerRight: onSave,
+    });
+  }, [navigation, onSave]);
+
   return (
     <>
-      <ScrollView style={MainStyle.sceneContainer}>
-        <Card style={styles.card}>
-          <Card.Content>
+      <ScrollView style={{ ...MainStyle.sceneContainer, paddingHorizontal: 0 }}>
+        <View style={MainStyle.inputCard}>
+          <TextInput
+            label="Title"
+            value={title}
+            mode="flat"
+            onChangeText={setTitle}
+            selectionColor={Colors.green}
+            underlineColor={Colors.green}
+            style={MainStyle.textInput}
+          />
+        </View>
+        {content !== "" && (
+          <View style={MainStyle.inputCard}>
             <TextInput
-              label="Title"
-              value={title}
+              label="Desciption"
+              value={content}
               mode="flat"
-              onChangeText={setTitle}
-              selectionColor="#3cc68a"
-              underlineColor="#3cc68a"
-              style={ MainStyle.textInput }
+              multiline
+              selectionColor={Colors.green}
+              underlineColor={Colors.green}
+              style={MainStyle.textInput}
+              disabled
             />
-          </Card.Content>
-        </Card>
-        <Card style={styles.card}>
-          {content !== "" && (
-            <Card.Content>
-              <TextInput
-                label="Desciption"
-                value={content}
-                mode="outlined"
-                multiline
-                selectionColor="red"
-                style={ MainStyle.innerButton }
-                disabled
-              />
-            </Card.Content>
-          )}
-          <Card.Actions style={styles.centerContainer}>
-            <Button
-              icon="pencil"
-              mode="contained"
-              compact={ false }
-              style={ MainStyle.innerButton }
-              onPress={() =>
-                navigation.navigate("AddRecipeDescription", {
-                  content: content,
-                })
-              }
-            >
-              {content !== "" ? "Edit" : "Add"} description
-            </Button>
-          </Card.Actions>
-        </Card>
+          </View>
+        )}
+        <View style={MainStyle.inputCard}>
+          <Button
+            icon="pencil"
+            mode="contained"
+            compact={false}
+            style={MainStyle.innerButton}
+            onPress={() =>
+              navigation.navigate("AddRecipeDescription", {
+                content: content,
+              })
+            }
+          >
+            {content !== "" ? "Edit" : "Add"} description
+          </Button>
+        </View>
 
         {images && (
-          <View style={{ marginBotton: 10 }}>
+          <View style={{ paddingBottom: 10 }}>
             <SliderBox images={images} />
           </View>
         )}
 
-        <Card style={styles.card}>
-          <Card.Actions style={styles.centerContainer}>
-            <Button
-              icon="camera"
-              mode="contained"
-              compact={ false }
-              style={ MainStyle.innerButton }
-              onPress={() =>
-                navigation.navigate("AddRecipeImages", {
-                  images: images,
-                })
-              }
-            >
-              {images ? "Edit" : "Add"} images
-            </Button>
-          </Card.Actions>
-        </Card>
-        <Card style={styles.card}>
-          {tags && (
-            <Card.Content>
-              <View style={MainStyle.tagContainer}>
-                {tags.map((tag, index) => {
-                  return (
-                    <Chip key={index} style={MainStyle.tagBox} icon="tag">
-                      {tag}
-                    </Chip>
-                  );
-                })}
-              </View>
-            </Card.Content>
-          )}
-
-          <Card.Actions style={styles.centerContainer}>
-            <Button
-              icon="tag"
-              mode="contained"
-              compact={ false }
-              style={ MainStyle.innerButton }
-
-              onPress={() =>
-                navigation.navigate("AddRecipeTags", {
-                  tags: tags,
-                })
-              }
-            >
-              {tags ? "Edit" : "Add"} tags
-            </Button>
-          </Card.Actions>
-        </Card>
-
-        <View style={styles.card}>
+        <View style={MainStyle.inputCard}>
           <Button
-            style={styles.submitButton}
+            icon="camera"
             mode="contained"
-            icon="check"
-            disabled={title == "" ? true : false}
-            onPress={() => onSave()}
+            compact={false}
+            style={MainStyle.innerButton}
+            onPress={() =>
+              navigation.navigate("AddRecipeImages", {
+                images: images,
+              })
+            }
           >
-            Submit
+            {images ? "Edit" : "Add"} images
+          </Button>
+        </View>
+
+        {tags.length > 0 && (
+          <View style={MainStyle.tagContainer}>
+            {tags.map((tag, index) => {
+              return (
+                <Chip key={index} style={MainStyle.tagBox} icon="tag">
+                  {tag}
+                </Chip>
+              );
+            })}
+          </View>
+        )}
+        <View style={ { ...MainStyle.inputCard, marginBottom: 50 }}>
+          <Button
+            icon="tag"
+            mode="contained"
+            compact={false}
+            style={MainStyle.innerButton}
+            onPress={() =>
+              navigation.navigate("AddRecipeTags", {
+                tags: tags,
+              })
+            }
+          >
+            {tags ? "Edit" : "Add"} tags
           </Button>
         </View>
       </ScrollView>
+      <FAB
+        style={MainStyle.fab}
+        small
+        icon="check"
+        color="#fff"
+        disabled={title == "" ? true : false}
+        onPress={() => onSave()}
+      />
       <SnackBar
         visible={snackbar.visible}
         type={snackbar.type}
@@ -238,22 +231,3 @@ export default function AddRecipe({ navigation, route }) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    marginBottom: 15,
-    marginHorizontal: 10,
-  },
-  centerContainer: {
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 16,
-    // marginBottom: 20,
-  },
-  submitButton: {
-    marginTop: 10,
-    marginBottom: 25,
-  },
-});

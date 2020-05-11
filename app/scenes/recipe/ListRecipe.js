@@ -158,6 +158,11 @@ export default function ListRecipe({ navigation }) {
         {recipes.length === 0 ? (
           <View style={MainStyle.centerContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
+            <IconButton 
+              icon="refresh"
+              size={20}
+              onPress={ ()=> handleRefresh() }
+            />
           </View>
         ) : (
           <FlatList
@@ -192,13 +197,6 @@ export default function ListRecipe({ navigation }) {
         message={snackbar.message}
         onClose={hideSnackbar}
       />
-      {/* <FAB
-        style={styles.fab}
-        small
-        icon="plus"
-        label="ADD"
-        onPress={() => navigation.navigate("AddRecipe")}
-      /> */}
     </>
   );
 }
@@ -215,11 +213,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: "grey",
   },
-  fab: {
-    position: "absolute",
-    backgroundColor: "green",
-    margin: 20,
-    right: 0,
-    top: 0,
-  },
+  
 });
