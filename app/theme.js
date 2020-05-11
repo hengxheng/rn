@@ -19,6 +19,8 @@ export const CombinedDarkTheme = {
 };
 
 export const Colors = {
+  header: "#4d5f7b", //"#ebebeb",
+  bg: "#4d5f7b", //"#ebebeb",
   primaryBtnColor: "#fff",
   secondaryBtnColor: "#fff",
   red: "#f77862",
@@ -38,7 +40,7 @@ export const MainStyle = StyleSheet.create({
   sceneContainer: { 
     flex:1,
     fontFamily: (Platform.OS === "ios" ? "HelveticaNeue" : "Roboto"),
-    backgroundColor: "#5f7393",
+    backgroundColor: Colors.bg,
     color: "#fff",
     fontSize: 14,
     paddingHorizontal: 5,
@@ -47,8 +49,7 @@ export const MainStyle = StyleSheet.create({
   },
   headerBar: {
     paddingVertical:10,
-    backgroundColor: "#5f7393",
-    borderWidth:0,
+    backgroundColor: Colors.header,
     elevation: 0, // remove shadow on Android
     shadowOpacity: 0, // remove shadow on iOS
   },
