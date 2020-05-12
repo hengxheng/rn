@@ -5,6 +5,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 import { createOrUpdateRecipe } from "../../services/app";
+import { useAuth } from "../../providers/auth";
 
 export default function UpdateRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -19,6 +20,8 @@ export default function UpdateRecipe({ navigation, route }) {
     type: null,
     message: "",
   });
+
+  const { handleLogout } = useAuth();
 
   useEffect(() => {
     if (route.params?.title) {

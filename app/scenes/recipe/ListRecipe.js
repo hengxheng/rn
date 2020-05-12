@@ -28,7 +28,7 @@ export default function ListRecipe({ navigation }) {
     type: null,
     message: "",
   });
-  const { state } = useAuth();
+  const { state,handleLogout } = useAuth();
 
   const [appState, setAppState] = useState(AppState.currentState);
 

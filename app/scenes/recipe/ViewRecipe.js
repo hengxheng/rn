@@ -13,6 +13,7 @@ import SnackBar from "../../components/SnackBar";
 import { RECIPE_IMAGE_URL } from "../../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 import { viewRecipe } from "../../services/app";
+import { useAuth } from "../../providers/auth";
 
 export default function ViewRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -27,6 +28,7 @@ export default function ViewRecipe({ navigation, route }) {
     type: null,
     message: "",
   });
+  const { handleLogout } = useAuth();
 
   useEffect(() => {
     onLoad();
