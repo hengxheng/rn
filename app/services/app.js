@@ -70,6 +70,50 @@ export async function viewRecipe(id) {
   }
 }
 
+export async function addRate(r_id, rating) {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (token !== null) {
+      return await axios.post(
+        `${c.ADD_RATING}`,
+        { r_id, rating },
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+    } else {
+      return { status: 401, data: { data: "JWT missing" } };
+    }
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getRate(r_id) {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (token !== null) {
+      return await axios.post(
+        `${c.GET_RATING}`,
+        { r_id },
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+    } else {
+      return { status: 401, data: { data: "JWT missing" } };
+    }
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export function handler(err) {
   // let error = err;
   // console.log(err.response.data);

@@ -14,6 +14,7 @@ import { RECIPE_IMAGE_URL } from "../../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
 import { viewRecipe } from "../../services/app";
 import { useAuth } from "../../providers/auth";
+import RateCard from "../../components/RateCard";
 
 export default function ViewRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -22,6 +23,7 @@ export default function ViewRecipe({ navigation, route }) {
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
+  const [rating, setRating] = useState({ like: 0, dislike: 0});
 
   const [snackbar, setSnackbar] = useState({
     visible: false,
@@ -66,17 +68,26 @@ export default function ViewRecipe({ navigation, route }) {
   }
 
   async function onLoad() {
+    
     if (recipeId !== null) {
       try {
+        
         const response = await viewRecipe(recipeId);
 
-        // console.log(response.data);
         if (response.status === 200) {
-          const recipe = response.data.data;
+          const recipe = response.data.recipe;
           setTitle(recipe.title);
           setContent(recipe.content);
           setImages(pluckImages(recipe.RecipeImages));
           setTags(pluckTagName(recipe.Tags));
+          
+          const r = response.data.rating;
+          if(r){
+            setRating({
+              like: r.like,
+              dislike: r.dislike,
+            });
+          }
         } else {
           if (typeof response.data.data === "string") {
             message = response.data.data;
@@ -127,7 +138,8 @@ export default function ViewRecipe({ navigation, route }) {
             </View>
           )}
         </Card>
-
+            
+        <RateCard navigation={ navigation } recipeId = {recipeId } likeCount={rating.like} dislikeCount={rating.dislike} />
         {/* 
         <View style={styles.card}>
           <Button

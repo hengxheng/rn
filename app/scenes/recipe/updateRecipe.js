@@ -96,7 +96,6 @@ export default function UpdateRecipe({ navigation, route }) {
 
     try {
       const response = await createOrUpdateRecipe(data);
-      console.log(response);
       if (response.status === 200) {
         setSnackbar({
           visible: true,
