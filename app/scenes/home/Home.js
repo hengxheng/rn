@@ -7,14 +7,15 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Text, FAB, List, IconButton } from "react-native-paper";
-import { AsyncStorage } from "react-native";
-import axios from "axios";
-import * as c from "../../constants";
 import RecipeCard from "../../components/RecipeCard";
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import { useAuth } from "../../providers/auth";
+import { getRecipes } from "../../services/app";
 
 export default function Home({ navigation }) {
+  const { handleLogout } = useAuth();
+
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(0);
   // const [loading, setLoading] = useState(false);
@@ -39,57 +40,54 @@ export default function Home({ navigation }) {
     setSnackbar({ ...snackbar, visible: false });
   }
 
-  async function getRecipes(fetchPage) {
-    let token = await AsyncStorage.getItem("token");
-    await axios
-      .get(`${c.GET_RECIPES}/${fetchPage}`, {
-        headers: { Authorization: `JWT ${token}` },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          // console.log(response.data.data);
-          const recipeData = response.data.data;
-          if (recipeData.length > 0) {
-            if (fetchPage === 0) {
-              setRecipes(recipeData);
-            } else {
-              setRecipes([...recipes, ...recipeData]);
-            }
-            const currentPage = response.data.currentPage;
-            setPage(currentPage);
-            setLoadingMore(true);
+  async function _getRecipes(fetchPage) {
+    try{
+      const response = await getRecipes(fetchPage);
+      let message = 'Server error';
+      if (response.status === 200) {
+        const recipeData = response.data.data;
+        if (recipeData.length > 0) {
+          if (fetchPage === 0) {
+            setRecipes(recipeData);
           } else {
-            setLoadingMore(false);
+            setRecipes([...recipes, ...recipeData]);
           }
-        } else if (response.status === 401 || response.status === 403) {
-          setSnackbar({
-            visible: true,
-            type: "error",
-            message: "Token expired, please try login again",
-          });
+          const currentPage = response.data.currentPage;
+          setPage(currentPage);
+          setLoadingMore(true);
         } else {
-          setSnackbar({
-            visible: true,
-            type: "error",
-            message: "Server error",
-          });
+          setLoadingMore(false);
         }
-      })
-      .catch((error) => {
-        console.log(error);
+      }
+      else {
+        if(typeof response.data.data === 'string'){
+          message = response.data.data;
+        }
         setSnackbar({
           visible: true,
           type: "error",
-          message: "Cannot connect to server",
+          message: message,
         });
-      });
 
+        await handleLogout();
+        navigation.navigate("Auth");
+      }
+    }
+    catch(e){
+      setSnackbar({
+          visible: true,
+          type: "error",
+          message: e.message,
+      });
+      await handleLogout();
+      navigation.navigate("Auth");
+    }
     setRefreshing(false);
   }
 
-  function handleLoadMore() {
+  async function handleLoadMore() {
     if (loadingMore) {
-      getRecipes(page + 1);
+      await _getRecipes(page + 1);
     }
   }
 
@@ -97,7 +95,7 @@ export default function Home({ navigation }) {
     setPage(0);
     setRefreshing(true);
     setLoadingMore(true);
-    await getRecipes(0);
+    await _getRecipes(0);
   }
 
   function _renderFooter() {
@@ -116,10 +114,10 @@ export default function Home({ navigation }) {
         {recipes.length === 0 ? (
           <View style={MainStyle.centerContainer}>
             <Text style={styles.title}>You do not have any recipe</Text>
-            <IconButton 
+            <IconButton
               icon="refresh"
               size={20}
-              onPress={ ()=> handleRefresh() }
+              onPress={() => handleRefresh()}
             />
           </View>
         ) : (
@@ -159,11 +157,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderColor: "grey",
-  },
-  fab: {
-    position: "absolute",
-    margin: 20,
-    right: 0,
-    top: 5,
   },
 });

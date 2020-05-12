@@ -15,10 +15,10 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { CombinedDefaultTheme, CombinedDarkTheme } from "./theme";
 
 //IMPORT ROUTES
-import AuthStack from "./routes/Auth";
-import HomeStack from "./routes/Home";
-import RecipeStack from "./routes/Recipe";
-import AccountStack from "./routes/Account";
+import AuthStack from "./routes/auth";
+import HomeStack from "./routes/home";
+import RecipeStack from "./routes/recipe";
+import AccountStack from "./routes/account";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
@@ -41,7 +41,7 @@ function MainTabNavigator() {
       sceneAnimationEnabled={false}
     >
       <MainTab.Screen
-        name="Home"
+        name="HomeStack"
         component={HomeStack}
         options={{
           tabBarIcon: "home-account",

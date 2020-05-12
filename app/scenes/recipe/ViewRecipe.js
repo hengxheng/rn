@@ -8,13 +8,11 @@ import {
   Paragraph,
   Title,
 } from "react-native-paper";
-import { AsyncStorage } from "react-native";
-import axios from "axios";
-import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 import { RECIPE_IMAGE_URL } from "../../constants";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import { viewRecipe } from "../../services/app";
 
 export default function ViewRecipe({ navigation, route }) {
   const recipeId = route.params.id;
@@ -66,53 +64,39 @@ export default function ViewRecipe({ navigation, route }) {
   }
 
   async function onLoad() {
-    //GET TOKEN
-    let token = await AsyncStorage.getItem("token");
-    if (token !== null && recipeId !== null) {
-      await axios
-        .get(`${c.VIEW_RECIPE}/${recipeId}`, {
-          headers: {
-            Authorization: `JWT ${token}`,
-            Accept: "application/json",
-          },
-        })
-        .then((response) => {
-          // console.log(response.data);
-          if (response.status === 200) {
-            const recipe = response.data.data;
-            setTitle(recipe.title);
-            setContent(recipe.content);
-            setImages(pluckImages(recipe.RecipeImages));
-            setTags(pluckTagName(recipe.Tags));
-          } else if (response.status === 401 || response.status === 403) {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Token expired, please try login again",
-            });
-          } else {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Server error",
-            });
+    if (recipeId !== null) {
+      try {
+        const response = await viewRecipe(recipeId);
+
+        // console.log(response.data);
+        if (response.status === 200) {
+          const recipe = response.data.data;
+          setTitle(recipe.title);
+          setContent(recipe.content);
+          setImages(pluckImages(recipe.RecipeImages));
+          setTags(pluckTagName(recipe.Tags));
+        } else {
+          if (typeof response.data.data === "string") {
+            message = response.data.data;
           }
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
           setSnackbar({
             visible: true,
             type: "error",
-            message: "Cannot connect to server",
+            message: message,
           });
+
+          await handleLogout();
+          navigation.navigate("Auth");
+        }
+      } catch (e) {
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: e.message,
         });
-    } else {
-      setSnackbar({
-        visible: true,
-        type: "error",
-        message: "Cannot connect to server",
-      });
+        await handleLogout();
+        navigation.navigate("Auth");
+      }
     }
   }
 

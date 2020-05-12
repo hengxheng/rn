@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Card, Button, Chip, FAB } from "react-native-paper";
-import { AsyncStorage } from "react-native";
-import axios from "axios";
-import * as c from "../../constants";
 import { SliderBox } from "react-native-image-slider-box";
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import { createOrUpdateRecipe } from "../../services/app";
 
 export default function AddRecipe({ navigation, route }) {
   const [title, setTitle] = useState("");
@@ -49,9 +47,6 @@ export default function AddRecipe({ navigation, route }) {
   }
 
   async function onSave() {
-    //GET TOKEN
-    let token = await AsyncStorage.getItem("token");
-
     const data = new FormData();
 
     const imgs = images.map((i) => {
@@ -65,52 +60,37 @@ export default function AddRecipe({ navigation, route }) {
     data.append("content", content);
     data.append("tags", JSON.stringify(tags));
 
-    if (token !== null) {
-      await axios
-        .post(c.ADD_RECIPES, data, {
-          headers: {
-            Authorization: `JWT ${token}`,
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setSnackbar({
-              visible: true,
-              type: "info",
-              message: "Recipe is added",
-            });
-            navigation.navigate("ListRecipe");
-          } else if (response.status === 401 || response.status === 403) {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Token expired, please try login again",
-            });
-          } else {
-            setSnackbar({
-              visible: true,
-              type: "error",
-              message: "Server error",
-            });
-          }
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          setSnackbar({
-            visible: true,
-            type: "error",
-            message: "Cannot connect to server",
-          });
+    try {
+      const response = await createOrUpdateRecipe(data);
+
+      if (response.status === 200) {
+        setSnackbar({
+          visible: true,
+          type: "info",
+          message: "Recipe is added",
         });
-    } else {
+        navigation.navigate("ListRecipe");
+      } else {
+        if (typeof response.data.data === "string") {
+          message = response.data.data;
+        }
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: message,
+        });
+
+        await handleLogout();
+        navigation.navigate("Auth");
+      }
+    } catch (e) {
       setSnackbar({
         visible: true,
         type: "error",
-        message: "Cannot connect to server",
+        message: e.message,
       });
+      await handleLogout();
+      navigation.navigate("Auth");
     }
   }
 
@@ -198,7 +178,7 @@ export default function AddRecipe({ navigation, route }) {
             })}
           </View>
         )}
-        <View style={ { ...MainStyle.inputCard, marginBottom: 50 }}>
+        <View style={{ ...MainStyle.inputCard, marginBottom: 50 }}>
           <Button
             icon="tag"
             mode="contained"
