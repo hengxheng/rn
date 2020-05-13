@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Header from "../components/Header";
 import HomeScreen from "../scenes/home/Home";
 import ViewRecipeScreen from "../scenes/recipe/ViewRecipe";
+import AddCommentScreen from "../scenes/recipe/AddComment";
 
 const HomeNav = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function HomeStack() {
     >
       <HomeNav.Screen name="Home" component={HomeScreen} />
       <HomeNav.Screen name="ViewHomeRecipe" component={ViewRecipeScreen} />
+      <HomeNav.Screen name="AddComment" component={AddCommentScreen} />
     </HomeNav.Navigator>
   );
 }

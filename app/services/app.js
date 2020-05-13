@@ -114,6 +114,71 @@ export async function getRate(r_id) {
   }
 }
 
+export async function addComment(commentId, recipeId, comment) {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (token !== null) {
+      return await axios.post(
+        `${c.ADD_COMMENT}`,
+        { commentId, recipeId, comment },
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+    } else {
+      return { status: 401, data: { data: "JWT missing" } };
+    }
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function removeComment(commentId, recipeId) {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (token !== null) {
+      return await axios.post(
+        `${c.DELETE_COMMENT}`,
+        { commentId, recipeId },
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+    } else {
+      return { status: 401, data: { data: "JWT missing" } };
+    }
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getComments(recipeId) {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (token !== null) {
+      return await axios.get(
+        `${c.GET_COMMENTS}/${recipeId}`,
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+    } else {
+      return { status: 401, data: { data: "JWT missing" } };
+    }
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export function handler(err) {
   // let error = err;
   // console.log(err.response.data);
