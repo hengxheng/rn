@@ -30,7 +30,7 @@ function MainTabNavigator() {
   const theme = useTheme();
   return (
     <MainTab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       activeColor="red"
       inactiveColor="grey"
       activeBackgroundColor= 'red'

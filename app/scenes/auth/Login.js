@@ -31,7 +31,7 @@ export default function Login({ navigation }) {
       let response = await api.login(data);
       await handleLogin(response);
       setLoading(false);
-      navigation.navigate("Home");
+      navigation.navigate("App");
     } catch (error) {
       setSnackbar({
         visible: true,

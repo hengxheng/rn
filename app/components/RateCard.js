@@ -78,14 +78,15 @@ export default function RateCard(props) {
       } else {
         if (typeof response.data.data === "string") {
           message = response.data.data;
+          console.log(message);
         }
-        await handleLogout();
-        navigation.navigate("Auth");
+        // await handleLogout();
+        // navigation.navigate("Auth");
       }
     } catch (err) {
       console.log(err.response);
-      await handleLogout();
-      navigation.navigate("Auth");
+      // await handleLogout();
+      // navigation.navigate("Auth");
     }
   }
 

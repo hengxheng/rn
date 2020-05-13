@@ -24,7 +24,6 @@ export default function AddComment({ navigation, route }) {
   }, [route.params]);
 
   async function onSave(commentId, recipeId, comment) {
-    console.log(commentId);
     try {
       const response = await addComment(commentId, recipeId, comment);
 
