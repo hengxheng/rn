@@ -25,10 +25,13 @@ export default function CommentSection(props) {
   const [comments, setComments] = useState([]);
   const [selectedComment, setSelectedComment] = useState(null);
   const { state } = useAuth();
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    _getComments(recipeId);
+    let mounted = true;
+    if (mounted) {
+      _getComments(recipeId);
+    }
+    return () => (mounted = false);
   }, []);
 
   useFocusEffect(
@@ -41,16 +44,6 @@ export default function CommentSection(props) {
       return () => (mounted = false);
     }, [])
   );
-
-  useEffect(() => {
-    if (route.params?.commmentRefresh) {
-      setRefresh(route.params.commmentRefresh);
-    }
-  }, [route.params?.commmentRefresh]);
-
-  useEffect(() => {
-    _getComments(recipeId);
-  }, [refresh]);
 
   async function _getComments(recipeId) {
     try {
@@ -101,7 +94,7 @@ export default function CommentSection(props) {
                     />
                   )}
                   right={() => {
-                    if (state.user.id === c.User.id) {
+                    if (state.user?.id&&(state.user.id === c.User.id)) {
                       return (
                         <IconButton
                           icon="square-edit-outline"

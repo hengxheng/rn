@@ -11,10 +11,13 @@ export default function Logout(props) {
   const { handleLogout } = useAuth();
 
   async function onLogout() {
+    const navigation = props.navigation;
     setLoading(true);
     try {
       await handleLogout();
-      props.navigation.navigate("Auth");
+      navigation.navigate("Auth", {
+        screen: "Login",
+      });
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -22,7 +25,7 @@ export default function Logout(props) {
   }
 
   async function onCancel() {
-    props.navigation.goBack();
+    navigation.goBack();
   }
 
   return (

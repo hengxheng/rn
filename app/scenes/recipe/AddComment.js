@@ -28,7 +28,7 @@ export default function AddComment({ navigation, route }) {
       const response = await addComment(commentId, recipeId, comment);
 
       if (response.status === 200) {
-        navigation.navigate("ViewHomeRecipe", { commmentRefresh: true });
+        navigation.navigate("ViewHomeRecipe");
       } else {
         if (typeof response.data.data === "string") {
           message = response.data.data;
@@ -48,7 +48,7 @@ export default function AddComment({ navigation, route }) {
       const response = await removeComment(commentId, recipeId);
 
       if (response.status === 200) {
-        navigation.navigate("ViewHomeRecipe", { commmentRefresh: true });
+        navigation.navigate("ViewHomeRecipe");
       } else {
         if (typeof response.data.data === "string") {
           message = response.data.data;
