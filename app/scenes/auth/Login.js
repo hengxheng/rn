@@ -31,7 +31,12 @@ export default function Login({ navigation }) {
       let response = await api.login(data);
       await handleLogin(response);
       setLoading(false);
-      navigation.navigate("App");
+      navigation.navigate("App", {
+        screen: "HomeStack",
+        params: {
+          screen: "Home",
+        },
+      });
     } catch (error) {
       setSnackbar({
         visible: true,

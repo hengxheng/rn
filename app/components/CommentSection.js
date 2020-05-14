@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableHighlight } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   Card,
   IconButton,
@@ -29,6 +30,17 @@ export default function CommentSection(props) {
   useEffect(() => {
     _getComments(recipeId);
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let mounted = true;
+      if (mounted) {
+        _getComments(recipeId);
+      }
+
+      return () => (mounted = false);
+    }, [])
+  );
 
   useEffect(() => {
     if (route.params?.commmentRefresh) {

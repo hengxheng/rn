@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -28,7 +29,7 @@ export default function ListRecipe({ navigation }) {
     type: null,
     message: "",
   });
-  const { state,handleLogout } = useAuth();
+  const { state, handleLogout } = useAuth();
 
   const [appState, setAppState] = useState(AppState.currentState);
 
@@ -46,6 +47,17 @@ export default function ListRecipe({ navigation }) {
       AppState.removeEventListener("change", _handleAppStateChange);
     };
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let mounted = true;
+      if (mounted) {
+        handleRefresh();
+      }
+
+      return () => (mounted = false);
+    }, [])
+  );
 
   const _handleAppStateChange = (nextAppState) => {
     if (appState.match(/inactive|background/) && nextAppState === "active") {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -35,6 +36,17 @@ export default function Home({ navigation }) {
     }
     return () => (mounted = false);
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let mounted = true;
+      if (mounted) {
+        handleRefresh();
+      }
+
+      return () => (mounted = false);
+    }, [])
+  );
 
   function hideSnackbar() {
     setSnackbar({ ...snackbar, visible: false });

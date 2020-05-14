@@ -33,7 +33,12 @@ export default function ViewRecipe({ navigation, route }) {
   const { handleLogout } = useAuth();
 
   useEffect(() => {
-    onLoad();
+    let mounted = true;
+
+    if (mounted) {
+      onLoad();
+    }
+    return () => (mounted = false);
   }, []);
 
   function hideSnackbar() {
