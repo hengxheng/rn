@@ -24,21 +24,25 @@ export default function UpdateRecipe({ navigation, route }) {
   const { handleLogout } = useAuth();
 
   useEffect(() => {
-    if (route.params?.title) {
-      setTitle(route.params.title);
-    }
+    let mounted = true;
+    if (mounted) {
+      if (route.params?.title) {
+        setTitle(route.params.title);
+      }
 
-    if (route.params?.content) {
-      setContent(route.params.content);
-    }
+      if (route.params?.content) {
+        setContent(route.params.content);
+      }
 
-    if (route.params?.tags) {
-      setTags(route.params.tags);
-    }
+      if (route.params?.tags) {
+        setTags(route.params.tags);
+      }
 
-    if (route.params?.images) {
-      setImages(route.params.images);
+      if (route.params?.images) {
+        setImages(route.params.images);
+      }
     }
+    return () => (mounted = false);
   }, []);
 
   useEffect(() => {
@@ -94,36 +98,22 @@ export default function UpdateRecipe({ navigation, route }) {
       data.append("tags", JSON.stringify(tags));
     }
 
-    try {
-      const response = await createOrUpdateRecipe(data);
-      if (response.status === 200) {
-        setSnackbar({
-          visible: true,
-          type: "info",
-          message: "Recipe is added",
-        });
-        navigation.navigate("ListRecipe");
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        setSnackbar({
-          visible: true,
-          type: "error",
-          message: message,
-        });
-
-        await handleLogout();
-        navigation.navigate("Auth");
-      }
-    } catch (e) {
+    const response = await createOrUpdateRecipe(data);
+    if (response.error) {
       setSnackbar({
         visible: true,
         type: "error",
-        message: e.message,
+        message: response.message,
       });
       await handleLogout();
       navigation.navigate("Auth");
+    } else {
+      setSnackbar({
+        visible: true,
+        type: "info",
+        message: "Recipe is added",
+      });
+      navigation.navigate("ListRecipe");
     }
   }
 

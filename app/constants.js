@@ -2,6 +2,11 @@
 export const API_URL = 'http://localhost:3003';
 export const USER_PROFILE_IMAGE_URL= 'http://localhost:3003';
 export const RECIPE_IMAGE_URL= 'http://localhost:3003';
+
+
+// export const API_URL = 'http://7beeddfc.ngrok.io';
+// export const USER_PROFILE_IMAGE_URL= 'http://7beeddfc.ngrok.io';
+// export const RECIPE_IMAGE_URL= 'http://7beeddfc.ngrok.io';
 //API End Points
 export const REGISTER = `${API_URL}/register`;
 export const LOGIN = `${API_URL}/login`;

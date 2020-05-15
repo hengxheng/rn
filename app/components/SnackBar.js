@@ -7,32 +7,36 @@ export default function SnackBar(props) {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("info"); //info, error, warning
 
-  function _onToggleSnackBar(){
+  function _onToggleSnackBar() {
     setVisible(!visible);
   }
 
-  function _onDismissSnackBar(){
+  function _onDismissSnackBar() {
     setVisible(false);
     props.onClose();
   }
 
   useEffect(() => {
-    setVisible(props.visible);
-    if(props.message){
+    let mounted = true;
+    if (mounted) {
+      setVisible(props.visible);
+      if (props.message) {
         setMessage(props.message);
-    }
-    
-    if(props.type){
+      }
+
+      if (props.type) {
         setType(props.type);
+      }
     }
+    return () => (mounted = false);
   }, [props]);
 
   return (
     <Snackbar
       visible={visible}
-      onDismiss={ () => _onDismissSnackBar() }
-        duration={ 3000 }
-      style={ { ...styles.container, ...styles[type] }}
+      onDismiss={() => _onDismissSnackBar()}
+      duration={3000}
+      style={{ ...styles.container, ...styles[type] }}
     >
       {message}
     </Snackbar>

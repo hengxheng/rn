@@ -14,7 +14,11 @@ export default function RecipeOptionsModal(props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setVisible(props.visible);
+    let mounted = true;
+    if (mounted) {
+      setVisible(props.visible);
+    }
+    return () => (mounted = false);
   }, [props.visible]);
 
   function navToScene(option) {

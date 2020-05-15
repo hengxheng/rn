@@ -71,45 +71,31 @@ export default function ListRecipe({ navigation }) {
   }
 
   async function _getUserRecipes(userId, fetchPage) {
-    try {
-      const response = await getUserRecipes(userId, fetchPage);
-      let message = "Server error";
-      if (response.status === 200) {
-        const recipeData = response.data.data;
-        if (recipeData.length > 0) {
-          if (fetchPage === 0) {
-            setRecipes(recipeData);
-          } else {
-            setRecipes([...recipes, ...recipeData]);
-          }
-          const currentPage = response.data.currentPage;
-          setPage(currentPage);
-          setLoadingMore(true);
-        } else {
-          setLoadingMore(false);
-        }
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        setSnackbar({
-          visible: true,
-          type: "error",
-          message: message,
-        });
-
-        await handleLogout();
-        navigation.navigate("Auth");
-      }
-    } catch (e) {
+    const response = await getUserRecipes(userId, fetchPage);
+    if (response.error) {
       setSnackbar({
         visible: true,
         type: "error",
-        message: e.message,
+        message: response.message,
       });
       await handleLogout();
       navigation.navigate("Auth");
+    } else {
+      const recipeData = response.data;
+      if (recipeData.length > 0) {
+        if (fetchPage === 0) {
+          setRecipes(recipeData);
+        } else {
+          setRecipes([...recipes, ...recipeData]);
+        }
+        const currentPage = response.currentPage;
+        setPage(currentPage);
+        setLoadingMore(true);
+      } else {
+        setLoadingMore(false);
+      }
     }
+
     setRefreshing(false);
   }
 

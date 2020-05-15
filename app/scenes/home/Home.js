@@ -53,46 +53,30 @@ export default function Home({ navigation }) {
   }
 
   async function _getRecipes(fetchPage) {
-    try{
-      const response = await getRecipes(fetchPage);
-      let message = 'Server error';
-      if (response.status === 200) {
-        const recipeData = response.data.data;
-        if (recipeData.length > 0) {
-          if (fetchPage === 0) {
-            setRecipes(recipeData);
-          } else {
-            setRecipes([...recipes, ...recipeData]);
-          }
-          const currentPage = response.data.currentPage;
-          setPage(currentPage);
-          setLoadingMore(true);
-        } else {
-          setLoadingMore(false);
-        }
-      }
-      else {
-        if(typeof response.data.data === 'string'){
-          message = response.data.data;
-        }
-        setSnackbar({
-          visible: true,
-          type: "error",
-          message: message,
-        });
+    const response = await getRecipes(fetchPage);
 
-        await handleLogout();
-        navigation.navigate("Auth");
-      }
-    }
-    catch(e){
+    if (response.error) {
       setSnackbar({
-          visible: true,
-          type: "error",
-          message: e.message,
+        visible: true,
+        type: "error",
+        message: response.message,
       });
       await handleLogout();
       navigation.navigate("Auth");
+    } else {
+      const recipeData = response.data;
+      if (recipeData.length > 0) {
+        if (fetchPage === 0) {
+          setRecipes(recipeData);
+        } else {
+          setRecipes([...recipes, ...recipeData]);
+        }
+        const currentPage = response.currentPage;
+        setPage(currentPage);
+        setLoadingMore(true);
+      } else {
+        setLoadingMore(false);
+      }
     }
     setRefreshing(false);
   }

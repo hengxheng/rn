@@ -3,78 +3,94 @@ import { AsyncStorage } from "react-native";
 import * as c from "../constants";
 
 export async function getUserRecipes(userId, fetchPage) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.get(`${c.GET_USER_RECIPES}/${userId}/${fetchPage}`, {
-        headers: { Authorization: `JWT ${token}` },
-      });
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.get(
+        `${c.GET_USER_RECIPES}/${userId}/${fetchPage}`,
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
+      return {
+        data: res.data.data,
+        currentPage: res.data.currentPage,
+        error: false,
+        message: "",
+      };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function getRecipes(fetchPage) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
       const res = await axios.get(`${c.GET_RECIPES}/${fetchPage}`, {
         headers: { Authorization: `JWT ${token}` },
       });
-      return res;
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return {
+        data: res.data.data,
+        currentPage: res.data.currentPage,
+        error: false,
+        message: "",
+      };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function createOrUpdateRecipe(data) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.post(c.ADD_RECIPES, data, {
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.post(c.ADD_RECIPES, data, {
         headers: {
           Authorization: `JWT ${token}`,
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
         },
       });
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, rating: res.data.rating, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function viewRecipe(id) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.get(`${c.VIEW_RECIPE}/${id}`, {
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.get(`${c.VIEW_RECIPE}/${id}`, {
         headers: {
           Authorization: `JWT ${token}`,
           Accept: "application/json",
         },
       });
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, rating: res.data.rating, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function addRate(r_id, rating) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.post(
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.post(
         `${c.ADD_RATING}`,
         { r_id, rating },
         {
@@ -84,19 +100,20 @@ export async function addRate(r_id, rating) {
           },
         }
       );
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function getRate(r_id) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.post(
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.post(
         `${c.GET_RATING}`,
         { r_id },
         {
@@ -106,19 +123,20 @@ export async function getRate(r_id) {
           },
         }
       );
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function addComment(commentId, recipeId, comment) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.post(
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.post(
         `${c.ADD_COMMENT}`,
         { commentId, recipeId, comment },
         {
@@ -128,19 +146,20 @@ export async function addComment(commentId, recipeId, comment) {
           },
         }
       );
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function removeComment(commentId, recipeId) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.post(
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.post(
         `${c.DELETE_COMMENT}`,
         { commentId, recipeId },
         {
@@ -150,41 +169,39 @@ export async function removeComment(commentId, recipeId) {
           },
         }
       );
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+      return { data: res.data.data, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export async function getComments(recipeId) {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      return await axios.get(
-        `${c.GET_COMMENTS}/${recipeId}`,
-        {
-          headers: {
-            Authorization: `JWT ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-    } else {
-      return { status: 401, data: { data: "JWT missing" } };
+  const token = await AsyncStorage.getItem("token");
+  if (token !== null) {
+    try {
+      const res = await axios.get(`${c.GET_COMMENTS}/${recipeId}`, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          Accept: "application/json",
+        },
+      });
+      return { data: res.data.data, error: false, message: "" };
+    } catch (err) {
+      return { data: null, error: true, message: handler(err) };
     }
-  } catch (e) {
-    throw handler(e);
+  } else {
+    return { data: null, error: true, message: "Authentication token expired" };
   }
 }
 
 export function handler(err) {
-  // let error = err;
-  // console.log(err.response.data);
-  // if (err.response && err.response.data.hasOwnProperty("message"))
-  //   error = err.response.data;
-  // else if (!err.hasOwnProperty("message")) error = err.toJSON();
+  let error = err;
+  if (err.response && err.response.data.hasOwnProperty("message"))
+    error = err.response.data;
+  else if (!err.hasOwnProperty("message")) error = err.toJSON();
 
-  return new Error(err.response.data);
+  return err.response.data;
 }

@@ -10,56 +10,48 @@ export default function AddComment({ navigation, route }) {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    if (route.params?.comment) {
-      setComment(route.params.comment);
-    }
+    let mounted = true;
 
-    if (route.params?.commentId) {
-      setCommentId(route.params.commentId);
-    }
+    if (mounted) {
+      if (route.params?.comment) {
+        setComment(route.params.comment);
+      }
 
-    if (route.params?.recipeId) {
-      setRecipeId(route.params.recipeId);
+      if (route.params?.commentId) {
+        setCommentId(route.params.commentId);
+      }
+
+      if (route.params?.recipeId) {
+        setRecipeId(route.params.recipeId);
+      }
     }
+    return () => (mounted = false);
   }, [route.params]);
 
   async function onSave(commentId, recipeId, comment) {
-    try {
-      const response = await addComment(commentId, recipeId, comment);
-
-      if (response.status === 200) {
-        navigation.navigate("ViewHomeRecipe");
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        // await handleLogout();
-        // navigation.navigate("Auth");
-      }
-    } catch (err) {
-      console.log(err.response);
-      //   await handleLogout();
-      //   navigation.navigate("Auth");
+    const response = await addComment(commentId, recipeId, comment);
+    if (response.error) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: response.message,
+      });
+    } else {
+      navigation.navigate("ViewHomeRecipe");
     }
   }
 
   async function onDelete(commentId, recipeId) {
-    try {
-      const response = await removeComment(commentId, recipeId);
-
-      if (response.status === 200) {
-        navigation.navigate("ViewHomeRecipe");
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        // await handleLogout();
-        // navigation.navigate("Auth");
-      }
-    } catch (err) {
-      console.log(err.response);
-      //   await handleLogout();
-      //   navigation.navigate("Auth");
+    const response = await removeComment(commentId, recipeId);
+    
+    if (response.error) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: response.message,
+      });
+    } else {
+      navigation.navigate("ViewHomeRecipe");
     }
   }
 

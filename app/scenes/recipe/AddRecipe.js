@@ -19,7 +19,7 @@ export default function AddRecipe({ navigation, route }) {
     message: "",
   });
   const { handleLogout } = useAuth();
-  
+
   useEffect(() => {
     if (route.params?.content) {
       setContent(route.params.content);
@@ -62,37 +62,22 @@ export default function AddRecipe({ navigation, route }) {
     data.append("content", content);
     data.append("tags", JSON.stringify(tags));
 
-    try {
-      const response = await createOrUpdateRecipe(data);
-
-      if (response.status === 200) {
-        setSnackbar({
-          visible: true,
-          type: "info",
-          message: "Recipe is added",
-        });
-        navigation.navigate("ListRecipe");
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        setSnackbar({
-          visible: true,
-          type: "error",
-          message: message,
-        });
-
-        await handleLogout();
-        navigation.navigate("Auth");
-      }
-    } catch (e) {
+    const response = await createOrUpdateRecipe(data);
+    if (response.error) {
       setSnackbar({
         visible: true,
         type: "error",
-        message: e.message,
+        message: response.message,
       });
       await handleLogout();
       navigation.navigate("Auth");
+    } else {
+      setSnackbar({
+        visible: true,
+        type: "info",
+        message: "Recipe is added",
+      });
+      navigation.navigate("ListRecipe");
     }
   }
 

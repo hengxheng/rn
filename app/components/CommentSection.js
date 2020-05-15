@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableHighlight } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import {
   Card,
   IconButton,
-  Text,
-  Title,
-  Button,
   Avatar,
-  List,
   Divider,
   Paragraph,
 } from "react-native-paper";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../theme";
 import { getComments } from "../services/app";
+import SnackBar from "./SnackBar";
 import { RECIPE_IMAGE_URL, USER_PROFILE_IMAGE_URL } from "../constants";
 import { useAuth } from "../providers/auth";
 
@@ -23,45 +19,39 @@ export default function CommentSection(props) {
   const route = props.route;
 
   const [comments, setComments] = useState([]);
-  const [selectedComment, setSelectedComment] = useState(null);
   const { state } = useAuth();
 
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      _getComments(recipeId);
-    }
-    return () => (mounted = false);
-  }, []);
+  const [snackbar, setSnackbar] = useState({
+    visible: false,
+    type: null,
+    message: "",
+  });
+
+  function hideSnackbar() {
+    setSnackbar({ ...snackbar, visible: false });
+  }
 
   useFocusEffect(
     React.useCallback(() => {
       let mounted = true;
-      if (mounted) {
-        _getComments(recipeId);
-      }
+
+      getComments(recipeId).then((response) => {
+        if (mounted) {
+          if (response.error) {
+            setSnackbar({
+              visible: true,
+              type: "error",
+              message: response.message,
+            });
+          } else {
+            setComments(response.data);
+          }
+        }
+      });
 
       return () => (mounted = false);
     }, [])
   );
-
-  async function _getComments(recipeId) {
-    try {
-      const response = await getComments(recipeId);
-      if (response.status === 200) {
-        setComments(response.data.data);
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        // await handleLogout();
-        // navigation.navigate("Auth");
-      }
-    } catch (err) {
-      console.log("err");
-      console.log(err.response);
-    }
-  }
 
   function gotoAddComment() {
     // setRefresh(false);
@@ -77,6 +67,16 @@ export default function CommentSection(props) {
       <Card.Title
         title="Comments"
         left={() => <Avatar.Icon icon="comment" size={40} />}
+        right={() => (
+          <IconButton
+            icon="plus"
+            size={30}
+            onPress={() => gotoAddComment()}
+            style={MainStyle.primaryBtn}
+            color="#fff"
+            size={20}
+          />
+        )}
       />
       <Card.Content>
         {comments.length > 0 &&
@@ -94,7 +94,7 @@ export default function CommentSection(props) {
                     />
                   )}
                   right={() => {
-                    if (state.user?.id&&(state.user.id === c.User.id)) {
+                    if (state.user?.id && state.user.id === c.User.id) {
                       return (
                         <IconButton
                           icon="square-edit-outline"
@@ -113,17 +113,12 @@ export default function CommentSection(props) {
               </Card>
             );
           })}
-
-        <View style={{ ...MainStyle.inputCard, marginTop: 30 }}>
-          <Button
-            style={MainStyle.innerButton2}
-            mode="contained"
-            icon="plus"
-            onPress={() => gotoAddComment()}
-          >
-            Make a comment
-          </Button>
-        </View>
+        <SnackBar
+          visible={snackbar.visible}
+          type={snackbar.type}
+          message={snackbar.message}
+          onClose={hideSnackbar}
+        />
       </Card.Content>
     </Card>
   );

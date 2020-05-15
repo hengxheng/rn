@@ -18,29 +18,29 @@ export default function RateCard(props) {
     getRateStatus();
   }, []);
 
-  useEffect(()=> {
-    setDislikeCount(props.dislikeCount);
-    setLikeCount(props.likeCount);
-  }, [props.likeCount, props.dislikeCount])
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      setDislikeCount(props.dislikeCount);
+      setLikeCount(props.likeCount);
+    }
+    return () => (mounted = false);
+  }, [props.likeCount, props.dislikeCount]);
 
   async function getRateStatus() {
-    try {
-      const response = await getRate(recipeId);
-      if (response.status === 200) {
-        if (response.data.data == 1) {
-          setLike(true);
-        } else if (response.data.data == 2) {
-          setDislike(true);
-        }
-      } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-        }
-        await handleLogout();
-        navigation.navigate("Auth");
+    const response = await getRate(recipeId);
+    if (response.error) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: response.message,
+      });
+    } else {
+      if (response.data == 1) {
+        setLike(true);
+      } else if (response.data == 2) {
+        setDislike(true);
       }
-    } catch (err) {
-      console.log(err.response);
     }
   }
 
@@ -48,11 +48,10 @@ export default function RateCard(props) {
     setLike(!v);
     setDislike(false);
 
-    if(!v){
-        onSubmit(recipeId, 1); //1 = like
-    }
-    else{
-        onSubmit(recipeId, 0); //0 = cancel like
+    if (!v) {
+      onSubmit(recipeId, 1); //1 = like
+    } else {
+      onSubmit(recipeId, 0); //0 = cancel like
     }
   }
 
@@ -60,34 +59,25 @@ export default function RateCard(props) {
     setDislike(!v);
     setLike(false);
 
-    if(!v){
-        onSubmit(recipeId, 2); //1 = dislike
-    }
-    else{
-        onSubmit(recipeId, 0); //0 = cancel dislike
+    if (!v) {
+      onSubmit(recipeId, 2); //1 = dislike
+    } else {
+      onSubmit(recipeId, 0); //0 = cancel dislike
     }
   }
 
   async function onSubmit(recipeId, rate) {
-    try {
       const response = await addRate(recipeId, rate);
-
-      if (response.status === 200) {
-        setDislikeCount(response.data.data.dislike);
-        setLikeCount(response.data.data.like);
+      if (response.error) {
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: response.message,
+        });
       } else {
-        if (typeof response.data.data === "string") {
-          message = response.data.data;
-          console.log(message);
-        }
-        // await handleLogout();
-        // navigation.navigate("Auth");
-      }
-    } catch (err) {
-      console.log(err.response);
-      // await handleLogout();
-      // navigation.navigate("Auth");
-    }
+        setDislikeCount(response.data.dislike);
+        setLikeCount(response.data.like);
+      } 
   }
 
   return (

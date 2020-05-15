@@ -74,44 +74,29 @@ export default function ViewRecipe({ navigation, route }) {
 
   async function onLoad() {
     if (recipeId !== null) {
-      try {
-        const response = await viewRecipe(recipeId);
-
-        if (response.status === 200) {
-          const recipe = response.data.recipe;
-          setTitle(recipe.title);
-          setContent(recipe.content);
-          setImages(pluckImages(recipe.RecipeImages));
-          setTags(pluckTagName(recipe.Tags));
-
-          const r = response.data.rating;
-          if (r) {
-            setRating({
-              like: r.like,
-              dislike: r.dislike,
-            });
-          }
-        } else {
-          if (typeof response.data.data === "string") {
-            message = response.data.data;
-          }
-          setSnackbar({
-            visible: true,
-            type: "error",
-            message: message,
-          });
-
-          await handleLogout();
-          navigation.navigate("Auth");
-        }
-      } catch (e) {
+      const response = await viewRecipe(recipeId);
+      if (response.error) {
         setSnackbar({
           visible: true,
           type: "error",
-          message: e.message,
+          message: response.message,
         });
         await handleLogout();
         navigation.navigate("Auth");
+      } else {
+        const recipe = response.data;
+        setTitle(recipe.title);
+        setContent(recipe.content);
+        setImages(pluckImages(recipe.RecipeImages));
+        setTags(pluckTagName(recipe.Tags));
+
+        const r = response.rating;
+        if (r) {
+          setRating({
+            like: r.like,
+            dislike: r.dislike,
+          });
+        }
       }
     }
   }
