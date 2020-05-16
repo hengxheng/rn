@@ -70,7 +70,6 @@ export default function CommentSection(props) {
         right={() => (
           <IconButton
             icon="plus"
-            size={30}
             onPress={() => gotoAddComment()}
             style={MainStyle.primaryBtn}
             color="#fff"

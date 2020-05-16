@@ -19,6 +19,7 @@ import AuthStack from "./routes/auth";
 import HomeStack from "./routes/home";
 import RecipeStack from "./routes/recipe";
 import AccountStack from "./routes/account";
+import MessageStack from "./routes/message";
 
 import AuthLoading from "./scenes/auth/AuthLoading";
 import AuthProvider from "./providers/auth";
@@ -54,6 +55,14 @@ function MainTabNavigator() {
         options={{
           tabBarIcon: "safe",
           tabBarLabel: "Activity",
+        }}
+      />
+      <MainTab.Screen
+        name="Message"
+        component={MessageStack}
+        options={{
+          tabBarIcon: "message-text",
+          tabBarLabel: "Message",
         }}
       />
       <MainTab.Screen

@@ -77,6 +77,7 @@ export async function viewRecipe(id) {
           Accept: "application/json",
         },
       });
+      
       return { data: res.data.data, rating: res.data.rating, error: false, message: "" };
     } catch (err) {
       return { data: null, error: true, message: handler(err) };

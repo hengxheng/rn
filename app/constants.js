@@ -20,7 +20,9 @@ export const ADD_COMMENT = `${API_URL}/recipe/comment/add`;
 export const DELETE_COMMENT = `${API_URL}/recipe/comment/delete`;
 export const GET_COMMENTS = `${API_URL}/recipe/comments`;
 
-export const SENT_MESSAGE = `${API_URL}/message`;
+export const SEND_MESSAGE = `${API_URL}/message/send`;
+export const GET_MESSAGES = `${API_URL}/messages/get`;
+export const VIEW_CONTACTS = `${API_URL}/message/contacted`;
 
 export const GET_USERS = `${API_URL}/users`;
 export const GET_USER_RECIPES = `${API_URL}/user/recipe`;
@@ -28,3 +30,4 @@ export const GET_USER_RECIPES = `${API_URL}/user/recipe`;
 export const GET_RECIPES = `${API_URL}/recipes`;
 export const ADD_RECIPES = `${API_URL}/recipe/add`;
 export const VIEW_RECIPE = `${API_URL}/recipe`;
+
