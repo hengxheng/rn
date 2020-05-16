@@ -103,25 +103,27 @@ export default function UpdateProfileImage({ navigation, route }) {
     setMessage("");
     setError("");
 
-    try {
-      const data = new FormData();
-      data.append("avatar", {
-        name: avatar.name,
-        type: avatar.type,
-        uri:
-          Platform.OS === "android"
-            ? avatar.uri
-            : avatar.uri.replace("file://", ""),
-      });
+    if(state.user?.id){
+      try {
+        const data = new FormData();
+        data.append("avatar", {
+          name: avatar.name,
+          type: avatar.type,
+          uri:
+            Platform.OS === "android"
+              ? avatar.uri
+              : avatar.uri.replace("file://", ""),
+        });
 
-      let response = await api.updateProfileImage(state.user.id, data);
-      updateUser({ ...state.user, image: response.filePath });
-      setMessage(response.message);
-      setLoading(false);
-      navigation.goBack();
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
+        let response = await api.updateProfileImage(state.user.id, data);
+        updateUser({ ...state.user, image: response.filePath });
+        setMessage(response.message);
+        setLoading(false);
+        navigation.goBack();
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
     }
   }
 

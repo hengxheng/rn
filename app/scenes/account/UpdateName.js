@@ -28,15 +28,17 @@ export default function UpdateName(props) {
     setMessage("");
     setError("");
     let data = formData;
-    try {
-      let response = await api.updateProfile(state.user.id, data);
-      updateUser(response.user);
-      setMessage(response.message);
-      setLoading(false);
-      navigation.navigate("Profile");
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
+    if(state.user?.id){
+      try {
+        let response = await api.updateProfile(state.user.id, data);
+        updateUser(response.user);
+        setMessage(response.message);
+        setLoading(false);
+        navigation.navigate("Profile");
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
     }
   }
 

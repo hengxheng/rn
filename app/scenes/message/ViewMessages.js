@@ -66,8 +66,6 @@ export default function AddDescription({ navigation, route }) {
     } else {
       const newMessage = convertMessage(response.data.message);
       setMessages([newMessage, ...messages]);
-      console.log("111");
-      console.log(newMessage);
     }
   }
 

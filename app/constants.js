@@ -22,7 +22,7 @@ export const GET_COMMENTS = `${API_URL}/recipe/comments`;
 
 export const SEND_MESSAGE = `${API_URL}/message/send`;
 export const GET_MESSAGES = `${API_URL}/messages/get`;
-export const VIEW_CONTACTS = `${API_URL}/message/contacted`;
+export const VIEW_CONTACTS = `${API_URL}/messages/contact`;
 
 export const GET_USERS = `${API_URL}/users`;
 export const GET_USER_RECIPES = `${API_URL}/user/recipe`;

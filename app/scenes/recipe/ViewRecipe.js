@@ -118,7 +118,7 @@ export default function ViewRecipe({ navigation, route }) {
   }
 
   function RightContent() {
-    return (author && author.id != state.user.id) ? (
+    return (author && state.user?.id && author.id != state.user.id) ? (
       <IconButton
         icon="message"
         style={MainStyle.secondaryBtn}

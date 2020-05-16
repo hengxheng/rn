@@ -26,27 +26,6 @@ export async function getMessages(recieverId, senderId) {
   }
 }
 
-export async function getRecipes(fetchPage) {
-  const token = await AsyncStorage.getItem("token");
-  if (token !== null) {
-    try {
-      const res = await axios.get(`${c.GET_RECIPES}/${fetchPage}`, {
-        headers: { Authorization: `JWT ${token}` },
-      });
-      return {
-        data: res.data.data,
-        currentPage: res.data.currentPage,
-        error: false,
-        message: "",
-      };
-    } catch (err) {
-      return { data: null, error: true, message: handler(err) };
-    }
-  } else {
-    return { data: null, error: true, message: "Authentication token expired" };
-  }
-}
-
 export async function createOrUpdateMessage(data) {
   const token = await AsyncStorage.getItem("token");
   if (token !== null) {
@@ -66,18 +45,18 @@ export async function createOrUpdateMessage(data) {
   }
 }
 
-export async function viewRecipe(id) {
+export async function getContacts(userId) {
   const token = await AsyncStorage.getItem("token");
   if (token !== null) {
     try {
-      const res = await axios.get(`${c.VIEW_RECIPE}/${id}`, {
-        headers: {
-          Authorization: `JWT ${token}`,
-          Accept: "application/json",
-        },
+      const res = await axios.get(`${c.VIEW_CONTACTS}/${userId}`, {
+        headers: { Authorization: `JWT ${token}` },
       });
-      
-      return { data: res.data.data, rating: res.data.rating, error: false, message: "" };
+      return {
+        data: res.data.data,
+        error: false,
+        message: "",
+      };
     } catch (err) {
       return { data: null, error: true, message: handler(err) };
     }

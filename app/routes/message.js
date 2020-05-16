@@ -2,7 +2,6 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 //IMPORT SCENES
-import SendMessageScreen from "../scenes/message/SendMessage";
 import ContactsScreen from "../scenes/message/Contacts";
 import ViewMessageScreen from "../scenes/message/ViewMessages";
 import Header from "../components/Header";
@@ -22,7 +21,6 @@ export default function MessageStack() {
     >
       <MessageNav.Screen name="Contacts" component={ContactsScreen} />
       <MessageNav.Screen name="ViewMessage" component={ViewMessageScreen} />
-      <MessageNav.Screen name="SendMessage" component={SendMessageScreen} />
     </MessageNav.Navigator>
   );
 }
