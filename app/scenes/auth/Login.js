@@ -8,6 +8,8 @@ import Loading from "../../components/Loading";
 import { TextInput, Button } from "react-native-paper";
 import SnackBar from "../../components/SnackBar";
 import { CombinedDefaultTheme, MainStyle, Colors } from "../../theme";
+import * as Google from "expo-google-app-auth";
+import { GOOGLE_IOS_CLIENT_ID } from "../../config";
 
 export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,43 @@ export default function Login({ navigation }) {
     }
   }
 
+  async function signInWithGoogleAsync() {
+    setLoading(true);
+    try {
+      const result = await Google.logInAsync({
+        // androidClientId: YOUR_CLIENT_ID_HERE,
+        iosClientId: GOOGLE_IOS_CLIENT_ID,
+        scopes: ["profile", "email"],
+      });
+
+      setLoading(false);
+      if (result.type === "success") {
+        const response = await api.loginWithGoogle(result);
+        // console.log(response);
+        await handleLogin(response);
+
+        navigation.navigate("App", {
+          screen: "HomeStack",
+          params: {
+            screen: "Home",
+          },
+        });
+      } else {
+        setSnackbar({
+          visible: true,
+          type: "error",
+          message: "Login failed",
+        });
+      }
+    } catch (e) {
+      setSnackbar({
+        visible: true,
+        type: "error",
+        message: "Login failed",
+      });
+    }
+  }
+
   function hideSnackbar() {
     setSnackbar({ ...snackbar, visible: false });
   }
@@ -74,10 +113,22 @@ export default function Login({ navigation }) {
           underlineColor="#3cc68a"
           style={MainStyle.textInput}
         />
-        <Button icon="login" mode="contained" onPress={() => onSubmit()}>
+        <Button
+          icon="login"
+          mode="contained"
+          onPress={() => onSubmit()}
+          style={{ marginBottom: 20 }}
+        >
           Login
         </Button>
 
+        <Button
+          icon="google"
+          mode="contained"
+          onPress={() => signInWithGoogleAsync()}
+        >
+          Google Login
+        </Button>
         {loading && <Loading />}
 
         <CTA

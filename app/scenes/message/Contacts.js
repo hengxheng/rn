@@ -52,7 +52,6 @@ export default function AddDescription({ navigation, route }) {
   }
 
   function sendMessage(receiver){
-    console.log(receiver);
     navigation.navigate(  "ViewMessage",  {receiver} );
   }
 
